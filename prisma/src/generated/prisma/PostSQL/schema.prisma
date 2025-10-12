@@ -1,0 +1,69 @@
+generator postgresqlClient {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma/PostSQL"
+}
+
+datasource PostSQLDB {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int                  @id @default(autoincrement())
+  name           String
+  email          String               @unique
+  passwordHash   String
+  ImagePath      String?
+  accountType    String
+  ActiveCode     String?
+  ActiveCodeTime DateTime?
+  active         Boolean              @default(false)
+  createdAt      DateTime             @default(now())
+  organization   Organization[]
+  member         OrganizationMember[]
+}
+
+model Organization {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String
+  ImagePath   String?
+  createAt    DateTime @default(now())
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+
+  meeting Meeting[]
+  members OrganizationMember[]
+
+  @@index([ownerId])
+}
+
+model OrganizationMember {
+  id Int @id @default(autoincrement())
+
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  userId   Int
+  user     User     @relation(fields: [userId], references: [id])
+  joinedAt DateTime @default(now())
+
+  @@unique([organizationId, userId])
+  @@index([userId, organizationId])
+  @@index([userId])
+  @@index([organizationId])
+}
+
+model Meeting {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  startTime      DateTime
+  endTime        DateTime?
+
+  @@index([organizationId])
+}

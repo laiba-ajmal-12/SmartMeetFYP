@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/Mongo"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URL")
+}
+
+model CVLog {
+  id             String   @id @map("_id") @default(auto())  @db.ObjectId
+  meetingId      String
+  participantId  String
+  sessionId      String?
+  cameraId       String?
+  timestamp      DateTime   @default(now())
+  emotion        String?
+  attentionScore Float?
+  discription    String
+  customMeta     Json?
+
+  @@index([meetingId])
+  @@index([participantId])
+  @@index([meetingId, participantId])
+}
