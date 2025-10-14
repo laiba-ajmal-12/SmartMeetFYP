@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 const SECRET_KEY = process.env.JWT_SECRET || 'key123434'
 

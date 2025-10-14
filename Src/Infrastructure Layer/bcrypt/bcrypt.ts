@@ -1,4 +1,4 @@
-import type { IhashService } from "../../Domain Layer/InterFaces/IHashService.js"; 
+import type { IhashService } from "../../Domain Layer/InterFaces/IHashService.ts"; 
 import bcrypt from "bcrypt";
 
 export class hashPassword implements IhashService{

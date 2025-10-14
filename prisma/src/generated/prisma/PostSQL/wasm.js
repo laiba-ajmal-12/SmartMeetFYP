@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.16.3
- * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+ * Prisma Client JS version: 6.17.1
+ * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
  */
 Prisma.prismaVersion = {
-  client: "6.16.3",
-  engine: "bb420e667c1820a8c05a38023385f6cc7ef8e83a"
+  client: "6.17.1",
+  engine: "272a37d34178c2894197e17273bf937f25acdeac"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -92,16 +92,13 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = {
+exports.Prisma.UsersScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  passwordHash: 'passwordHash',
+  password: 'password',
   ImagePath: 'ImagePath',
-  accountType: 'accountType',
-  ActiveCode: 'ActiveCode',
-  ActiveCodeTime: 'ActiveCodeTime',
-  active: 'active',
+  role: 'role',
   createdAt: 'createdAt'
 };
 
@@ -147,7 +144,7 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User',
+  Users: 'Users',
   Organization: 'Organization',
   OrganizationMember: 'OrganizationMember',
   Meeting: 'Meeting'
@@ -185,8 +182,8 @@ const config = {
     "schemaEnvPath": "../../../../../.env"
   },
   "relativePath": "../../../../PostGreSQL",
-  "clientVersion": "6.16.3",
-  "engineVersion": "bb420e667c1820a8c05a38023385f6cc7ef8e83a",
+  "clientVersion": "6.17.1",
+  "engineVersion": "272a37d34178c2894197e17273bf937f25acdeac",
   "datasourceNames": [
     "PostSQLDB"
   ],
@@ -199,13 +196,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator postgresqlClient {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma/PostSQL\"\n}\n\ndatasource PostSQLDB {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id             Int                  @id @default(autoincrement())\n  name           String\n  email          String               @unique\n  passwordHash   String\n  ImagePath      String?\n  accountType    String\n  ActiveCode     String?\n  ActiveCodeTime DateTime?\n  active         Boolean              @default(false)\n  createdAt      DateTime             @default(now())\n  organization   Organization[]\n  member         OrganizationMember[]\n}\n\nmodel Organization {\n  id Int @id @default(autoincrement())\n\n  name        String\n  description String\n  ImagePath   String?\n  createAt    DateTime @default(now())\n\n  ownerId Int\n  owner   User @relation(fields: [ownerId], references: [id])\n\n  meeting Meeting[]\n  members OrganizationMember[]\n\n  @@index([ownerId])\n}\n\nmodel OrganizationMember {\n  id Int @id @default(autoincrement())\n\n  organizationId Int\n  organization   Organization @relation(fields: [organizationId], references: [id])\n\n  userId   Int\n  user     User     @relation(fields: [userId], references: [id])\n  joinedAt DateTime @default(now())\n\n  @@unique([organizationId, userId])\n  @@index([userId, organizationId])\n  @@index([userId])\n  @@index([organizationId])\n}\n\nmodel Meeting {\n  id             Int          @id @default(autoincrement())\n  name           String\n  description    String?\n  organizationId Int\n  organization   Organization @relation(fields: [organizationId], references: [id])\n  startTime      DateTime\n  endTime        DateTime?\n\n  @@index([organizationId])\n}\n",
-  "inlineSchemaHash": "6dda2defc00ae52401ef08162c37a86d0031d0ff22a0c4458b217cc757ff0e3d",
+  "inlineSchema": "generator postgresqlClient {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma/PostSQL\"\n}\n\ndatasource PostSQLDB {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Users {\n  id           Int                  @id @default(autoincrement())\n  name         String\n  email        String               @unique\n  password     String\n  ImagePath    String?\n  role         String\n  createdAt    DateTime             @default(now())\n  organization Organization[]\n  member       OrganizationMember[]\n}\n\nmodel Organization {\n  id Int @id @default(autoincrement())\n\n  name        String\n  description String\n  ImagePath   String?\n  createAt    DateTime @default(now())\n\n  ownerId Int\n  owner   Users @relation(fields: [ownerId], references: [id])\n\n  meeting Meeting[]\n  members OrganizationMember[]\n\n  @@index([ownerId])\n}\n\nmodel OrganizationMember {\n  id Int @id @default(autoincrement())\n\n  organizationId Int\n  organization   Organization @relation(fields: [organizationId], references: [id])\n\n  userId   Int\n  user     Users    @relation(fields: [userId], references: [id])\n  joinedAt DateTime @default(now())\n\n  @@unique([organizationId, userId])\n  @@index([userId, organizationId])\n  @@index([userId])\n  @@index([organizationId])\n}\n\nmodel Meeting {\n  id             Int          @id @default(autoincrement())\n  name           String\n  description    String?\n  organizationId Int\n  organization   Organization @relation(fields: [organizationId], references: [id])\n  startTime      DateTime\n  endTime        DateTime?\n\n  @@index([organizationId])\n}\n",
+  "inlineSchemaHash": "020102368fcbba56bdf25d66fd7389da5da4dd705aace7f8b0223b855aed81b7",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ImagePath\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ActiveCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ActiveCodeTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"OrganizationToUser\"},{\"name\":\"member\",\"kind\":\"object\",\"type\":\"OrganizationMember\",\"relationName\":\"OrganizationMemberToUser\"}],\"dbName\":null},\"Organization\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ImagePath\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ownerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"owner\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"OrganizationToUser\"},{\"name\":\"meeting\",\"kind\":\"object\",\"type\":\"Meeting\",\"relationName\":\"MeetingToOrganization\"},{\"name\":\"members\",\"kind\":\"object\",\"type\":\"OrganizationMember\",\"relationName\":\"OrganizationToOrganizationMember\"}],\"dbName\":null},\"OrganizationMember\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organizationId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"OrganizationToOrganizationMember\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"OrganizationMemberToUser\"},{\"name\":\"joinedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Meeting\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organizationId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"MeetingToOrganization\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Users\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ImagePath\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"OrganizationToUsers\"},{\"name\":\"member\",\"kind\":\"object\",\"type\":\"OrganizationMember\",\"relationName\":\"OrganizationMemberToUsers\"}],\"dbName\":null},\"Organization\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ImagePath\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ownerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"owner\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"OrganizationToUsers\"},{\"name\":\"meeting\",\"kind\":\"object\",\"type\":\"Meeting\",\"relationName\":\"MeetingToOrganization\"},{\"name\":\"members\",\"kind\":\"object\",\"type\":\"OrganizationMember\",\"relationName\":\"OrganizationToOrganizationMember\"}],\"dbName\":null},\"OrganizationMember\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organizationId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"OrganizationToOrganizationMember\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"Users\",\"relationName\":\"OrganizationMemberToUsers\"},{\"name\":\"joinedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Meeting\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organizationId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"Organization\",\"relationName\":\"MeetingToOrganization\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

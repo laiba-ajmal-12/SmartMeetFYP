@@ -3,7 +3,5 @@ export interface UserResponseDTO {
   name: string
   email: string
   ImagePath?: string
-  accountType: string
-  active: boolean
-  createdAt: Date
+  role: string
 }

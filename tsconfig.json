@@ -43,5 +43,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  "include": ["src", "Domain Layer"]
+  "include": ["src", "Domain Layer", "index.ts"]
 }

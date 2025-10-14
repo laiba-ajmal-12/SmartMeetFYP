@@ -18,7 +18,7 @@ export class userValidator {
 
     async isEmailUnique(email:string):Promise<boolean>{
         const user:InternalUserDTO | null = await this.dataStorage.getUserbyEmail(email);
-        if(user){
+        if(user === null){
             return true;
         }
         return false;

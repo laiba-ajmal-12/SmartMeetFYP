@@ -1,32 +1,32 @@
-import type { InternalUserDTO } from "../../../Domain Layer/DTOs/userDTOs/InternalUser.js";
-import  type {IUserService} from "../../../Domain Layer/InterFaces/IUserService.js";
-import PostSQLClinet from "../dbCon.js"
+import type { InternalUserDTO } from "../../../Domain Layer/DTOs/userDTOs/InternalUser.ts";
+import  type {IUserService} from "../../../Domain Layer/InterFaces/IUserService.ts";
+import PostSQLClinet from "../dbCon.ts"
 
-class userDbRepo implements IUserService{
+export class userDbRepo implements IUserService{
     private postSQlClient;
     constructor(){
         this.postSQlClient = PostSQLClinet.getClient();
         this.postSQlClient.$connect()
     }
     async createUser(user: InternalUserDTO): Promise<number> {
-
-        const users  = await this.postSQlClient.user.create({data:user})  
+        console.log('inside User ---- > ' , user)
+        const users  = await this.postSQlClient.users.create({data:user})  
         return users.id;
     }
     async updateUser(ids : number ,user: InternalUserDTO): Promise<number> {
-        const users  = await this.postSQlClient.user.update({where:{id : ids} , data:user})  
+        const users  = await this.postSQlClient.users.update({where:{id : ids} , data:user})  
         return users.id;
     }
     async deleteUser(ids: number): Promise<number> {
-        const users  = await this.postSQlClient.user.delete({where:{id : ids}}) ; 
+        const users  = await this.postSQlClient.users.delete({where:{id : ids}}) ; 
         return users.id;
     }
     async getUserbyId(ids: number): Promise<InternalUserDTO | null> {
-        const users  = await this.postSQlClient.user.findUnique({where:{id : ids}}) ; 
+        const users:InternalUserDTO |null  = await this.postSQlClient.users.findUnique({where:{id : ids}}) ; 
         return users;
     }
     async getUserbyEmail(emails: string): Promise<InternalUserDTO | null> {
-        const users  = await this.postSQlClient.user.findUnique({where:{email : emails}}) ; 
+        const users:InternalUserDTO |null   = await this.postSQlClient.users.findUnique({where:{email : emails}}) ; 
         return users;
     }
 }

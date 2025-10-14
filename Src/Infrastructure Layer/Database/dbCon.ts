@@ -1,4 +1,4 @@
-import {PrismaClient as PostSQLClient} from "../../../prisma/src/generated/prisma/PostSQL";
+import { PrismaClient as PostSQLClient } from "../../../prisma/src/generated/prisma/PostSQL/index.js";
 
 class PostSQLClinet{
       private static postSql :PostSQLClient

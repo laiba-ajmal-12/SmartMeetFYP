@@ -8,19 +8,16 @@ datasource PostSQLDB {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id             Int                  @id @default(autoincrement())
-  name           String
-  email          String               @unique
-  passwordHash   String
-  ImagePath      String?
-  accountType    String
-  ActiveCode     String?
-  ActiveCodeTime DateTime?
-  active         Boolean              @default(false)
-  createdAt      DateTime             @default(now())
-  organization   Organization[]
-  member         OrganizationMember[]
+model Users {
+  id           Int                  @id @default(autoincrement())
+  name         String
+  email        String               @unique
+  password     String
+  ImagePath    String?
+  role         String
+  createdAt    DateTime             @default(now())
+  organization Organization[]
+  member       OrganizationMember[]
 }
 
 model Organization {
@@ -32,7 +29,7 @@ model Organization {
   createAt    DateTime @default(now())
 
   ownerId Int
-  owner   User @relation(fields: [ownerId], references: [id])
+  owner   Users @relation(fields: [ownerId], references: [id])
 
   meeting Meeting[]
   members OrganizationMember[]
@@ -47,7 +44,7 @@ model OrganizationMember {
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   userId   Int
-  user     User     @relation(fields: [userId], references: [id])
+  user     Users    @relation(fields: [userId], references: [id])
   joinedAt DateTime @default(now())
 
   @@unique([organizationId, userId])
