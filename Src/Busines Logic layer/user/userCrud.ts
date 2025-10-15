@@ -3,6 +3,8 @@ import type { InternalUserDTO } from "../../Domain Layer/DTOs/userDTOs/InternalU
 import type { IhashService } from "../../Domain Layer/InterFaces/IHashService.ts";
 import type { IUserService } from "../../Domain Layer/InterFaces/IUserService.ts";
 import { userValidator } from "./userChecks.ts";
+import type { UserResponseDTO } from "../../Domain Layer/DTOs/userDTOs/UserResponse.js";
+import type { LoginUserDTO } from "../../Domain Layer/DTOs/userDTOs/UserLogin.js";
 export class UserCrud {
 
     private hasher:IhashService;
@@ -15,48 +17,60 @@ export class UserCrud {
         this.validation = new userValidator(this.dataStorage)
     }
 
-    async createUser(user: InternalUserDTO):Promise<number> {
+    async createUser(user: InternalUserDTO):Promise<number | null> {
 
         try{
-            console.log('User name:', user.name);
-            console.log('Email correct?', this.validation.isEmailCorrect(user.email));
-            console.log('Email unique?', await this.validation.isEmailUnique(user.email));
             if(
                 user.name != null 
                 && this.validation.isEmailCorrect(user.email) 
                 &&  await this.validation.isEmailUnique(user.email)
+                && this.validation.isvalidRole(user.role)
             ){
-                console.log('hel --- > ' )
+                user.password = user.password.trim();
+                user.email= user.email.trim().toLocaleLowerCase();
                 user.password = await this.hasher.hashPassword(user.password)
+
                 return await this.dataStorage.createUser(user);
             }
-            return -1;
+            return null;
         }catch(e){
             console.log(e);
-            return -1;
+            return null;
         }
     }
 
-    async LoginUser(email:string , pass:string):Promise<InternalUserDTO | null> {
+    async LoginUser(userCredintials:LoginUserDTO):Promise<UserResponseDTO | null> {
 
         try{
-            if(this.validation.isEmailCorrect(email)){
-                const user:InternalUserDTO | null = await this.dataStorage.getUserbyEmail(email)
+            if(this.validation.isEmailCorrect(userCredintials.email)){
+                console.log('Email Correct! ');
+                const user:InternalUserDTO | null = await this.dataStorage.getUserbyEmail(userCredintials.email.trim().toLocaleLowerCase())
                 if(user == null){
+                    console.error("user"," not Found!")
                     return null
                 }
-                const res: boolean = await this.hasher.comparePassword(pass, user.password)
+                const res: boolean = await this.hasher.comparePassword(userCredintials.password.trim(), user.password)
                 if(res == true){
-                    return user;
+                    console.error("password:","Match" )
+                    const final: UserResponseDTO = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                        ImagePath: user.ImagePath ?? " "
+                    };
+                   console.log( "final --- > ",final)
+                   return final;
                 }
+                console.error("password:","misMatch" )
                 return null
             }
         }catch(e){
             console.log(e);
+            return null
         }
-        finally{
-            return null;
-        }
+        return null;
+        
     }
 
 

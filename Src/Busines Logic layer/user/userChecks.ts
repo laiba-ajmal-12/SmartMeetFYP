@@ -23,6 +23,10 @@ export class userValidator {
         }
         return false;
     }
+    isvalidRole(role:string):boolean{
+         const validRoles = ["admin", "user", "host"];
+        return validRoles.includes(role.toLowerCase());
+    }
     
 }
 

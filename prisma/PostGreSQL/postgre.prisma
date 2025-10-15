@@ -29,7 +29,10 @@ model Organization{
   description String
   ImagePath String?
   createAt DateTime  @default(now())
+  organizationCode String @unique
+  domainName String?
 
+  domainRestrictionFlag Boolean @default(false)
   ownerId Int 
   owner Users @relation(fields: [ownerId] ,references: [id])
 
@@ -50,7 +53,6 @@ model OrganizationMember{
   user Users @relation(fields: [userId] , references: [id])
   joinedAt   DateTime @default(now()) 
   @@unique([organizationId, userId])
-
   @@index([userId , organizationId])
   @@index([userId])
   @@index([organizationId])

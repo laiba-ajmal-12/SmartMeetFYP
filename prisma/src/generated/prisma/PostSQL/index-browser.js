@@ -136,6 +136,9 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   description: 'description',
   ImagePath: 'ImagePath',
   createAt: 'createAt',
+  organizationCode: 'organizationCode',
+  domainName: 'domainName',
+  domainRestrictionFlag: 'domainRestrictionFlag',
   ownerId: 'ownerId'
 };
 

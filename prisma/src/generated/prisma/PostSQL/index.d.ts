@@ -2398,6 +2398,9 @@ export namespace Prisma {
     description: string | null
     ImagePath: string | null
     createAt: Date | null
+    organizationCode: string | null
+    domainName: string | null
+    domainRestrictionFlag: boolean | null
     ownerId: number | null
   }
 
@@ -2407,6 +2410,9 @@ export namespace Prisma {
     description: string | null
     ImagePath: string | null
     createAt: Date | null
+    organizationCode: string | null
+    domainName: string | null
+    domainRestrictionFlag: boolean | null
     ownerId: number | null
   }
 
@@ -2416,6 +2422,9 @@ export namespace Prisma {
     description: number
     ImagePath: number
     createAt: number
+    organizationCode: number
+    domainName: number
+    domainRestrictionFlag: number
     ownerId: number
     _all: number
   }
@@ -2437,6 +2446,9 @@ export namespace Prisma {
     description?: true
     ImagePath?: true
     createAt?: true
+    organizationCode?: true
+    domainName?: true
+    domainRestrictionFlag?: true
     ownerId?: true
   }
 
@@ -2446,6 +2458,9 @@ export namespace Prisma {
     description?: true
     ImagePath?: true
     createAt?: true
+    organizationCode?: true
+    domainName?: true
+    domainRestrictionFlag?: true
     ownerId?: true
   }
 
@@ -2455,6 +2470,9 @@ export namespace Prisma {
     description?: true
     ImagePath?: true
     createAt?: true
+    organizationCode?: true
+    domainName?: true
+    domainRestrictionFlag?: true
     ownerId?: true
     _all?: true
   }
@@ -2551,6 +2569,9 @@ export namespace Prisma {
     description: string
     ImagePath: string | null
     createAt: Date
+    organizationCode: string
+    domainName: string | null
+    domainRestrictionFlag: boolean
     ownerId: number
     _count: OrganizationCountAggregateOutputType | null
     _avg: OrganizationAvgAggregateOutputType | null
@@ -2579,6 +2600,9 @@ export namespace Prisma {
     description?: boolean
     ImagePath?: boolean
     createAt?: boolean
+    organizationCode?: boolean
+    domainName?: boolean
+    domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
     meeting?: boolean | Organization$meetingArgs<ExtArgs>
@@ -2592,6 +2616,9 @@ export namespace Prisma {
     description?: boolean
     ImagePath?: boolean
     createAt?: boolean
+    organizationCode?: boolean
+    domainName?: boolean
+    domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
@@ -2602,6 +2629,9 @@ export namespace Prisma {
     description?: boolean
     ImagePath?: boolean
     createAt?: boolean
+    organizationCode?: boolean
+    domainName?: boolean
+    domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
@@ -2612,10 +2642,13 @@ export namespace Prisma {
     description?: boolean
     ImagePath?: boolean
     createAt?: boolean
+    organizationCode?: boolean
+    domainName?: boolean
+    domainRestrictionFlag?: boolean
     ownerId?: boolean
   }
 
-  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "ImagePath" | "createAt" | "ownerId", ExtArgs["result"]["organization"]>
+  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "ImagePath" | "createAt" | "organizationCode" | "domainName" | "domainRestrictionFlag" | "ownerId", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UsersDefaultArgs<ExtArgs>
     meeting?: boolean | Organization$meetingArgs<ExtArgs>
@@ -2642,6 +2675,9 @@ export namespace Prisma {
       description: string
       ImagePath: string | null
       createAt: Date
+      organizationCode: string
+      domainName: string | null
+      domainRestrictionFlag: boolean
       ownerId: number
     }, ExtArgs["result"]["organization"]>
     composites: {}
@@ -3074,6 +3110,9 @@ export namespace Prisma {
     readonly description: FieldRef<"Organization", 'String'>
     readonly ImagePath: FieldRef<"Organization", 'String'>
     readonly createAt: FieldRef<"Organization", 'DateTime'>
+    readonly organizationCode: FieldRef<"Organization", 'String'>
+    readonly domainName: FieldRef<"Organization", 'String'>
+    readonly domainRestrictionFlag: FieldRef<"Organization", 'Boolean'>
     readonly ownerId: FieldRef<"Organization", 'Int'>
   }
     
@@ -5774,6 +5813,9 @@ export namespace Prisma {
     description: 'description',
     ImagePath: 'ImagePath',
     createAt: 'createAt',
+    organizationCode: 'organizationCode',
+    domainName: 'domainName',
+    domainRestrictionFlag: 'domainRestrictionFlag',
     ownerId: 'ownerId'
   };
 
@@ -5874,6 +5916,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -5969,6 +6018,9 @@ export namespace Prisma {
     description?: StringFilter<"Organization"> | string
     ImagePath?: StringNullableFilter<"Organization"> | string | null
     createAt?: DateTimeFilter<"Organization"> | Date | string
+    organizationCode?: StringFilter<"Organization"> | string
+    domainName?: StringNullableFilter<"Organization"> | string | null
+    domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
     owner?: XOR<UsersScalarRelationFilter, UsersWhereInput>
     meeting?: MeetingListRelationFilter
@@ -5981,6 +6033,9 @@ export namespace Prisma {
     description?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
     createAt?: SortOrder
+    organizationCode?: SortOrder
+    domainName?: SortOrderInput | SortOrder
+    domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
     owner?: UsersOrderByWithRelationInput
     meeting?: MeetingOrderByRelationAggregateInput
@@ -5989,6 +6044,7 @@ export namespace Prisma {
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    organizationCode?: string
     AND?: OrganizationWhereInput | OrganizationWhereInput[]
     OR?: OrganizationWhereInput[]
     NOT?: OrganizationWhereInput | OrganizationWhereInput[]
@@ -5996,11 +6052,13 @@ export namespace Prisma {
     description?: StringFilter<"Organization"> | string
     ImagePath?: StringNullableFilter<"Organization"> | string | null
     createAt?: DateTimeFilter<"Organization"> | Date | string
+    domainName?: StringNullableFilter<"Organization"> | string | null
+    domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
     owner?: XOR<UsersScalarRelationFilter, UsersWhereInput>
     meeting?: MeetingListRelationFilter
     members?: OrganizationMemberListRelationFilter
-  }, "id">
+  }, "id" | "organizationCode">
 
   export type OrganizationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -6008,6 +6066,9 @@ export namespace Prisma {
     description?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
     createAt?: SortOrder
+    organizationCode?: SortOrder
+    domainName?: SortOrderInput | SortOrder
+    domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
     _count?: OrganizationCountOrderByAggregateInput
     _avg?: OrganizationAvgOrderByAggregateInput
@@ -6025,6 +6086,9 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Organization"> | string
     ImagePath?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     createAt?: DateTimeWithAggregatesFilter<"Organization"> | Date | string
+    organizationCode?: StringWithAggregatesFilter<"Organization"> | string
+    domainName?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    domainRestrictionFlag?: BoolWithAggregatesFilter<"Organization"> | boolean
     ownerId?: IntWithAggregatesFilter<"Organization"> | number
   }
 
@@ -6226,6 +6290,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberCreateNestedManyWithoutOrganizationInput
@@ -6237,6 +6304,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     ownerId: number
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
@@ -6247,6 +6317,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUpdateManyWithoutOrganizationNestedInput
@@ -6258,6 +6331,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -6269,6 +6345,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     ownerId: number
   }
 
@@ -6277,6 +6356,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type OrganizationUncheckedUpdateManyInput = {
@@ -6285,6 +6367,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -6572,6 +6657,11 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UsersScalarRelationFilter = {
     is?: UsersWhereInput
     isNot?: UsersWhereInput
@@ -6593,6 +6683,9 @@ export namespace Prisma {
     description?: SortOrder
     ImagePath?: SortOrder
     createAt?: SortOrder
+    organizationCode?: SortOrder
+    domainName?: SortOrder
+    domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -6607,6 +6700,9 @@ export namespace Prisma {
     description?: SortOrder
     ImagePath?: SortOrder
     createAt?: SortOrder
+    organizationCode?: SortOrder
+    domainName?: SortOrder
+    domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -6616,12 +6712,23 @@ export namespace Prisma {
     description?: SortOrder
     ImagePath?: SortOrder
     createAt?: SortOrder
+    organizationCode?: SortOrder
+    domainName?: SortOrder
+    domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
 
   export type OrganizationSumOrderByAggregateInput = {
     id?: SortOrder
     ownerId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type OrganizationScalarRelationFilter = {
@@ -6865,6 +6972,10 @@ export namespace Prisma {
     connectOrCreate?: OrganizationMemberCreateOrConnectWithoutOrganizationInput | OrganizationMemberCreateOrConnectWithoutOrganizationInput[]
     createMany?: OrganizationMemberCreateManyOrganizationInputEnvelope
     connect?: OrganizationMemberWhereUniqueInput | OrganizationMemberWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UsersUpdateOneRequiredWithoutOrganizationNestedInput = {
@@ -7113,6 +7224,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7143,6 +7267,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberCreateNestedManyWithoutOrganizationInput
   }
@@ -7153,6 +7280,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   }
@@ -7213,6 +7343,9 @@ export namespace Prisma {
     description?: StringFilter<"Organization"> | string
     ImagePath?: StringNullableFilter<"Organization"> | string | null
     createAt?: DateTimeFilter<"Organization"> | Date | string
+    organizationCode?: StringFilter<"Organization"> | string
+    domainName?: StringNullableFilter<"Organization"> | string | null
+    domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
   }
 
@@ -7395,6 +7528,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
   }
@@ -7405,6 +7541,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     ownerId: number
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
   }
@@ -7456,6 +7595,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
   }
@@ -7466,6 +7608,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
   }
@@ -7507,6 +7652,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     members?: OrganizationMemberCreateNestedManyWithoutOrganizationInput
   }
@@ -7517,6 +7665,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
     ownerId: number
     members?: OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   }
@@ -7542,6 +7693,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     members?: OrganizationMemberUpdateManyWithoutOrganizationNestedInput
   }
@@ -7552,6 +7706,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   }
@@ -7562,6 +7719,9 @@ export namespace Prisma {
     description: string
     ImagePath?: string | null
     createAt?: Date | string
+    organizationCode: string
+    domainName?: string | null
+    domainRestrictionFlag?: boolean
   }
 
   export type OrganizationMemberCreateManyUserInput = {
@@ -7575,6 +7735,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUpdateManyWithoutOrganizationNestedInput
   }
@@ -7585,6 +7748,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   }
@@ -7595,6 +7761,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organizationCode?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type OrganizationMemberUpdateWithoutUserInput = {
