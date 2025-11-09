@@ -15,7 +15,6 @@ model Users {
   email     String    @unique
   password  String
   ImagePath String?
-  role String 
   createdAt DateTime  @default(now())
   organization Organization[]
   member OrganizationMember[]
@@ -52,6 +51,7 @@ model OrganizationMember{
   userId Int
   user Users @relation(fields: [userId] , references: [id])
   joinedAt   DateTime @default(now()) 
+
   @@unique([organizationId, userId])
   @@index([userId , organizationId])
   @@index([userId])
@@ -64,6 +64,8 @@ model Meeting{
   description String?
   organizationId Int
   organization Organization @relation(fields: [organizationId] ,references: [id])
+  daily Boolean @default(false)
+  weekly Boolean @default(false)
   startTime DateTime
   endTime DateTime?
 

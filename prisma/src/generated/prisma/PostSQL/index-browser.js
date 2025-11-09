@@ -126,7 +126,6 @@ exports.Prisma.UsersScalarFieldEnum = {
   email: 'email',
   password: 'password',
   ImagePath: 'ImagePath',
-  role: 'role',
   createdAt: 'createdAt'
 };
 
@@ -154,6 +153,8 @@ exports.Prisma.MeetingScalarFieldEnum = {
   name: 'name',
   description: 'description',
   organizationId: 'organizationId',
+  daily: 'daily',
+  weekly: 'weekly',
   startTime: 'startTime',
   endTime: 'endTime'
 };

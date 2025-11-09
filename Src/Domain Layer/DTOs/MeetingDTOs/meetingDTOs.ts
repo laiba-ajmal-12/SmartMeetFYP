@@ -5,4 +5,6 @@ export interface MeetingDTOs{
   organizationId:number 
   startTime:Date
   endTime:Date | null
+  daily: Boolean 
+  weekly: Boolean
 }

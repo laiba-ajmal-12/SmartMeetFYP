@@ -3,5 +3,4 @@ export interface UserResponseDTO {
   name: string
   email: string
   ImagePath?: string | null
-  role: string
 }

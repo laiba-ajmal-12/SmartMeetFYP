@@ -1,8 +1,9 @@
 import type{ OrganizationDTOs } from "../DTOs/OrganizationDTOs/organizationDTO.js"
 
 export interface IOrganizationService{
-       createOrganization(organ:OrganizationDTOs): Promise<number>
-       updateOrganization(id : number, organ:OrganizationDTOs): Promise<number>
-       deleteOrganization(id:number): Promise<number>
+       createOrganization(organ:OrganizationDTOs): Promise<OrganizationDTOs>
+       updateOrganization(id:number,  organ:OrganizationDTOs): Promise<OrganizationDTOs>
+       deleteOrganization(id:number): Promise<OrganizationDTOs>
+       getOrganizationById(id:number):Promise<OrganizationDTOs | null>
        getOrganizationByHost(id:number):Promise<OrganizationDTOs[]>
 }

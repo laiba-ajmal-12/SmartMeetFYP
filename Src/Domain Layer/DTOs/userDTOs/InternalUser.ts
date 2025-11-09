@@ -4,5 +4,4 @@ export interface InternalUserDTO {
   email: string
   password: string
   ImagePath?: string | null
-  role: string
 }

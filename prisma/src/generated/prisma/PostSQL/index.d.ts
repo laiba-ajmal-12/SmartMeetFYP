@@ -1238,7 +1238,6 @@ export namespace Prisma {
     email: string | null
     password: string | null
     ImagePath: string | null
-    role: string | null
     createdAt: Date | null
   }
 
@@ -1248,7 +1247,6 @@ export namespace Prisma {
     email: string | null
     password: string | null
     ImagePath: string | null
-    role: string | null
     createdAt: Date | null
   }
 
@@ -1258,7 +1256,6 @@ export namespace Prisma {
     email: number
     password: number
     ImagePath: number
-    role: number
     createdAt: number
     _all: number
   }
@@ -1278,7 +1275,6 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
-    role?: true
     createdAt?: true
   }
 
@@ -1288,7 +1284,6 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
-    role?: true
     createdAt?: true
   }
 
@@ -1298,7 +1293,6 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
-    role?: true
     createdAt?: true
     _all?: true
   }
@@ -1395,7 +1389,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath: string | null
-    role: string
     createdAt: Date
     _count: UsersCountAggregateOutputType | null
     _avg: UsersAvgAggregateOutputType | null
@@ -1424,7 +1417,6 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
-    role?: boolean
     createdAt?: boolean
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
@@ -1437,7 +1429,6 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
-    role?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["users"]>
 
@@ -1447,7 +1438,6 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
-    role?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["users"]>
 
@@ -1457,11 +1447,10 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
-    role?: boolean
     createdAt?: boolean
   }
 
-  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "role" | "createdAt", ExtArgs["result"]["users"]>
+  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "createdAt", ExtArgs["result"]["users"]>
   export type UsersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
@@ -1482,7 +1471,6 @@ export namespace Prisma {
       email: string
       password: string
       ImagePath: string | null
-      role: string
       createdAt: Date
     }, ExtArgs["result"]["users"]>
     composites: {}
@@ -1914,7 +1902,6 @@ export namespace Prisma {
     readonly email: FieldRef<"Users", 'String'>
     readonly password: FieldRef<"Users", 'String'>
     readonly ImagePath: FieldRef<"Users", 'String'>
-    readonly role: FieldRef<"Users", 'String'>
     readonly createdAt: FieldRef<"Users", 'DateTime'>
   }
     
@@ -4698,6 +4685,8 @@ export namespace Prisma {
     name: string | null
     description: string | null
     organizationId: number | null
+    daily: boolean | null
+    weekly: boolean | null
     startTime: Date | null
     endTime: Date | null
   }
@@ -4707,6 +4696,8 @@ export namespace Prisma {
     name: string | null
     description: string | null
     organizationId: number | null
+    daily: boolean | null
+    weekly: boolean | null
     startTime: Date | null
     endTime: Date | null
   }
@@ -4716,6 +4707,8 @@ export namespace Prisma {
     name: number
     description: number
     organizationId: number
+    daily: number
+    weekly: number
     startTime: number
     endTime: number
     _all: number
@@ -4737,6 +4730,8 @@ export namespace Prisma {
     name?: true
     description?: true
     organizationId?: true
+    daily?: true
+    weekly?: true
     startTime?: true
     endTime?: true
   }
@@ -4746,6 +4741,8 @@ export namespace Prisma {
     name?: true
     description?: true
     organizationId?: true
+    daily?: true
+    weekly?: true
     startTime?: true
     endTime?: true
   }
@@ -4755,6 +4752,8 @@ export namespace Prisma {
     name?: true
     description?: true
     organizationId?: true
+    daily?: true
+    weekly?: true
     startTime?: true
     endTime?: true
     _all?: true
@@ -4851,6 +4850,8 @@ export namespace Prisma {
     name: string
     description: string | null
     organizationId: number
+    daily: boolean
+    weekly: boolean
     startTime: Date
     endTime: Date | null
     _count: MeetingCountAggregateOutputType | null
@@ -4879,6 +4880,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     organizationId?: boolean
+    daily?: boolean
+    weekly?: boolean
     startTime?: boolean
     endTime?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -4889,6 +4892,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     organizationId?: boolean
+    daily?: boolean
+    weekly?: boolean
     startTime?: boolean
     endTime?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -4899,6 +4904,8 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     organizationId?: boolean
+    daily?: boolean
+    weekly?: boolean
     startTime?: boolean
     endTime?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
@@ -4909,11 +4916,13 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     organizationId?: boolean
+    daily?: boolean
+    weekly?: boolean
     startTime?: boolean
     endTime?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "startTime" | "endTime", ExtArgs["result"]["meeting"]>
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "daily" | "weekly" | "startTime" | "endTime", ExtArgs["result"]["meeting"]>
   export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
   }
@@ -4934,6 +4943,8 @@ export namespace Prisma {
       name: string
       description: string | null
       organizationId: number
+      daily: boolean
+      weekly: boolean
       startTime: Date
       endTime: Date | null
     }, ExtArgs["result"]["meeting"]>
@@ -5364,6 +5375,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Meeting", 'String'>
     readonly description: FieldRef<"Meeting", 'String'>
     readonly organizationId: FieldRef<"Meeting", 'Int'>
+    readonly daily: FieldRef<"Meeting", 'Boolean'>
+    readonly weekly: FieldRef<"Meeting", 'Boolean'>
     readonly startTime: FieldRef<"Meeting", 'DateTime'>
     readonly endTime: FieldRef<"Meeting", 'DateTime'>
   }
@@ -5800,7 +5813,6 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     ImagePath: 'ImagePath',
-    role: 'role',
     createdAt: 'createdAt'
   };
 
@@ -5837,6 +5849,8 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     organizationId: 'organizationId',
+    daily: 'daily',
+    weekly: 'weekly',
     startTime: 'startTime',
     endTime: 'endTime'
   };
@@ -5948,7 +5962,6 @@ export namespace Prisma {
     email?: StringFilter<"Users"> | string
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
-    role?: StringFilter<"Users"> | string
     createdAt?: DateTimeFilter<"Users"> | Date | string
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
@@ -5960,7 +5973,6 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     organization?: OrganizationOrderByRelationAggregateInput
     member?: OrganizationMemberOrderByRelationAggregateInput
@@ -5975,7 +5987,6 @@ export namespace Prisma {
     name?: StringFilter<"Users"> | string
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
-    role?: StringFilter<"Users"> | string
     createdAt?: DateTimeFilter<"Users"> | Date | string
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
@@ -5987,7 +5998,6 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
     _count?: UsersCountOrderByAggregateInput
     _avg?: UsersAvgOrderByAggregateInput
@@ -6005,7 +6015,6 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Users"> | string
     password?: StringWithAggregatesFilter<"Users"> | string
     ImagePath?: StringNullableWithAggregatesFilter<"Users"> | string | null
-    role?: StringWithAggregatesFilter<"Users"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Users"> | Date | string
   }
 
@@ -6156,6 +6165,8 @@ export namespace Prisma {
     name?: StringFilter<"Meeting"> | string
     description?: StringNullableFilter<"Meeting"> | string | null
     organizationId?: IntFilter<"Meeting"> | number
+    daily?: BoolFilter<"Meeting"> | boolean
+    weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -6166,6 +6177,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     organizationId?: SortOrder
+    daily?: SortOrder
+    weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
     organization?: OrganizationOrderByWithRelationInput
@@ -6179,6 +6192,8 @@ export namespace Prisma {
     name?: StringFilter<"Meeting"> | string
     description?: StringNullableFilter<"Meeting"> | string | null
     organizationId?: IntFilter<"Meeting"> | number
+    daily?: BoolFilter<"Meeting"> | boolean
+    weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
@@ -6189,6 +6204,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     organizationId?: SortOrder
+    daily?: SortOrder
+    weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
     _count?: MeetingCountOrderByAggregateInput
@@ -6206,6 +6223,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Meeting"> | string
     description?: StringNullableWithAggregatesFilter<"Meeting"> | string | null
     organizationId?: IntWithAggregatesFilter<"Meeting"> | number
+    daily?: BoolWithAggregatesFilter<"Meeting"> | boolean
+    weekly?: BoolWithAggregatesFilter<"Meeting"> | boolean
     startTime?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableWithAggregatesFilter<"Meeting"> | Date | string | null
   }
@@ -6215,7 +6234,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
@@ -6227,7 +6245,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
@@ -6238,7 +6255,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
@@ -6250,7 +6266,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -6262,7 +6277,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
   }
 
@@ -6271,7 +6285,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6281,7 +6294,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6420,6 +6432,8 @@ export namespace Prisma {
   export type MeetingCreateInput = {
     name: string
     description?: string | null
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
     organization: OrganizationCreateNestedOneWithoutMeetingInput
@@ -6430,6 +6444,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     organizationId: number
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
   }
@@ -6437,6 +6453,8 @@ export namespace Prisma {
   export type MeetingUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organization?: OrganizationUpdateOneRequiredWithoutMeetingNestedInput
@@ -6447,6 +6465,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: IntFieldUpdateOperationsInput | number
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -6456,6 +6476,8 @@ export namespace Prisma {
     name: string
     description?: string | null
     organizationId: number
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
   }
@@ -6463,6 +6485,8 @@ export namespace Prisma {
   export type MeetingUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -6472,6 +6496,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     organizationId?: IntFieldUpdateOperationsInput | number
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -6559,7 +6585,6 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -6573,7 +6598,6 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -6583,7 +6607,6 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
-    role?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -6790,6 +6813,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     organizationId?: SortOrder
+    daily?: SortOrder
+    weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
   }
@@ -6804,6 +6829,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     organizationId?: SortOrder
+    daily?: SortOrder
+    weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
   }
@@ -6813,6 +6840,8 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     organizationId?: SortOrder
+    daily?: SortOrder
+    weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
   }
@@ -7380,7 +7409,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
   }
@@ -7391,7 +7419,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   }
@@ -7404,6 +7431,8 @@ export namespace Prisma {
   export type MeetingCreateWithoutOrganizationInput = {
     name: string
     description?: string | null
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
   }
@@ -7412,6 +7441,8 @@ export namespace Prisma {
     id?: number
     name: string
     description?: string | null
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
   }
@@ -7463,7 +7494,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
   }
@@ -7474,7 +7504,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -7503,6 +7532,8 @@ export namespace Prisma {
     name?: StringFilter<"Meeting"> | string
     description?: StringNullableFilter<"Meeting"> | string | null
     organizationId?: IntFilter<"Meeting"> | number
+    daily?: BoolFilter<"Meeting"> | boolean
+    weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
   }
@@ -7558,7 +7589,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
   }
@@ -7569,7 +7599,6 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
-    role: string
     createdAt?: Date | string
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
   }
@@ -7631,7 +7660,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
   }
@@ -7642,7 +7670,6 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
   }
@@ -7787,6 +7814,8 @@ export namespace Prisma {
     id?: number
     name: string
     description?: string | null
+    daily?: boolean
+    weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
   }
@@ -7800,6 +7829,8 @@ export namespace Prisma {
   export type MeetingUpdateWithoutOrganizationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -7808,6 +7839,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -7816,6 +7849,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }

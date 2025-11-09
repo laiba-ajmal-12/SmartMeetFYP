@@ -8,20 +8,20 @@ export class userDbRepo implements IUserService{
         this.postSQlClient = PostSQLClinet.getClient();
         this.postSQlClient.$connect()
     }
-    async createUser(user: InternalUserDTO): Promise<number> {
+    async createUser(user:InternalUserDTO): Promise<InternalUserDTO> {
         console.log('inside User ---- > ' , user)
         const users  = await this.postSQlClient.users.create({data:user})  
-        return users.id;
+        return users;
     }
-    async updateUser(ids : number ,user: InternalUserDTO): Promise<number> {
+    async updateUser(ids : number ,user: InternalUserDTO): Promise<InternalUserDTO> {
         const users  = await this.postSQlClient.users.update({where:{id : ids} , data:user})  
-        return users.id;
+        return users;
     }
-    async deleteUser(ids: number): Promise<number> {
+    async deleteUser(ids: number): Promise<InternalUserDTO> {
         const users  = await this.postSQlClient.users.delete({where:{id : ids}}) ; 
-        return users.id;
+        return users;
     }
-    async getUserbyId(ids: number): Promise<InternalUserDTO | null> {
+    async getUserbyId(ids: number): Promise<InternalUserDTO| null> {
         const users:InternalUserDTO |null  = await this.postSQlClient.users.findUnique({where:{id : ids}}) ; 
         return users;
     }

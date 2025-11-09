@@ -1,6 +1,6 @@
-import type{ MeetingDTOs } from "../../../Domain Layer/DTOs/MeetingDTOs/meetingDTOs.js";
+import type { MeetingDTOs } from "../../../Domain Layer/DTOs/MeetingDTOs/meetingDTOs.js";
 import type { IMeetingService } from "../../../Domain Layer/InterFaces/IMeetingService.js";
-import PostSQLClinet from "../dbCon.ts"
+import PostSQLClinet from "../dbCon"
 
 export class MeetingDbRepo implements IMeetingService{
     private postSQlClient;
@@ -16,12 +16,12 @@ export class MeetingDbRepo implements IMeetingService{
     }
 
     async updateMeeting(ids : number ,meet: MeetingDTOs): Promise<number> {
-        const meeting:MeetingDTOs  = await this.postSQlClient.meeting.update({where:{id : ids} , data:meet})  
+        const meeting:MeetingDTOs = await this.postSQlClient.meeting.update({where:{id : ids} , data:meet})  
         return meeting.id;
     }
 
     async deleteMeeting(ids: number): Promise<number> {
-        const meeting:MeetingDTOs   = await this.postSQlClient.meeting.delete({where:{id : ids}}) ; 
+        const meeting:MeetingDTOs  = await this.postSQlClient.meeting.delete({where:{id : ids}}) ; 
         return meeting.id;
     }
 
