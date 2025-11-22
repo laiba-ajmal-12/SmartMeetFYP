@@ -156,7 +156,8 @@ exports.Prisma.MeetingScalarFieldEnum = {
   daily: 'daily',
   weekly: 'weekly',
   startTime: 'startTime',
-  endTime: 'endTime'
+  endTime: 'endTime',
+  hostId: 'hostId'
 };
 
 exports.Prisma.SortOrder = {

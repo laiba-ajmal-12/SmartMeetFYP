@@ -7,4 +7,5 @@ export interface MeetingDTOs{
   endTime:Date | null
   daily: Boolean 
   weekly: Boolean
+  hostId:number
 }

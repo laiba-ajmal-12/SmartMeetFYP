@@ -1,6 +1,6 @@
 export interface Member{
 
-  id:number
+  id?:number
   organizationId:number 
   userId:number
   joinedAt: Date

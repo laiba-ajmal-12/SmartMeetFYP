@@ -1,3 +1,4 @@
+//@ts-ignore
 import PostSQLClinet from "../dbCon.ts"
 import type { IOrganizationService } from "../../../Domain Layer/InterFaces/IOrganizationService.js";
 import type { OrganizationDTOs } from "../../../Domain Layer/DTOs/OrganizationDTOs/organizationDTO.js";
@@ -12,12 +13,17 @@ export class OrganizationDbRepo implements IOrganizationService{
         const users  = await this.postSQlClient.organization.create({data:user})  
         return users;
     }
-    async updateOrganization(ids : number ,user: OrganizationDTOs): Promise<OrganizationDTOs> {
-        const users  = await this.postSQlClient.organization.update({where:{id : ids} , data:user})  
+    async updateOrganization(ids : number ,organ: OrganizationDTOs): Promise<OrganizationDTOs> {
+        const { id, ...updateData } = organ;
+        const users  = await this.postSQlClient.organization.update({where:{id : ids} , data:updateData})  
         return users;
     }
     async getOrganizationById(id:number):Promise<OrganizationDTOs | null>{
         const user:OrganizationDTOs | null  = await this.postSQlClient.organization.findUnique({where:{id : id}})
+        return user;
+    }
+    async getOrganizationByCode(code:string):Promise<OrganizationDTOs | null>{
+        const user:OrganizationDTOs | null  = await this.postSQlClient.organization.findUnique({where:{organizationCode  : code}})
         return user;
     }
     async deleteOrganization(ids: number): Promise<OrganizationDTOs> {

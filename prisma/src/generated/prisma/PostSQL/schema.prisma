@@ -17,21 +17,21 @@ model Users {
   createdAt    DateTime             @default(now())
   organization Organization[]
   member       OrganizationMember[]
+  meetings     Meeting[]
 }
 
 model Organization {
   id Int @id @default(autoincrement())
 
-  name             String
-  description      String
-  ImagePath        String?
-  createAt         DateTime @default(now())
-  organizationCode String   @unique
-  domainName       String?
-
-  domainRestrictionFlag Boolean @default(false)
+  name                  String
+  description           String
+  ImagePath             String?
+  createAt              DateTime @default(now())
+  organizationCode      String   @unique
+  domainName            String?
+  domainRestrictionFlag Boolean  @default(false)
   ownerId               Int
-  owner                 Users   @relation(fields: [ownerId], references: [id])
+  owner                 Users    @relation(fields: [ownerId], references: [id])
 
   meeting Meeting[]
   members OrganizationMember[]
@@ -65,6 +65,9 @@ model Meeting {
   weekly         Boolean      @default(false)
   startTime      DateTime
   endTime        DateTime?
+  hostId         Int
+  host           Users        @relation(fields: [hostId], references: [id])
 
   @@index([organizationId])
+  @@index([hostId])
 }

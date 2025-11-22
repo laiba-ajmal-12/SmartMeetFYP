@@ -18,6 +18,7 @@ model Users {
   createdAt DateTime  @default(now())
   organization Organization[]
   member OrganizationMember[]
+  meetings Meeting[]
 }
 
 model Organization{
@@ -30,7 +31,6 @@ model Organization{
   createAt DateTime  @default(now())
   organizationCode String @unique
   domainName String?
-
   domainRestrictionFlag Boolean @default(false)
   ownerId Int 
   owner Users @relation(fields: [ownerId] ,references: [id])
@@ -68,7 +68,10 @@ model Meeting{
   weekly Boolean @default(false)
   startTime DateTime
   endTime DateTime?
+  hostId Int
+  host Users @relation(fields: [hostId] , references: [id])
 
   @@index([organizationId])
+  @@index([hostId])
 }
 

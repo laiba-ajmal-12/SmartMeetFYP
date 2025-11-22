@@ -1,13 +1,19 @@
 import express from 'express';
+//@ts-ignore
 import {generateToken , verifyToken} from '../../Infrastructure Layer/Authentication/jwt.ts'
 import type { InternalUserDTO } from '../../Domain Layer/DTOs/userDTOs/InternalUser.ts';
-import { upload } from './userMiddlewares.ts';
+//@ts-ignore
+import { upload } from '../MiddleWares/ImageMiddleware.ts';
+//@ts-ignore
 import { UserService } from '../../Busines Logic layer/user/userService.ts';
+//@ts-ignore
 import { hashPassword } from '../../Infrastructure Layer/bcrypt/bcrypt.ts';
+//@ts-ignore
 import { userDbRepo } from '../../Infrastructure Layer/Database/userRepo.ts/userDb.ts';
 import type { LoginUserDTO } from '../../Domain Layer/DTOs/userDTOs/UserLogin.js';
 import type { UserResponseDTO } from '../../Domain Layer/DTOs/userDTOs/UserResponse.js';
 import fs from 'fs/promises';
+//@ts-ignore
 import { ApplicationError } from '../../Busines Logic layer/ErrorHandling/appErrors.ts';
 
 const userRouter = express.Router();
@@ -32,7 +38,7 @@ userRouter.post("/signup", upload.single("image"), async (req, res) => {
     if (err instanceof ApplicationError){
       return res.status(err.status).json({"message":err.message})
     }
-    console.error("[Error] ", err)
+    console.error("[Error]", err)
     return res.status(500).json({ "message": "Internal Server Error" })
   }
 });

@@ -5,5 +5,6 @@ export interface IOrganizationService{
        updateOrganization(id:number,  organ:OrganizationDTOs): Promise<OrganizationDTOs>
        deleteOrganization(id:number): Promise<OrganizationDTOs>
        getOrganizationById(id:number):Promise<OrganizationDTOs | null>
+       getOrganizationByCode(code:string):Promise<OrganizationDTOs | null>
        getOrganizationByHost(id:number):Promise<OrganizationDTOs[]>
 }

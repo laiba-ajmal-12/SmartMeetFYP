@@ -1135,11 +1135,13 @@ export namespace Prisma {
   export type UsersCountOutputType = {
     organization: number
     member: number
+    meetings: number
   }
 
   export type UsersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | UsersCountOutputTypeCountOrganizationArgs
     member?: boolean | UsersCountOutputTypeCountMemberArgs
+    meetings?: boolean | UsersCountOutputTypeCountMeetingsArgs
   }
 
   // Custom InputTypes
@@ -1165,6 +1167,13 @@ export namespace Prisma {
    */
   export type UsersCountOutputTypeCountMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrganizationMemberWhereInput
+  }
+
+  /**
+   * UsersCountOutputType without action
+   */
+  export type UsersCountOutputTypeCountMeetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
   }
 
 
@@ -1420,6 +1429,7 @@ export namespace Prisma {
     createdAt?: boolean
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
+    meetings?: boolean | Users$meetingsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
@@ -1454,6 +1464,7 @@ export namespace Prisma {
   export type UsersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
+    meetings?: boolean | Users$meetingsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UsersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1464,6 +1475,7 @@ export namespace Prisma {
     objects: {
       organization: Prisma.$OrganizationPayload<ExtArgs>[]
       member: Prisma.$OrganizationMemberPayload<ExtArgs>[]
+      meetings: Prisma.$MeetingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1868,6 +1880,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends Users$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Users$organizationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     member<T extends Users$memberArgs<ExtArgs> = {}>(args?: Subset<T, Users$memberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizationMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    meetings<T extends Users$meetingsArgs<ExtArgs> = {}>(args?: Subset<T, Users$meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2336,6 +2349,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: OrganizationMemberScalarFieldEnum | OrganizationMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Users.meetings
+   */
+  export type Users$meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    cursor?: MeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
   }
 
   /**
@@ -4673,11 +4710,13 @@ export namespace Prisma {
   export type MeetingAvgAggregateOutputType = {
     id: number | null
     organizationId: number | null
+    hostId: number | null
   }
 
   export type MeetingSumAggregateOutputType = {
     id: number | null
     organizationId: number | null
+    hostId: number | null
   }
 
   export type MeetingMinAggregateOutputType = {
@@ -4689,6 +4728,7 @@ export namespace Prisma {
     weekly: boolean | null
     startTime: Date | null
     endTime: Date | null
+    hostId: number | null
   }
 
   export type MeetingMaxAggregateOutputType = {
@@ -4700,6 +4740,7 @@ export namespace Prisma {
     weekly: boolean | null
     startTime: Date | null
     endTime: Date | null
+    hostId: number | null
   }
 
   export type MeetingCountAggregateOutputType = {
@@ -4711,6 +4752,7 @@ export namespace Prisma {
     weekly: number
     startTime: number
     endTime: number
+    hostId: number
     _all: number
   }
 
@@ -4718,11 +4760,13 @@ export namespace Prisma {
   export type MeetingAvgAggregateInputType = {
     id?: true
     organizationId?: true
+    hostId?: true
   }
 
   export type MeetingSumAggregateInputType = {
     id?: true
     organizationId?: true
+    hostId?: true
   }
 
   export type MeetingMinAggregateInputType = {
@@ -4734,6 +4778,7 @@ export namespace Prisma {
     weekly?: true
     startTime?: true
     endTime?: true
+    hostId?: true
   }
 
   export type MeetingMaxAggregateInputType = {
@@ -4745,6 +4790,7 @@ export namespace Prisma {
     weekly?: true
     startTime?: true
     endTime?: true
+    hostId?: true
   }
 
   export type MeetingCountAggregateInputType = {
@@ -4756,6 +4802,7 @@ export namespace Prisma {
     weekly?: true
     startTime?: true
     endTime?: true
+    hostId?: true
     _all?: true
   }
 
@@ -4854,6 +4901,7 @@ export namespace Prisma {
     weekly: boolean
     startTime: Date
     endTime: Date | null
+    hostId: number
     _count: MeetingCountAggregateOutputType | null
     _avg: MeetingAvgAggregateOutputType | null
     _sum: MeetingSumAggregateOutputType | null
@@ -4884,7 +4932,9 @@ export namespace Prisma {
     weekly?: boolean
     startTime?: boolean
     endTime?: boolean
+    hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meeting"]>
 
   export type MeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4896,7 +4946,9 @@ export namespace Prisma {
     weekly?: boolean
     startTime?: boolean
     endTime?: boolean
+    hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meeting"]>
 
   export type MeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4908,7 +4960,9 @@ export namespace Prisma {
     weekly?: boolean
     startTime?: boolean
     endTime?: boolean
+    hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meeting"]>
 
   export type MeetingSelectScalar = {
@@ -4920,23 +4974,28 @@ export namespace Prisma {
     weekly?: boolean
     startTime?: boolean
     endTime?: boolean
+    hostId?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "daily" | "weekly" | "startTime" | "endTime", ExtArgs["result"]["meeting"]>
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "daily" | "weekly" | "startTime" | "endTime" | "hostId", ExtArgs["result"]["meeting"]>
   export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }
   export type MeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }
   export type MeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    host?: boolean | UsersDefaultArgs<ExtArgs>
   }
 
   export type $MeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Meeting"
     objects: {
       organization: Prisma.$OrganizationPayload<ExtArgs>
+      host: Prisma.$UsersPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4947,6 +5006,7 @@ export namespace Prisma {
       weekly: boolean
       startTime: Date
       endTime: Date | null
+      hostId: number
     }, ExtArgs["result"]["meeting"]>
     composites: {}
   }
@@ -5342,6 +5402,7 @@ export namespace Prisma {
   export interface Prisma__MeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    host<T extends UsersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsersDefaultArgs<ExtArgs>>): Prisma__UsersClient<$Result.GetResult<Prisma.$UsersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5379,6 +5440,7 @@ export namespace Prisma {
     readonly weekly: FieldRef<"Meeting", 'Boolean'>
     readonly startTime: FieldRef<"Meeting", 'DateTime'>
     readonly endTime: FieldRef<"Meeting", 'DateTime'>
+    readonly hostId: FieldRef<"Meeting", 'Int'>
   }
     
 
@@ -5852,7 +5914,8 @@ export namespace Prisma {
     daily: 'daily',
     weekly: 'weekly',
     startTime: 'startTime',
-    endTime: 'endTime'
+    endTime: 'endTime',
+    hostId: 'hostId'
   };
 
   export type MeetingScalarFieldEnum = (typeof MeetingScalarFieldEnum)[keyof typeof MeetingScalarFieldEnum]
@@ -5965,6 +6028,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Users"> | Date | string
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
+    meetings?: MeetingListRelationFilter
   }
 
   export type UsersOrderByWithRelationInput = {
@@ -5976,6 +6040,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     organization?: OrganizationOrderByRelationAggregateInput
     member?: OrganizationMemberOrderByRelationAggregateInput
+    meetings?: MeetingOrderByRelationAggregateInput
   }
 
   export type UsersWhereUniqueInput = Prisma.AtLeast<{
@@ -5990,6 +6055,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Users"> | Date | string
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
+    meetings?: MeetingListRelationFilter
   }, "id" | "email">
 
   export type UsersOrderByWithAggregationInput = {
@@ -6169,7 +6235,9 @@ export namespace Prisma {
     weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    hostId?: IntFilter<"Meeting"> | number
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    host?: XOR<UsersScalarRelationFilter, UsersWhereInput>
   }
 
   export type MeetingOrderByWithRelationInput = {
@@ -6181,7 +6249,9 @@ export namespace Prisma {
     weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
+    hostId?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
+    host?: UsersOrderByWithRelationInput
   }
 
   export type MeetingWhereUniqueInput = Prisma.AtLeast<{
@@ -6196,7 +6266,9 @@ export namespace Prisma {
     weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    hostId?: IntFilter<"Meeting"> | number
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    host?: XOR<UsersScalarRelationFilter, UsersWhereInput>
   }, "id">
 
   export type MeetingOrderByWithAggregationInput = {
@@ -6208,6 +6280,7 @@ export namespace Prisma {
     weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrderInput | SortOrder
+    hostId?: SortOrder
     _count?: MeetingCountOrderByAggregateInput
     _avg?: MeetingAvgOrderByAggregateInput
     _max?: MeetingMaxOrderByAggregateInput
@@ -6227,6 +6300,7 @@ export namespace Prisma {
     weekly?: BoolWithAggregatesFilter<"Meeting"> | boolean
     startTime?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
     endTime?: DateTimeNullableWithAggregatesFilter<"Meeting"> | Date | string | null
+    hostId?: IntWithAggregatesFilter<"Meeting"> | number
   }
 
   export type UsersCreateInput = {
@@ -6237,6 +6311,7 @@ export namespace Prisma {
     createdAt?: Date | string
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
+    meetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UsersUncheckedCreateInput = {
@@ -6248,6 +6323,7 @@ export namespace Prisma {
     createdAt?: Date | string
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UsersUpdateInput = {
@@ -6258,6 +6334,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
+    meetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UsersUncheckedUpdateInput = {
@@ -6269,6 +6346,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type UsersCreateManyInput = {
@@ -6437,6 +6515,7 @@ export namespace Prisma {
     startTime: Date | string
     endTime?: Date | string | null
     organization: OrganizationCreateNestedOneWithoutMeetingInput
+    host: UsersCreateNestedOneWithoutMeetingsInput
   }
 
   export type MeetingUncheckedCreateInput = {
@@ -6448,6 +6527,7 @@ export namespace Prisma {
     weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
+    hostId: number
   }
 
   export type MeetingUpdateInput = {
@@ -6458,6 +6538,7 @@ export namespace Prisma {
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organization?: OrganizationUpdateOneRequiredWithoutMeetingNestedInput
+    host?: UsersUpdateOneRequiredWithoutMeetingsNestedInput
   }
 
   export type MeetingUncheckedUpdateInput = {
@@ -6469,6 +6550,7 @@ export namespace Prisma {
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    hostId?: IntFieldUpdateOperationsInput | number
   }
 
   export type MeetingCreateManyInput = {
@@ -6480,6 +6562,7 @@ export namespace Prisma {
     weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
+    hostId: number
   }
 
   export type MeetingUpdateManyMutationInput = {
@@ -6500,6 +6583,7 @@ export namespace Prisma {
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    hostId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6566,6 +6650,12 @@ export namespace Prisma {
     none?: OrganizationMemberWhereInput
   }
 
+  export type MeetingListRelationFilter = {
+    every?: MeetingWhereInput
+    some?: MeetingWhereInput
+    none?: MeetingWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -6576,6 +6666,10 @@ export namespace Prisma {
   }
 
   export type OrganizationMemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MeetingOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -6688,16 +6782,6 @@ export namespace Prisma {
   export type UsersScalarRelationFilter = {
     is?: UsersWhereInput
     isNot?: UsersWhereInput
-  }
-
-  export type MeetingListRelationFilter = {
-    every?: MeetingWhereInput
-    some?: MeetingWhereInput
-    none?: MeetingWhereInput
-  }
-
-  export type MeetingOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type OrganizationCountOrderByAggregateInput = {
@@ -6817,11 +6901,13 @@ export namespace Prisma {
     weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    hostId?: SortOrder
   }
 
   export type MeetingAvgOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    hostId?: SortOrder
   }
 
   export type MeetingMaxOrderByAggregateInput = {
@@ -6833,6 +6919,7 @@ export namespace Prisma {
     weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    hostId?: SortOrder
   }
 
   export type MeetingMinOrderByAggregateInput = {
@@ -6844,11 +6931,13 @@ export namespace Prisma {
     weekly?: SortOrder
     startTime?: SortOrder
     endTime?: SortOrder
+    hostId?: SortOrder
   }
 
   export type MeetingSumOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    hostId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -6879,6 +6968,13 @@ export namespace Prisma {
     connect?: OrganizationMemberWhereUniqueInput | OrganizationMemberWhereUniqueInput[]
   }
 
+  export type MeetingCreateNestedManyWithoutHostInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
   export type OrganizationUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<OrganizationCreateWithoutOwnerInput, OrganizationUncheckedCreateWithoutOwnerInput> | OrganizationCreateWithoutOwnerInput[] | OrganizationUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: OrganizationCreateOrConnectWithoutOwnerInput | OrganizationCreateOrConnectWithoutOwnerInput[]
@@ -6891,6 +6987,13 @@ export namespace Prisma {
     connectOrCreate?: OrganizationMemberCreateOrConnectWithoutUserInput | OrganizationMemberCreateOrConnectWithoutUserInput[]
     createMany?: OrganizationMemberCreateManyUserInputEnvelope
     connect?: OrganizationMemberWhereUniqueInput | OrganizationMemberWhereUniqueInput[]
+  }
+
+  export type MeetingUncheckedCreateNestedManyWithoutHostInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -6933,6 +7036,20 @@ export namespace Prisma {
     deleteMany?: OrganizationMemberScalarWhereInput | OrganizationMemberScalarWhereInput[]
   }
 
+  export type MeetingUpdateManyWithoutHostNestedInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutHostInput | MeetingUpsertWithWhereUniqueWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutHostInput | MeetingUpdateWithWhereUniqueWithoutHostInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutHostInput | MeetingUpdateManyWithWhereWithoutHostInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -6967,6 +7084,20 @@ export namespace Prisma {
     update?: OrganizationMemberUpdateWithWhereUniqueWithoutUserInput | OrganizationMemberUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OrganizationMemberUpdateManyWithWhereWithoutUserInput | OrganizationMemberUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OrganizationMemberScalarWhereInput | OrganizationMemberScalarWhereInput[]
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutHostNestedInput = {
+    create?: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput> | MeetingCreateWithoutHostInput[] | MeetingUncheckedCreateWithoutHostInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutHostInput | MeetingCreateOrConnectWithoutHostInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutHostInput | MeetingUpsertWithWhereUniqueWithoutHostInput[]
+    createMany?: MeetingCreateManyHostInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutHostInput | MeetingUpdateWithWhereUniqueWithoutHostInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutHostInput | MeetingUpdateManyWithWhereWithoutHostInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
   }
 
   export type UsersCreateNestedOneWithoutOrganizationInput = {
@@ -7105,6 +7236,12 @@ export namespace Prisma {
     connect?: OrganizationWhereUniqueInput
   }
 
+  export type UsersCreateNestedOneWithoutMeetingsInput = {
+    create?: XOR<UsersCreateWithoutMeetingsInput, UsersUncheckedCreateWithoutMeetingsInput>
+    connectOrCreate?: UsersCreateOrConnectWithoutMeetingsInput
+    connect?: UsersWhereUniqueInput
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -7115,6 +7252,14 @@ export namespace Prisma {
     upsert?: OrganizationUpsertWithoutMeetingInput
     connect?: OrganizationWhereUniqueInput
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutMeetingInput, OrganizationUpdateWithoutMeetingInput>, OrganizationUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type UsersUpdateOneRequiredWithoutMeetingsNestedInput = {
+    create?: XOR<UsersCreateWithoutMeetingsInput, UsersUncheckedCreateWithoutMeetingsInput>
+    connectOrCreate?: UsersCreateOrConnectWithoutMeetingsInput
+    upsert?: UsersUpsertWithoutMeetingsInput
+    connect?: UsersWhereUniqueInput
+    update?: XOR<XOR<UsersUpdateToOneWithWhereWithoutMeetingsInput, UsersUpdateWithoutMeetingsInput>, UsersUncheckedUpdateWithoutMeetingsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -7347,6 +7492,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MeetingCreateWithoutHostInput = {
+    name: string
+    description?: string | null
+    daily?: boolean
+    weekly?: boolean
+    startTime: Date | string
+    endTime?: Date | string | null
+    organization: OrganizationCreateNestedOneWithoutMeetingInput
+  }
+
+  export type MeetingUncheckedCreateWithoutHostInput = {
+    id?: number
+    name: string
+    description?: string | null
+    organizationId: number
+    daily?: boolean
+    weekly?: boolean
+    startTime: Date | string
+    endTime?: Date | string | null
+  }
+
+  export type MeetingCreateOrConnectWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput>
+  }
+
+  export type MeetingCreateManyHostInputEnvelope = {
+    data: MeetingCreateManyHostInput | MeetingCreateManyHostInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganizationUpsertWithWhereUniqueWithoutOwnerInput = {
     where: OrganizationWhereUniqueInput
     update: XOR<OrganizationUpdateWithoutOwnerInput, OrganizationUncheckedUpdateWithoutOwnerInput>
@@ -7404,6 +7580,37 @@ export namespace Prisma {
     joinedAt?: DateTimeFilter<"OrganizationMember"> | Date | string
   }
 
+  export type MeetingUpsertWithWhereUniqueWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    update: XOR<MeetingUpdateWithoutHostInput, MeetingUncheckedUpdateWithoutHostInput>
+    create: XOR<MeetingCreateWithoutHostInput, MeetingUncheckedCreateWithoutHostInput>
+  }
+
+  export type MeetingUpdateWithWhereUniqueWithoutHostInput = {
+    where: MeetingWhereUniqueInput
+    data: XOR<MeetingUpdateWithoutHostInput, MeetingUncheckedUpdateWithoutHostInput>
+  }
+
+  export type MeetingUpdateManyWithWhereWithoutHostInput = {
+    where: MeetingScalarWhereInput
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutHostInput>
+  }
+
+  export type MeetingScalarWhereInput = {
+    AND?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    OR?: MeetingScalarWhereInput[]
+    NOT?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    id?: IntFilter<"Meeting"> | number
+    name?: StringFilter<"Meeting"> | string
+    description?: StringNullableFilter<"Meeting"> | string | null
+    organizationId?: IntFilter<"Meeting"> | number
+    daily?: BoolFilter<"Meeting"> | boolean
+    weekly?: BoolFilter<"Meeting"> | boolean
+    startTime?: DateTimeFilter<"Meeting"> | Date | string
+    endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    hostId?: IntFilter<"Meeting"> | number
+  }
+
   export type UsersCreateWithoutOrganizationInput = {
     name: string
     email: string
@@ -7411,6 +7618,7 @@ export namespace Prisma {
     ImagePath?: string | null
     createdAt?: Date | string
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
+    meetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UsersUncheckedCreateWithoutOrganizationInput = {
@@ -7421,6 +7629,7 @@ export namespace Prisma {
     ImagePath?: string | null
     createdAt?: Date | string
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UsersCreateOrConnectWithoutOrganizationInput = {
@@ -7435,6 +7644,7 @@ export namespace Prisma {
     weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
+    host: UsersCreateNestedOneWithoutMeetingsInput
   }
 
   export type MeetingUncheckedCreateWithoutOrganizationInput = {
@@ -7445,6 +7655,7 @@ export namespace Prisma {
     weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
+    hostId: number
   }
 
   export type MeetingCreateOrConnectWithoutOrganizationInput = {
@@ -7496,6 +7707,7 @@ export namespace Prisma {
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
+    meetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UsersUncheckedUpdateWithoutOrganizationInput = {
@@ -7506,6 +7718,7 @@ export namespace Prisma {
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type MeetingUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -7522,20 +7735,6 @@ export namespace Prisma {
   export type MeetingUpdateManyWithWhereWithoutOrganizationInput = {
     where: MeetingScalarWhereInput
     data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutOrganizationInput>
-  }
-
-  export type MeetingScalarWhereInput = {
-    AND?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
-    OR?: MeetingScalarWhereInput[]
-    NOT?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
-    id?: IntFilter<"Meeting"> | number
-    name?: StringFilter<"Meeting"> | string
-    description?: StringNullableFilter<"Meeting"> | string | null
-    organizationId?: IntFilter<"Meeting"> | number
-    daily?: BoolFilter<"Meeting"> | boolean
-    weekly?: BoolFilter<"Meeting"> | boolean
-    startTime?: DateTimeFilter<"Meeting"> | Date | string
-    endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
   }
 
   export type OrganizationMemberUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -7591,6 +7790,7 @@ export namespace Prisma {
     ImagePath?: string | null
     createdAt?: Date | string
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
+    meetings?: MeetingCreateNestedManyWithoutHostInput
   }
 
   export type UsersUncheckedCreateWithoutMemberInput = {
@@ -7601,6 +7801,7 @@ export namespace Prisma {
     ImagePath?: string | null
     createdAt?: Date | string
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
+    meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type UsersCreateOrConnectWithoutMemberInput = {
@@ -7662,6 +7863,7 @@ export namespace Prisma {
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
+    meetings?: MeetingUpdateManyWithoutHostNestedInput
   }
 
   export type UsersUncheckedUpdateWithoutMemberInput = {
@@ -7672,6 +7874,7 @@ export namespace Prisma {
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
+    meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
 
   export type OrganizationCreateWithoutMeetingInput = {
@@ -7702,6 +7905,32 @@ export namespace Prisma {
   export type OrganizationCreateOrConnectWithoutMeetingInput = {
     where: OrganizationWhereUniqueInput
     create: XOR<OrganizationCreateWithoutMeetingInput, OrganizationUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type UsersCreateWithoutMeetingsInput = {
+    name: string
+    email: string
+    password: string
+    ImagePath?: string | null
+    createdAt?: Date | string
+    organization?: OrganizationCreateNestedManyWithoutOwnerInput
+    member?: OrganizationMemberCreateNestedManyWithoutUserInput
+  }
+
+  export type UsersUncheckedCreateWithoutMeetingsInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    ImagePath?: string | null
+    createdAt?: Date | string
+    organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
+    member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UsersCreateOrConnectWithoutMeetingsInput = {
+    where: UsersWhereUniqueInput
+    create: XOR<UsersCreateWithoutMeetingsInput, UsersUncheckedCreateWithoutMeetingsInput>
   }
 
   export type OrganizationUpsertWithoutMeetingInput = {
@@ -7740,6 +7969,38 @@ export namespace Prisma {
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
+  export type UsersUpsertWithoutMeetingsInput = {
+    update: XOR<UsersUpdateWithoutMeetingsInput, UsersUncheckedUpdateWithoutMeetingsInput>
+    create: XOR<UsersCreateWithoutMeetingsInput, UsersUncheckedCreateWithoutMeetingsInput>
+    where?: UsersWhereInput
+  }
+
+  export type UsersUpdateToOneWithWhereWithoutMeetingsInput = {
+    where?: UsersWhereInput
+    data: XOR<UsersUpdateWithoutMeetingsInput, UsersUncheckedUpdateWithoutMeetingsInput>
+  }
+
+  export type UsersUpdateWithoutMeetingsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateManyWithoutOwnerNestedInput
+    member?: OrganizationMemberUpdateManyWithoutUserNestedInput
+  }
+
+  export type UsersUncheckedUpdateWithoutMeetingsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
+    member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type OrganizationCreateManyOwnerInput = {
     id?: number
     name: string
@@ -7755,6 +8016,17 @@ export namespace Prisma {
     id?: number
     organizationId: number
     joinedAt?: Date | string
+  }
+
+  export type MeetingCreateManyHostInput = {
+    id?: number
+    name: string
+    description?: string | null
+    organizationId: number
+    daily?: boolean
+    weekly?: boolean
+    startTime: Date | string
+    endTime?: Date | string | null
   }
 
   export type OrganizationUpdateWithoutOwnerInput = {
@@ -7810,6 +8082,38 @@ export namespace Prisma {
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MeetingUpdateWithoutHostInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    organization?: OrganizationUpdateOneRequiredWithoutMeetingNestedInput
+  }
+
+  export type MeetingUncheckedUpdateWithoutHostInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: IntFieldUpdateOperationsInput | number
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutHostInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationId?: IntFieldUpdateOperationsInput | number
+    daily?: BoolFieldUpdateOperationsInput | boolean
+    weekly?: BoolFieldUpdateOperationsInput | boolean
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type MeetingCreateManyOrganizationInput = {
     id?: number
     name: string
@@ -7818,6 +8122,7 @@ export namespace Prisma {
     weekly?: boolean
     startTime: Date | string
     endTime?: Date | string | null
+    hostId: number
   }
 
   export type OrganizationMemberCreateManyOrganizationInput = {
@@ -7833,6 +8138,7 @@ export namespace Prisma {
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    host?: UsersUpdateOneRequiredWithoutMeetingsNestedInput
   }
 
   export type MeetingUncheckedUpdateWithoutOrganizationInput = {
@@ -7843,6 +8149,7 @@ export namespace Prisma {
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    hostId?: IntFieldUpdateOperationsInput | number
   }
 
   export type MeetingUncheckedUpdateManyWithoutOrganizationInput = {
@@ -7853,6 +8160,7 @@ export namespace Prisma {
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    hostId?: IntFieldUpdateOperationsInput | number
   }
 
   export type OrganizationMemberUpdateWithoutOrganizationInput = {

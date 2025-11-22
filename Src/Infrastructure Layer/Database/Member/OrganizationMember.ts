@@ -10,9 +10,9 @@ export class OrganizationMemberDbRepo implements IOrganizationMemberService{
         this.postSQlClient.$connect()
     }
 
-    async addMember(user:Member): Promise<number> {
+    async addMember(user:Member): Promise<Member> {
         const users  = await this.postSQlClient.organizationMember.create({data:user})  
-        return users.id;
+        return users;
     }
 
     async deleteMember(ids: number): Promise<number> {
@@ -21,13 +21,17 @@ export class OrganizationMemberDbRepo implements IOrganizationMemberService{
     }
 
     async getOrganizationByMember(ids: number): Promise<Member[]> {
-        const organ:Member[] = await this.postSQlClient.organizationMember.findMany({where:{userId : ids}}) ; 
-        return organ;
+        const mem:Member[] = await this.postSQlClient.organizationMember.findMany({where:{userId : ids}}) ; 
+        return mem;
+    }
+    async getMemberByUserAndOrganization(OrganId:number ,memberId:number ):Promise<Member | null>{
+        const mem:Member | null = await this.postSQlClient.organizationMember.findFirst({where:{userId : memberId , organizationId: OrganId}}) 
+        return mem
     }
     
 
     async getAllMemberByOrganiztion(id:number):Promise<Member[]>{
-        const organ:Member[] = await this.postSQlClient.organizationMember.findMany({where:{organizationId : id}}) ; 
-        return organ;
+        const mem:Member[] = await this.postSQlClient.organizationMember.findMany({where:{organizationId : id}}) ; 
+        return mem;
     }
 }

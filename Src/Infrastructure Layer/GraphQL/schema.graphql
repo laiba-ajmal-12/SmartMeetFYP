@@ -1,0 +1,61 @@
+# =========================
+#         TYPES
+# =========================
+
+type Users {
+  id: Int!
+  name: String!
+  email: String!
+  ImagePath: String
+  createdAt: String!
+  organization: [Organization!]
+  member: [OrganizationMember!]
+}
+
+type Organization {
+  id: Int!
+  name: String!
+  description: String!
+  ImagePath: String
+  createAt: String!
+  organizationCode: String!
+  domainName: String
+  domainRestrictionFlag: Boolean!
+  ownerId: Int!
+  owner: Users!
+  meeting: [Meeting!]
+  members: [OrganizationMember!]
+}
+
+type OrganizationMember {
+  id: Int!
+  organizationId: Int!
+  userId: Int!
+  joinedAt: String!
+  user: Users!
+  organization: Organization!
+}
+
+type Meeting {
+  id: Int!
+  name: String!
+  description: String
+  organizationId: Int!
+  daily: Boolean!
+  weekly: Boolean!
+  startTime: String!
+  endTime: String
+  hostId: Int!
+  organization: Organization!
+  host: Users!
+}
+
+# =========================
+#        QUERIES (GET)
+# =========================
+
+type Query {
+  getUserbyId(id: Int!): Users
+  getOrganizationbyId(id:Int!):Organization
+  getMeetingById(id:Int!):Meeting
+}
