@@ -15,7 +15,7 @@ const meetings:MeetingDbRepo = new MeetingDbRepo();
 export const resolvers = {
   Query: {
         getUserbyId: async (_:any, args:any , context:any) =>{
-            return await userFetcher.getUserbyId(args.id);
+            return await userFetcher.getUserbyId(context.userId);
         },
 
         getOrganizationbyId:async (_:any, args:any , context:any)=>{
@@ -26,6 +26,7 @@ export const resolvers = {
         }
         
   },
+
   Users: {
     member:async (obj:any)=>{
         return await organmMember.getOrganizationByMember(obj.id);

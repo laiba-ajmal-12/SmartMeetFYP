@@ -1,62 +1,63 @@
-//@ts-ignore
-import userRouter from "./Src/Presnetation Layer/userRoutes/users.ts";
-import express from "express";
+// imports
+import  express from "express";
 import { ApolloServer } from "@apollo/server";
-import bodyParser from 'body-parser';
+import { expressMiddleware } from "@apollo/server/express4";
 //@ts-ignore
 import cors from "cors";
-//@ts-ignore
-import { resolvers } from "./Src/Infrastructure Layer/GraphQL/resolver.ts";
+import bodyParser from "body-parser";
+import path from "path";
 import { readFileSync } from "fs";
+import type { Request } from "express";
+
+//@ts-ignore
+import userRouter from "./Src/Presnetation Layer/userRoutes/users.ts";
 //@ts-ignore
 import organRoute from "./Src/Presnetation Layer/OrganizationRoutes/organization.ts";
 //@ts-ignore
 import MemberRoute from "./Src/Presnetation Layer/MemberRoutes/Members.ts";
 //@ts-ignore
 import MeetingRoute from "./Src/Presnetation Layer/MeetingRoutes/Meeting.ts";
-
-import path from "path";
+//@ts-ignore
+import { resolvers } from "./Src/Infrastructure Layer/GraphQL/resolver.ts";
+//@ts-ignore
+import { verifyUser } from "./Src/Presnetation Layer/MiddleWares/jwtAuthMiddleware.ts";
 
 const app = express();
 const port = 3000;
-const json = bodyParser.json;
-
-// TypeDefs
+const json = bodyParser.json
 const typeDefs = readFileSync(
   path.join("./Src/Infrastructure Layer/GraphQL/schema.graphql"),
   "utf-8"
 );
 
 const startServer = async () => {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
-
+  const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();
 
   app.use(
     "/graphql",
+    verifyUser,
     cors(),
-    json(),
-    (req, res, next) => {
-      server
-        .executeOperation({
-          query: req.body.query,
-          variables: req.body.variables,
-        })
-        .then((result) => res.json(result))
-        .catch(next);
-    }
+    bodyParser.json(),
+    expressMiddleware(server, {
+
+      context: async ( {req}) => {
+        //@ts-ignore
+        console.error('[Context]: ' , req.user?.id)
+        //@ts-ignore
+        return { userId: req.user?.id };
+      },
+    })
   );
 
+  // REST routes
   app.use("/api", userRouter);
-  app.use('/api' , organRoute);
-  app.use('/api' , MeetingRoute);
-  app.use('/api' ,  MemberRoute);
+  app.use("/api", organRoute);
+  app.use("/api", MeetingRoute);
+  app.use("/api", MemberRoute);
 
-  app.get("/check", (req, res) => {
-    console.log('server checked!')
+  app.get("/check", (req:any, res:any) => {
+    console.log("server checked!");
     res.status(200).json("Everything is okay");
   });
 

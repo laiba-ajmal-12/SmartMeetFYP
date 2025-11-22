@@ -55,7 +55,7 @@ type Meeting {
 # =========================
 
 type Query {
-  getUserbyId(id: Int!): Users
+  getUserbyId: Users
   getOrganizationbyId(id:Int!):Organization
   getMeetingById(id:Int!):Meeting
 }
