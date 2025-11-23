@@ -4,23 +4,48 @@ import { useState } from 'react';
 import { Video, Eye, EyeOff, ArrowLeft, Mail, Lock, User, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import axios  from 'axios';
+import { error } from 'console';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [logError, setIsError] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    image:''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission
-    console.log('Form submitted:', formData);
+    try{
+    if (!isLogin){
+      let result = await axios.post(`http://localhost:3000/api/signup` , formData)
+      if(result.data.success){
+          console.log('login ' , result.data.token)
+          localStorage.setItem('token' , result.data.Token)
+          window.location.href = '/auth/Actiavte';
+      }
+    }
+    else{
+      let result = await axios.post(`http://localhost:3000/api/login` , formData)
+
+    }
     // Redirect to meeting room for demo
-    window.location.href = '/meeting';
+    }catch(error){
+        if (axios.isAxiosError(error)) {
+        console.error("Axios Error:", error.response?.status, error.response?.data);
+        alert("Error: " + error.response?.data?.message || error.message);
+      } else {
+        console.error("Other Error:", error);
+        
+        alert("An unexpected error occurred.");
+      }
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -100,6 +125,7 @@ export default function Auth() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            <p className='text-md font-bold text-danger'>{logError} </p>
             {!isLogin && (
               <div className="relative">
                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
@@ -125,6 +151,50 @@ export default function Auth() {
                 required
               />
             </div>
+
+            {!isLogin && (
+              <div className="relative">
+                {/* Optional: icon */}
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
+
+                {/* File input */}
+                <Input
+                  type="file"
+                  accept="image/png, image/jpeg"   // sirf PNG ya JPEG allow
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const file = e.target.files[0];
+
+                      // Optional: check type again
+                      if (!["image/png", "image/jpeg"].includes(file.type)) {
+                        alert("Please select PNG or JPEG image only!");
+                        return;
+                      }
+
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setFormData(prev => ({
+                          ...prev,
+                          image: reader.result as string // base64 store
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="pl-12 pr-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
+                />
+
+                {/* Optional: preview */}
+                {formData.image && (
+                  <img
+                    src={formData.image}
+                    alt="Preview"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full object-cover"
+                  />
+                )}
+              </div>
+            )}
+
 
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
