@@ -28,8 +28,6 @@ export class MeetingValidator {
         return true;
 
     }
-
-   
 }
 
 

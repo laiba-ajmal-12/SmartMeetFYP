@@ -15,12 +15,15 @@ import type { UserResponseDTO } from '../../Domain Layer/DTOs/userDTOs/UserRespo
 import fs from 'fs/promises';
 //@ts-ignore
 import { ApplicationError } from '../../Busines Logic layer/ErrorHandling/appErrors.ts';
+//@ts-ignore
+import {BrevoEmail} from '../../Infrastructure Layer/Email/email.ts'
 
 const userRouter = express.Router();
 const port = 3000;
 
+
 userRouter.use(express.json());
-const userService = new UserService(new hashPassword(), new userDbRepo())
+const userService = new UserService(new hashPassword(), new userDbRepo() , new BrevoEmail("smartmeet07@gmail.com"))
 
 userRouter.post("/signup", upload.single("image"), async (req, res) => {
   try{
@@ -55,6 +58,7 @@ userRouter.post('/login', async (req, res) => {
 
   }catch(err){
     if (err instanceof ApplicationError){
+      console.error("[Error] ", err)
       return res.status(err.status).json({"message":err.message})
     }
     console.error("[Error] ", err)
@@ -63,5 +67,62 @@ userRouter.post('/login', async (req, res) => {
 });
 
 
+userRouter.post('/activateAccount', verifyToken,  async (req:any, res:any) => {
+  try{
+
+      const code = req.body;
+      const userRes:UserResponseDTO | null = await userService.ActivateAccount(req.user.id , code)
+      if (!userRes){
+        return res.status(400).send('Error while Processing')
+      }
+      return res.status(200).json({user:userRes});
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
+
+userRouter.post('/ForgetPassword',  async (req:any, res:any) => {
+  try{
+
+      const email = req.body;
+      const resObj:boolean = await userService.forgetPassword(email)
+      if (!res){
+        return res.status(400).send('Error while Processing')
+      }
+      return res.status(200);
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
+
+
+userRouter.post('/resetPassword',  async (req:any, res:any) => {
+  try{
+
+      const {email,code, password} = req.body;
+      const resObj:boolean = await userService.resetPassword(email , code , password);
+      if (!res){
+        return res.status(400).send('Error while Processing')
+      }
+      return res.status(200);
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
 
 export default userRouter;

@@ -34,6 +34,13 @@ const startServer = async () => {
   const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();
 
+  app.use(cors({
+    origin: '*',                     // ✅ sab origins allow
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization'],
+    credentials: true                // cookies waghera allow
+  }));
+
   app.use(
     "/graphql",
     verifyUser,
@@ -49,7 +56,8 @@ const startServer = async () => {
       },
     })
   );
-
+  app.use(bodyParser.json({ limit: "10mb" }));
+  app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
   // REST routes
   app.use("/api", userRouter);
   app.use("/api", organRoute);

@@ -16,6 +16,11 @@ model Users {
   password  String
   ImagePath String?
   createdAt DateTime  @default(now())
+  active Boolean @default(false)
+  code String? 
+  codeActivationTime DateTime?
+  role String? @default("user")
+  accountType String? @default("Basic")
   organization Organization[]
   member OrganizationMember[]
   meetings Meeting[]

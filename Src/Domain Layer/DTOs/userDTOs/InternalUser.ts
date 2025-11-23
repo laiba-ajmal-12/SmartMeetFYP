@@ -4,4 +4,9 @@ export interface InternalUserDTO {
   email: string
   password: string
   ImagePath?: string | null
+  active: boolean 
+  code?:string | null 
+  codeActivationTime?:Date | null; 
+  accountType?: string |null
+  role?:string |null
 }

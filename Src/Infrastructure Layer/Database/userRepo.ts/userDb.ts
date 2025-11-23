@@ -1,5 +1,6 @@
 import type { InternalUserDTO } from "../../../Domain Layer/DTOs/userDTOs/InternalUser.ts";
 import  type {IUserService} from "../../../Domain Layer/InterFaces/IUserService.ts";
+//@ts-ignore
 import PostSQLClinet from "../dbCon.ts"
 
 export class userDbRepo implements IUserService{
@@ -10,11 +11,38 @@ export class userDbRepo implements IUserService{
     }
     async createUser(user:InternalUserDTO): Promise<InternalUserDTO> {
         console.log('inside User ---- > ' , user)
-        const users  = await this.postSQlClient.users.create({data:user})  
+
+           const userInterl = {
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                ImagePath: user.ImagePath ?? null,         
+                active: false,
+                code: user.code ?? null,                    
+                accountType: user.accountType ?? null,
+                role: user.role ?? null,
+                codeActivationTime: user.codeActivationTime ?? null
+            };
+        
+        const users  = await this.postSQlClient.users.create({data:userInterl})  
         return users;
     }
     async updateUser(ids : number ,user: InternalUserDTO): Promise<InternalUserDTO> {
-        const users  = await this.postSQlClient.users.update({where:{id : ids} , data:user})  
+
+        const userInterl = {
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                ImagePath: user.ImagePath ?? null,         
+                active: false,
+                code: user.code ?? null,                    
+                accountType: user.accountType ?? null,
+                role: user.role ?? null,
+                codeActivationTime: user.codeActivationTime ?? null
+        };
+        
+
+        const users  = await this.postSQlClient.users.update({where:{id : ids} , data:userInterl})  
         return users;
     }
     async deleteUser(ids: number): Promise<InternalUserDTO> {

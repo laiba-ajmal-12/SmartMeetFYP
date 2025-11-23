@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.12.2",
+    "@getbrevo/brevo": "^3.0.1",
     "@prisma/client": "^6.17.1",
     "@types/node": "^24.7.0",
     "bcrypt": "^6.0.0",

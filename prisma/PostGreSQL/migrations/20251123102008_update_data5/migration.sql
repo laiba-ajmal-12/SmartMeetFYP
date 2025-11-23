@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Users" ALTER COLUMN "accountType" DROP NOT NULL,
+ALTER COLUMN "role" DROP NOT NULL;

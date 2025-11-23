@@ -25,7 +25,7 @@ export class organizationValidator {
     }
 
     getRandomFiveDigit(): number {
-        return Math.floor(Math.random() * 90000) + 10000;
+        return Math.floor(Math.random() * 900000) + 100000;
     }
     
     async isOrganizationExists(id:number):Promise<boolean>{

@@ -1248,6 +1248,11 @@ export namespace Prisma {
     password: string | null
     ImagePath: string | null
     createdAt: Date | null
+    active: boolean | null
+    code: string | null
+    codeActivationTime: Date | null
+    role: string | null
+    accountType: string | null
   }
 
   export type UsersMaxAggregateOutputType = {
@@ -1257,6 +1262,11 @@ export namespace Prisma {
     password: string | null
     ImagePath: string | null
     createdAt: Date | null
+    active: boolean | null
+    code: string | null
+    codeActivationTime: Date | null
+    role: string | null
+    accountType: string | null
   }
 
   export type UsersCountAggregateOutputType = {
@@ -1266,6 +1276,11 @@ export namespace Prisma {
     password: number
     ImagePath: number
     createdAt: number
+    active: number
+    code: number
+    codeActivationTime: number
+    role: number
+    accountType: number
     _all: number
   }
 
@@ -1285,6 +1300,11 @@ export namespace Prisma {
     password?: true
     ImagePath?: true
     createdAt?: true
+    active?: true
+    code?: true
+    codeActivationTime?: true
+    role?: true
+    accountType?: true
   }
 
   export type UsersMaxAggregateInputType = {
@@ -1294,6 +1314,11 @@ export namespace Prisma {
     password?: true
     ImagePath?: true
     createdAt?: true
+    active?: true
+    code?: true
+    codeActivationTime?: true
+    role?: true
+    accountType?: true
   }
 
   export type UsersCountAggregateInputType = {
@@ -1303,6 +1328,11 @@ export namespace Prisma {
     password?: true
     ImagePath?: true
     createdAt?: true
+    active?: true
+    code?: true
+    codeActivationTime?: true
+    role?: true
+    accountType?: true
     _all?: true
   }
 
@@ -1399,6 +1429,11 @@ export namespace Prisma {
     password: string
     ImagePath: string | null
     createdAt: Date
+    active: boolean
+    code: string | null
+    codeActivationTime: Date | null
+    role: string | null
+    accountType: string | null
     _count: UsersCountAggregateOutputType | null
     _avg: UsersAvgAggregateOutputType | null
     _sum: UsersSumAggregateOutputType | null
@@ -1427,6 +1462,11 @@ export namespace Prisma {
     password?: boolean
     ImagePath?: boolean
     createdAt?: boolean
+    active?: boolean
+    code?: boolean
+    codeActivationTime?: boolean
+    role?: boolean
+    accountType?: boolean
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
     meetings?: boolean | Users$meetingsArgs<ExtArgs>
@@ -1440,6 +1480,11 @@ export namespace Prisma {
     password?: boolean
     ImagePath?: boolean
     createdAt?: boolean
+    active?: boolean
+    code?: boolean
+    codeActivationTime?: boolean
+    role?: boolean
+    accountType?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type UsersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1449,6 +1494,11 @@ export namespace Prisma {
     password?: boolean
     ImagePath?: boolean
     createdAt?: boolean
+    active?: boolean
+    code?: boolean
+    codeActivationTime?: boolean
+    role?: boolean
+    accountType?: boolean
   }, ExtArgs["result"]["users"]>
 
   export type UsersSelectScalar = {
@@ -1458,9 +1508,14 @@ export namespace Prisma {
     password?: boolean
     ImagePath?: boolean
     createdAt?: boolean
+    active?: boolean
+    code?: boolean
+    codeActivationTime?: boolean
+    role?: boolean
+    accountType?: boolean
   }
 
-  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "createdAt", ExtArgs["result"]["users"]>
+  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "createdAt" | "active" | "code" | "codeActivationTime" | "role" | "accountType", ExtArgs["result"]["users"]>
   export type UsersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
@@ -1484,6 +1539,11 @@ export namespace Prisma {
       password: string
       ImagePath: string | null
       createdAt: Date
+      active: boolean
+      code: string | null
+      codeActivationTime: Date | null
+      role: string | null
+      accountType: string | null
     }, ExtArgs["result"]["users"]>
     composites: {}
   }
@@ -1916,6 +1976,11 @@ export namespace Prisma {
     readonly password: FieldRef<"Users", 'String'>
     readonly ImagePath: FieldRef<"Users", 'String'>
     readonly createdAt: FieldRef<"Users", 'DateTime'>
+    readonly active: FieldRef<"Users", 'Boolean'>
+    readonly code: FieldRef<"Users", 'String'>
+    readonly codeActivationTime: FieldRef<"Users", 'DateTime'>
+    readonly role: FieldRef<"Users", 'String'>
+    readonly accountType: FieldRef<"Users", 'String'>
   }
     
 
@@ -5875,7 +5940,12 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     ImagePath: 'ImagePath',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    active: 'active',
+    code: 'code',
+    codeActivationTime: 'codeActivationTime',
+    role: 'role',
+    accountType: 'accountType'
   };
 
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -6026,6 +6096,11 @@ export namespace Prisma {
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
     createdAt?: DateTimeFilter<"Users"> | Date | string
+    active?: BoolFilter<"Users"> | boolean
+    code?: StringNullableFilter<"Users"> | string | null
+    codeActivationTime?: DateTimeNullableFilter<"Users"> | Date | string | null
+    role?: StringNullableFilter<"Users"> | string | null
+    accountType?: StringNullableFilter<"Users"> | string | null
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
     meetings?: MeetingListRelationFilter
@@ -6038,6 +6113,11 @@ export namespace Prisma {
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    active?: SortOrder
+    code?: SortOrderInput | SortOrder
+    codeActivationTime?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    accountType?: SortOrderInput | SortOrder
     organization?: OrganizationOrderByRelationAggregateInput
     member?: OrganizationMemberOrderByRelationAggregateInput
     meetings?: MeetingOrderByRelationAggregateInput
@@ -6053,6 +6133,11 @@ export namespace Prisma {
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
     createdAt?: DateTimeFilter<"Users"> | Date | string
+    active?: BoolFilter<"Users"> | boolean
+    code?: StringNullableFilter<"Users"> | string | null
+    codeActivationTime?: DateTimeNullableFilter<"Users"> | Date | string | null
+    role?: StringNullableFilter<"Users"> | string | null
+    accountType?: StringNullableFilter<"Users"> | string | null
     organization?: OrganizationListRelationFilter
     member?: OrganizationMemberListRelationFilter
     meetings?: MeetingListRelationFilter
@@ -6065,6 +6150,11 @@ export namespace Prisma {
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    active?: SortOrder
+    code?: SortOrderInput | SortOrder
+    codeActivationTime?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    accountType?: SortOrderInput | SortOrder
     _count?: UsersCountOrderByAggregateInput
     _avg?: UsersAvgOrderByAggregateInput
     _max?: UsersMaxOrderByAggregateInput
@@ -6082,6 +6172,11 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"Users"> | string
     ImagePath?: StringNullableWithAggregatesFilter<"Users"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Users"> | Date | string
+    active?: BoolWithAggregatesFilter<"Users"> | boolean
+    code?: StringNullableWithAggregatesFilter<"Users"> | string | null
+    codeActivationTime?: DateTimeNullableWithAggregatesFilter<"Users"> | Date | string | null
+    role?: StringNullableWithAggregatesFilter<"Users"> | string | null
+    accountType?: StringNullableWithAggregatesFilter<"Users"> | string | null
   }
 
   export type OrganizationWhereInput = {
@@ -6309,6 +6404,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
     meetings?: MeetingCreateNestedManyWithoutHostInput
@@ -6321,6 +6421,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
@@ -6332,6 +6437,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
     meetings?: MeetingUpdateManyWithoutHostNestedInput
@@ -6344,6 +6454,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
@@ -6356,6 +6471,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
   }
 
   export type UsersUpdateManyMutationInput = {
@@ -6364,6 +6484,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UsersUncheckedUpdateManyInput = {
@@ -6373,6 +6498,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrganizationCreateInput = {
@@ -6638,6 +6768,22 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type OrganizationListRelationFilter = {
     every?: OrganizationWhereInput
     some?: OrganizationWhereInput
@@ -6680,6 +6826,11 @@ export namespace Prisma {
     password?: SortOrder
     ImagePath?: SortOrder
     createdAt?: SortOrder
+    active?: SortOrder
+    code?: SortOrder
+    codeActivationTime?: SortOrder
+    role?: SortOrder
+    accountType?: SortOrder
   }
 
   export type UsersAvgOrderByAggregateInput = {
@@ -6693,6 +6844,11 @@ export namespace Prisma {
     password?: SortOrder
     ImagePath?: SortOrder
     createdAt?: SortOrder
+    active?: SortOrder
+    code?: SortOrder
+    codeActivationTime?: SortOrder
+    role?: SortOrder
+    accountType?: SortOrder
   }
 
   export type UsersMinOrderByAggregateInput = {
@@ -6702,6 +6858,11 @@ export namespace Prisma {
     password?: SortOrder
     ImagePath?: SortOrder
     createdAt?: SortOrder
+    active?: SortOrder
+    code?: SortOrder
+    codeActivationTime?: SortOrder
+    role?: SortOrder
+    accountType?: SortOrder
   }
 
   export type UsersSumOrderByAggregateInput = {
@@ -6774,9 +6935,26 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type UsersScalarRelationFilter = {
@@ -6830,14 +7008,6 @@ export namespace Prisma {
     ownerId?: SortOrder
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type OrganizationScalarRelationFilter = {
     is?: OrganizationWhereInput
     isNot?: OrganizationWhereInput
@@ -6879,17 +7049,6 @@ export namespace Prisma {
     id?: SortOrder
     organizationId?: SortOrder
     userId?: SortOrder
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type MeetingCountOrderByAggregateInput = {
@@ -6938,20 +7097,6 @@ export namespace Prisma {
     id?: SortOrder
     organizationId?: SortOrder
     hostId?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type OrganizationCreateNestedManyWithoutOwnerInput = {
@@ -7006,6 +7151,14 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type OrganizationUpdateManyWithoutOwnerNestedInput = {
@@ -7134,10 +7287,6 @@ export namespace Prisma {
     connect?: OrganizationMemberWhereUniqueInput | OrganizationMemberWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type UsersUpdateOneRequiredWithoutOrganizationNestedInput = {
     create?: XOR<UsersCreateWithoutOrganizationInput, UsersUncheckedCreateWithoutOrganizationInput>
     connectOrCreate?: UsersCreateOrConnectWithoutOrganizationInput
@@ -7242,10 +7391,6 @@ export namespace Prisma {
     connect?: UsersWhereUniqueInput
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type OrganizationUpdateOneRequiredWithoutMeetingNestedInput = {
     create?: XOR<OrganizationCreateWithoutMeetingInput, OrganizationUncheckedCreateWithoutMeetingInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutMeetingInput
@@ -7310,6 +7455,22 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -7398,28 +7559,12 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7617,6 +7762,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
     meetings?: MeetingCreateNestedManyWithoutHostInput
   }
@@ -7628,6 +7778,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
@@ -7706,6 +7861,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
     meetings?: MeetingUpdateManyWithoutHostNestedInput
   }
@@ -7717,6 +7877,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
@@ -7789,6 +7954,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
     meetings?: MeetingCreateNestedManyWithoutHostInput
   }
@@ -7800,6 +7970,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
     meetings?: MeetingUncheckedCreateNestedManyWithoutHostInput
   }
@@ -7862,6 +8037,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
     meetings?: MeetingUpdateManyWithoutHostNestedInput
   }
@@ -7873,6 +8053,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
     meetings?: MeetingUncheckedUpdateManyWithoutHostNestedInput
   }
@@ -7913,6 +8098,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberCreateNestedManyWithoutUserInput
   }
@@ -7924,6 +8114,11 @@ export namespace Prisma {
     password: string
     ImagePath?: string | null
     createdAt?: Date | string
+    active?: boolean
+    code?: string | null
+    codeActivationTime?: Date | string | null
+    role?: string | null
+    accountType?: string | null
     organization?: OrganizationUncheckedCreateNestedManyWithoutOwnerInput
     member?: OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   }
@@ -7986,6 +8181,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUpdateManyWithoutUserNestedInput
   }
@@ -7997,6 +8197,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    codeActivationTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    accountType?: NullableStringFieldUpdateOperationsInput | string | null
     organization?: OrganizationUncheckedUpdateManyWithoutOwnerNestedInput
     member?: OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   }
