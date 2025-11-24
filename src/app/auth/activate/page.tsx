@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import axios  from 'axios';
 import { error } from 'console';
 
-export default function Actiavte() {
+export default function Activate() {
   const [isLogin, setIsLogin] = useState(true);
   const [logError, setIsError] = useState(true);
   const [formData, setFormData] = useState({
@@ -15,28 +15,37 @@ export default function Actiavte() {
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try{
-      let result = await axios.post(`http://localhost:3000/api/activateAccount` , formData,
-         {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}` 
-          },
-      })
-      if (result.data.success){
-        window.location.href = "/dashboard"
+  e.preventDefault();
+
+  console.log("Sending data:", formData);
+  console.log("Token:", localStorage.getItem("token"));
+
+  try {
+    let result = await axios.post(
+      "http://localhost:4000/api/activateAccount",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
       }
-    }catch(error){
-        if (axios.isAxiosError(error)) {
-        console.error("Axios Error:", error.response?.status, error.response?.data);
-        alert("Error: " + error.response?.data?.message || error.message);
-      } else {
-        console.error("Other Error:", error);
-        alert("An unexpected error occurred.");
-      }
+    );
+
+    if (result.data) {
+      console.log('Done! ' , result.data);
+      window.location.href = "/dashboard";
     }
-  };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios Error:", error.response?.status, error.response?.data);
+      alert("Error: " + (error.response?.data?.message || error.message));
+    } else {
+      console.error("Other Error:", error);
+      alert("An unexpected error occurred.");
+    }
+  }
+};
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -81,10 +90,10 @@ export default function Actiavte() {
           {/* Welcome Message */}
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-rich-black mb-2">
-              {isLogin ? 'Welcome back!' : 'Join SmartMeet'}
+              Join SmartMeet
             </h2>
             <p className="text-onyx-gray/70">
-              {isLogin ? 'Sign in to your account to continue' : 'Create your account to get started'}
+                Enter the Code to Activate the Account
             </p>
           </div>
 
@@ -95,11 +104,11 @@ export default function Actiavte() {
                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
                 <Input
                   type="text"
-                  placeholder="Full name"
+                  placeholder="Code"
                   value={formData.code}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  onChange={(e) => handleInputChange('code', e.target.value)}
                   className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
-                  required={!isLogin}
+                  required
                 />
               </div>
 
@@ -107,7 +116,7 @@ export default function Actiavte() {
               type="submit"
               className="w-full bg-gradient-to-r from-royal-blue to-deep-wine hover:from-deep-wine hover:to-royal-blue text-white py-3 h-12 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              {isLogin ? 'Sign In' : 'Create Account'}
+              Create Account
             </Button>
           </form>
 

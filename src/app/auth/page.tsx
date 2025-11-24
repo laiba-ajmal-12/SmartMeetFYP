@@ -5,35 +5,62 @@ import { Video, Eye, EyeOff, ArrowLeft, Mail, Lock, User, Github } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios  from 'axios';
+import { useRouter } from 'next/navigation'
 import { error } from 'console';
 
 export default function Auth() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [logError, setIsError] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  image: string | File; 
+  }>({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    image:''
+    image: '' 
   });
+  function navigateToOtherPage(e:React.MouseEvent){
+    e.preventDefault();
+    router.push('/auth/activate'); 
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     try{
-    if (!isLogin){
-      let result = await axios.post(`http://localhost:3000/api/signup` , formData)
-      if(result.data.success){
+      if (!isLogin){
+        if (formData.confirmPassword !== formData.password){
+          alert('both Password field Does not Match')
+        }
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('email', formData.email);
+      data.append('password', formData.password);
+      
+      if (formData.image instanceof File) {
+        data.append('image', formData.image); 
+      }
+      let result = await axios.post(`http://localhost:4000/api/signup` , data)
+      console.log('-->: bef' , result.data);
+      if(result.data){
+          console.log(formData, 'inside -- ');
           console.log('login ' , result.data.token)
           localStorage.setItem('token' , result.data.Token)
-          window.location.href = '/auth/Actiavte';
+          router.push('/auth/activate'); 
       }
     }
     else{
-      let result = await axios.post(`http://localhost:3000/api/login` , formData)
-
+      let result = await axios.post(`http://localhost:4000/api/login` , formData)
+      if(result.data){
+        localStorage.setItem('token' , result.data.Token)
+        router.push('/dashboard'); 
+      }
     }
     // Redirect to meeting room for demo
     }catch(error){
@@ -160,7 +187,7 @@ export default function Auth() {
                 {/* File input */}
                 <Input
                   type="file"
-                  accept="image/png, image/jpeg"   // sirf PNG ya JPEG allow
+                  accept="image/png, image/jpeg"   
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       const file = e.target.files[0];
@@ -171,27 +198,14 @@ export default function Auth() {
                         return;
                       }
 
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        setFormData(prev => ({
+                      setFormData(prev => ({
                           ...prev,
-                          image: reader.result as string // base64 store
+                          image: file
                         }));
-                      };
-                      reader.readAsDataURL(file);
                     }
                   }}
                   className="pl-12 pr-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
                 />
-
-                {/* Optional: preview */}
-                {formData.image && (
-                  <img
-                    src={formData.image}
-                    alt="Preview"
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full object-cover"
-                  />
-                )}
               </div>
             )}
 
@@ -264,6 +278,7 @@ export default function Auth() {
               <Button
                 variant="outline"
                 className="border-2 border-gray-200 hover:border-royal-blue hover:bg-royal-blue/5 transition-all duration-200 py-3 h-12 rounded-xl group"
+                onClick={(e)=>navigateToOtherPage(e)}
               >
                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -275,6 +290,7 @@ export default function Auth() {
               <Button
                 variant="outline"
                 className="border-2 border-gray-200 hover:border-royal-blue hover:bg-royal-blue/5 transition-all duration-200 py-3 h-12 rounded-xl group"
+                onClick={(e)=>navigateToOtherPage(e)}
               >
                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"/>
@@ -283,6 +299,7 @@ export default function Auth() {
               <Button
                 variant="outline"
                 className="border-2 border-gray-200 hover:border-royal-blue hover:bg-royal-blue/5 transition-all duration-200 py-3 h-12 rounded-xl group"
+                onClick={(e)=>navigateToOtherPage(e)}
               >
                 <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
               </Button>
