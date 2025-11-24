@@ -2,6 +2,7 @@
 import { generateToken, verifyToken } from '../../Infrastructure Layer/Authentication/jwt.ts';
 
 export function verifyUser(req: any, res: any, next: any) {
+    console.log('Hell o g --- > ' )
     const authHeader = req.headers['authorization'];
 
     if (!authHeader) {
@@ -23,3 +24,5 @@ export function verifyUser(req: any, res: any, next: any) {
     req.user = payload; 
     next();
 }
+
+export default verifyUser;

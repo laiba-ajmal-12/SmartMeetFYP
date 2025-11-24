@@ -1,6 +1,9 @@
+
 import express from 'express';
 //@ts-ignore
-import {generateToken , verifyToken} from '../../Infrastructure Layer/Authentication/jwt.ts'
+import {generateToken } from '../../Infrastructure Layer/Authentication/jwt.ts'
+//@ts-ignore
+import verifyUser from '../MiddleWares/jwtAuthMiddleware.ts';
 import type { InternalUserDTO } from '../../Domain Layer/DTOs/userDTOs/InternalUser.ts';
 //@ts-ignore
 import { upload } from '../MiddleWares/ImageMiddleware.ts';
@@ -18,14 +21,14 @@ import { ApplicationError } from '../../Busines Logic layer/ErrorHandling/appErr
 //@ts-ignore
 import {BrevoEmail} from '../../Infrastructure Layer/Email/email.ts'
 
-const userRouter = express.Router();
+const userRoute = express.Router();
 const port = 3000;
 
 
-userRouter.use(express.json());
+userRoute.use(express.json());
 const userService = new UserService(new hashPassword(), new userDbRepo() , new BrevoEmail("smartmeet07@gmail.com"))
 
-userRouter.post("/signup", upload.single("image"), async (req, res) => {
+userRoute.post("/signup", upload.single("image"), async (req, res) => {
   try{
     const user:InternalUserDTO =  req.body
     user.ImagePath = req.file?.path ?? "" ;
@@ -46,7 +49,7 @@ userRouter.post("/signup", upload.single("image"), async (req, res) => {
   }
 });
 
-userRouter.post('/login', async (req, res) => {
+userRoute.post('/login', async (req, res) => {
   try{
 
       const user:LoginUserDTO = req.body;
@@ -67,14 +70,12 @@ userRouter.post('/login', async (req, res) => {
 });
 
 
-userRouter.post('/activateAccount', verifyToken,  async (req:any, res:any) => {
+userRoute.post('/activateAccount',verifyUser,   async (req:any, res:any) => {
   try{
 
       const code = req.body;
-      const userRes:UserResponseDTO | null = await userService.ActivateAccount(req.user.id , code)
-      if (!userRes){
-        return res.status(400).send('Error while Processing')
-      }
+      console.log('Activate: ' , code)
+      const userRes:UserResponseDTO = await userService.ActivateAccount(req.user.id , code.code)
       return res.status(200).json({user:userRes});
 
   }catch(err){
@@ -86,7 +87,7 @@ userRouter.post('/activateAccount', verifyToken,  async (req:any, res:any) => {
   }
 });
 
-userRouter.post('/ForgetPassword',  async (req:any, res:any) => {
+userRoute.post('/ForgetPassword',  async (req:any, res:any) => {
   try{
 
       const email = req.body;
@@ -106,7 +107,7 @@ userRouter.post('/ForgetPassword',  async (req:any, res:any) => {
 });
 
 
-userRouter.post('/resetPassword',  async (req:any, res:any) => {
+userRoute.post('/resetPassword',  async (req:any, res:any) => {
   try{
 
       const {email,code, password} = req.body;
@@ -125,4 +126,4 @@ userRouter.post('/resetPassword',  async (req:any, res:any) => {
   }
 });
 
-export default userRouter;
+export default userRoute;

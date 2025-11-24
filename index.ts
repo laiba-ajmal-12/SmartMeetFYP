@@ -10,9 +10,9 @@ import { readFileSync } from "fs";
 import type { Request } from "express";
 
 //@ts-ignore
-import userRouter from "./Src/Presnetation Layer/userRoutes/users.ts";
-//@ts-ignore
 import organRoute from "./Src/Presnetation Layer/OrganizationRoutes/organization.ts";
+//@ts-ignore
+import userRoute from "./Src/Presnetation Layer/userRoutes/users.ts";
 //@ts-ignore
 import MemberRoute from "./Src/Presnetation Layer/MemberRoutes/Members.ts";
 //@ts-ignore
@@ -23,7 +23,7 @@ import { resolvers } from "./Src/Infrastructure Layer/GraphQL/resolver.ts";
 import { verifyUser } from "./Src/Presnetation Layer/MiddleWares/jwtAuthMiddleware.ts";
 
 const app = express();
-const port = 3000;
+const port = 4000;
 const json = bodyParser.json
 const typeDefs = readFileSync(
   path.join("./Src/Infrastructure Layer/GraphQL/schema.graphql"),
@@ -58,8 +58,10 @@ const startServer = async () => {
   );
   app.use(bodyParser.json({ limit: "10mb" }));
   app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+  app.use(cors())
+  
   // REST routes
-  app.use("/api", userRouter);
+  app.use("/api", userRoute);
   app.use("/api", organRoute);
   app.use("/api", MeetingRoute);
   app.use("/api", MemberRoute);

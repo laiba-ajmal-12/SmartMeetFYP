@@ -55,6 +55,9 @@ export class UserService {
         if (res == false){
             throw new ApplicationError(403,"Forbidden")
         }
+        if(user.active ==false){
+            throw new ApplicationError(404,"inactive")
+        }
 
         const final: UserResponseDTO = {
             id: user.id,
@@ -65,36 +68,31 @@ export class UserService {
         return final;    
     } 
 
-    async ActivateAccount(id:number,code:string):Promise<UserResponseDTO | null> {
-
+    async ActivateAccount(id:number,code:string):Promise<UserResponseDTO> {
+        
         const user:InternalUserDTO | null = await this.dataStorage.getUserbyId(id)
         if(user == null){
             throw new ApplicationError(404,"Not Found")
         }
+        console.log(code ,'==', user?.code)
 
         if (user?.code && code !== user.code){
             throw new ApplicationError(400,"Wrong Code ")
         }
-
-        let activeUser:InternalUserDTO | null =null;
-        if ( user.codeActivationTime
-             && user.code === code && 
-             Date.now() <= new Date(user.codeActivationTime).getTime() + 10 * 60 * 1000
-        ){
-            user.active= true;
-            activeUser = await this.dataStorage.updateUser(user.id , user);
-        } 
-        if (activeUser){
-            const final: UserResponseDTO = {
-                id: activeUser.id,
-                name: activeUser.name,
-                email: activeUser.email,
-                ImagePath: activeUser.ImagePath ?? " "
-            };
-            return final;
+        if (user.codeActivationTime && Date.now() >= new Date(user.codeActivationTime).getTime() + 10 * 60 * 1000){
+            throw new ApplicationError(400, "Code TimeOut");
         }
-        return null;
-       
+
+        user.active= true;
+        const activeUser:InternalUserDTO =  await this.dataStorage.updateUser(user.id , user);
+        const final: UserResponseDTO = {
+            id: activeUser.id,
+            name: activeUser.name,
+            email: activeUser.email,
+            ImagePath: activeUser.ImagePath ?? " ",
+            active:activeUser.active,
+        };
+        return final;       
     } 
 
     async forgetPassword(email:string):Promise<boolean> {
