@@ -25,7 +25,7 @@ The following features are fully implemented in the current MVP:
 
 ### Computer Vision & Engagement Tracking
 
-* Real-time face detection (face present or not)
+* Face detection (face present or not)
 * Head pose movement analysis (right or left)
 * Eye gaze tracking
 * Attention and attentiveness detection logic
@@ -61,7 +61,7 @@ The following features are fully implemented in the current MVP:
 ### Database
 
 * PostgreSQL
-* Prisma ORM(as a wrapper for Db)
+* Prisma ORM
 
 ## Setup Instructions
 
