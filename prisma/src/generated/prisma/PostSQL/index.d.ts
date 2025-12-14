@@ -1247,6 +1247,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     ImagePath: string | null
+    codeVerified: boolean | null
     createdAt: Date | null
     active: boolean | null
     code: string | null
@@ -1261,6 +1262,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     ImagePath: string | null
+    codeVerified: boolean | null
     createdAt: Date | null
     active: boolean | null
     code: string | null
@@ -1275,6 +1277,7 @@ export namespace Prisma {
     email: number
     password: number
     ImagePath: number
+    codeVerified: number
     createdAt: number
     active: number
     code: number
@@ -1299,6 +1302,7 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
+    codeVerified?: true
     createdAt?: true
     active?: true
     code?: true
@@ -1313,6 +1317,7 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
+    codeVerified?: true
     createdAt?: true
     active?: true
     code?: true
@@ -1327,6 +1332,7 @@ export namespace Prisma {
     email?: true
     password?: true
     ImagePath?: true
+    codeVerified?: true
     createdAt?: true
     active?: true
     code?: true
@@ -1428,6 +1434,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath: string | null
+    codeVerified: boolean | null
     createdAt: Date
     active: boolean
     code: string | null
@@ -1461,6 +1468,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
+    codeVerified?: boolean
     createdAt?: boolean
     active?: boolean
     code?: boolean
@@ -1479,6 +1487,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
+    codeVerified?: boolean
     createdAt?: boolean
     active?: boolean
     code?: boolean
@@ -1493,6 +1502,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
+    codeVerified?: boolean
     createdAt?: boolean
     active?: boolean
     code?: boolean
@@ -1507,6 +1517,7 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     ImagePath?: boolean
+    codeVerified?: boolean
     createdAt?: boolean
     active?: boolean
     code?: boolean
@@ -1515,7 +1526,7 @@ export namespace Prisma {
     accountType?: boolean
   }
 
-  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "createdAt" | "active" | "code" | "codeActivationTime" | "role" | "accountType", ExtArgs["result"]["users"]>
+  export type UsersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "ImagePath" | "codeVerified" | "createdAt" | "active" | "code" | "codeActivationTime" | "role" | "accountType", ExtArgs["result"]["users"]>
   export type UsersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Users$organizationArgs<ExtArgs>
     member?: boolean | Users$memberArgs<ExtArgs>
@@ -1538,6 +1549,7 @@ export namespace Prisma {
       email: string
       password: string
       ImagePath: string | null
+      codeVerified: boolean | null
       createdAt: Date
       active: boolean
       code: string | null
@@ -1975,6 +1987,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Users", 'String'>
     readonly password: FieldRef<"Users", 'String'>
     readonly ImagePath: FieldRef<"Users", 'String'>
+    readonly codeVerified: FieldRef<"Users", 'Boolean'>
     readonly createdAt: FieldRef<"Users", 'DateTime'>
     readonly active: FieldRef<"Users", 'Boolean'>
     readonly code: FieldRef<"Users", 'String'>
@@ -2473,11 +2486,13 @@ export namespace Prisma {
 
   export type OrganizationAvgAggregateOutputType = {
     id: number | null
+    totalParticipants: number | null
     ownerId: number | null
   }
 
   export type OrganizationSumAggregateOutputType = {
     id: number | null
+    totalParticipants: number | null
     ownerId: number | null
   }
 
@@ -2489,6 +2504,7 @@ export namespace Prisma {
     createAt: Date | null
     organizationCode: string | null
     domainName: string | null
+    totalParticipants: number | null
     domainRestrictionFlag: boolean | null
     ownerId: number | null
   }
@@ -2501,6 +2517,7 @@ export namespace Prisma {
     createAt: Date | null
     organizationCode: string | null
     domainName: string | null
+    totalParticipants: number | null
     domainRestrictionFlag: boolean | null
     ownerId: number | null
   }
@@ -2513,6 +2530,7 @@ export namespace Prisma {
     createAt: number
     organizationCode: number
     domainName: number
+    totalParticipants: number
     domainRestrictionFlag: number
     ownerId: number
     _all: number
@@ -2521,11 +2539,13 @@ export namespace Prisma {
 
   export type OrganizationAvgAggregateInputType = {
     id?: true
+    totalParticipants?: true
     ownerId?: true
   }
 
   export type OrganizationSumAggregateInputType = {
     id?: true
+    totalParticipants?: true
     ownerId?: true
   }
 
@@ -2537,6 +2557,7 @@ export namespace Prisma {
     createAt?: true
     organizationCode?: true
     domainName?: true
+    totalParticipants?: true
     domainRestrictionFlag?: true
     ownerId?: true
   }
@@ -2549,6 +2570,7 @@ export namespace Prisma {
     createAt?: true
     organizationCode?: true
     domainName?: true
+    totalParticipants?: true
     domainRestrictionFlag?: true
     ownerId?: true
   }
@@ -2561,6 +2583,7 @@ export namespace Prisma {
     createAt?: true
     organizationCode?: true
     domainName?: true
+    totalParticipants?: true
     domainRestrictionFlag?: true
     ownerId?: true
     _all?: true
@@ -2660,6 +2683,7 @@ export namespace Prisma {
     createAt: Date
     organizationCode: string
     domainName: string | null
+    totalParticipants: number
     domainRestrictionFlag: boolean
     ownerId: number
     _count: OrganizationCountAggregateOutputType | null
@@ -2691,6 +2715,7 @@ export namespace Prisma {
     createAt?: boolean
     organizationCode?: boolean
     domainName?: boolean
+    totalParticipants?: boolean
     domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
@@ -2707,6 +2732,7 @@ export namespace Prisma {
     createAt?: boolean
     organizationCode?: boolean
     domainName?: boolean
+    totalParticipants?: boolean
     domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
@@ -2720,6 +2746,7 @@ export namespace Prisma {
     createAt?: boolean
     organizationCode?: boolean
     domainName?: boolean
+    totalParticipants?: boolean
     domainRestrictionFlag?: boolean
     ownerId?: boolean
     owner?: boolean | UsersDefaultArgs<ExtArgs>
@@ -2733,11 +2760,12 @@ export namespace Prisma {
     createAt?: boolean
     organizationCode?: boolean
     domainName?: boolean
+    totalParticipants?: boolean
     domainRestrictionFlag?: boolean
     ownerId?: boolean
   }
 
-  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "ImagePath" | "createAt" | "organizationCode" | "domainName" | "domainRestrictionFlag" | "ownerId", ExtArgs["result"]["organization"]>
+  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "ImagePath" | "createAt" | "organizationCode" | "domainName" | "totalParticipants" | "domainRestrictionFlag" | "ownerId", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UsersDefaultArgs<ExtArgs>
     meeting?: boolean | Organization$meetingArgs<ExtArgs>
@@ -2766,6 +2794,7 @@ export namespace Prisma {
       createAt: Date
       organizationCode: string
       domainName: string | null
+      totalParticipants: number
       domainRestrictionFlag: boolean
       ownerId: number
     }, ExtArgs["result"]["organization"]>
@@ -3201,6 +3230,7 @@ export namespace Prisma {
     readonly createAt: FieldRef<"Organization", 'DateTime'>
     readonly organizationCode: FieldRef<"Organization", 'String'>
     readonly domainName: FieldRef<"Organization", 'String'>
+    readonly totalParticipants: FieldRef<"Organization", 'Int'>
     readonly domainRestrictionFlag: FieldRef<"Organization", 'Boolean'>
     readonly ownerId: FieldRef<"Organization", 'Int'>
   }
@@ -4775,12 +4805,16 @@ export namespace Prisma {
   export type MeetingAvgAggregateOutputType = {
     id: number | null
     organizationId: number | null
+    Engagment: number | null
+    meetingDuration: number | null
     hostId: number | null
   }
 
   export type MeetingSumAggregateOutputType = {
     id: number | null
     organizationId: number | null
+    Engagment: number | null
+    meetingDuration: number | null
     hostId: number | null
   }
 
@@ -4792,7 +4826,10 @@ export namespace Prisma {
     daily: boolean | null
     weekly: boolean | null
     startTime: Date | null
-    endTime: Date | null
+    EnableEngagement: boolean | null
+    Engagment: number | null
+    meetingDuration: number | null
+    meetingLink: string | null
     hostId: number | null
   }
 
@@ -4804,7 +4841,10 @@ export namespace Prisma {
     daily: boolean | null
     weekly: boolean | null
     startTime: Date | null
-    endTime: Date | null
+    EnableEngagement: boolean | null
+    Engagment: number | null
+    meetingDuration: number | null
+    meetingLink: string | null
     hostId: number | null
   }
 
@@ -4816,7 +4856,10 @@ export namespace Prisma {
     daily: number
     weekly: number
     startTime: number
-    endTime: number
+    EnableEngagement: number
+    Engagment: number
+    meetingDuration: number
+    meetingLink: number
     hostId: number
     _all: number
   }
@@ -4825,12 +4868,16 @@ export namespace Prisma {
   export type MeetingAvgAggregateInputType = {
     id?: true
     organizationId?: true
+    Engagment?: true
+    meetingDuration?: true
     hostId?: true
   }
 
   export type MeetingSumAggregateInputType = {
     id?: true
     organizationId?: true
+    Engagment?: true
+    meetingDuration?: true
     hostId?: true
   }
 
@@ -4842,7 +4889,10 @@ export namespace Prisma {
     daily?: true
     weekly?: true
     startTime?: true
-    endTime?: true
+    EnableEngagement?: true
+    Engagment?: true
+    meetingDuration?: true
+    meetingLink?: true
     hostId?: true
   }
 
@@ -4854,7 +4904,10 @@ export namespace Prisma {
     daily?: true
     weekly?: true
     startTime?: true
-    endTime?: true
+    EnableEngagement?: true
+    Engagment?: true
+    meetingDuration?: true
+    meetingLink?: true
     hostId?: true
   }
 
@@ -4866,7 +4919,10 @@ export namespace Prisma {
     daily?: true
     weekly?: true
     startTime?: true
-    endTime?: true
+    EnableEngagement?: true
+    Engagment?: true
+    meetingDuration?: true
+    meetingLink?: true
     hostId?: true
     _all?: true
   }
@@ -4965,7 +5021,10 @@ export namespace Prisma {
     daily: boolean
     weekly: boolean
     startTime: Date
-    endTime: Date | null
+    EnableEngagement: boolean
+    Engagment: number
+    meetingDuration: number
+    meetingLink: string
     hostId: number
     _count: MeetingCountAggregateOutputType | null
     _avg: MeetingAvgAggregateOutputType | null
@@ -4996,7 +5055,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime?: boolean
-    endTime?: boolean
+    EnableEngagement?: boolean
+    Engagment?: boolean
+    meetingDuration?: boolean
+    meetingLink?: boolean
     hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     host?: boolean | UsersDefaultArgs<ExtArgs>
@@ -5010,7 +5072,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime?: boolean
-    endTime?: boolean
+    EnableEngagement?: boolean
+    Engagment?: boolean
+    meetingDuration?: boolean
+    meetingLink?: boolean
     hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     host?: boolean | UsersDefaultArgs<ExtArgs>
@@ -5024,7 +5089,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime?: boolean
-    endTime?: boolean
+    EnableEngagement?: boolean
+    Engagment?: boolean
+    meetingDuration?: boolean
+    meetingLink?: boolean
     hostId?: boolean
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     host?: boolean | UsersDefaultArgs<ExtArgs>
@@ -5038,11 +5106,14 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime?: boolean
-    endTime?: boolean
+    EnableEngagement?: boolean
+    Engagment?: boolean
+    meetingDuration?: boolean
+    meetingLink?: boolean
     hostId?: boolean
   }
 
-  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "daily" | "weekly" | "startTime" | "endTime" | "hostId", ExtArgs["result"]["meeting"]>
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "organizationId" | "daily" | "weekly" | "startTime" | "EnableEngagement" | "Engagment" | "meetingDuration" | "meetingLink" | "hostId", ExtArgs["result"]["meeting"]>
   export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | OrganizationDefaultArgs<ExtArgs>
     host?: boolean | UsersDefaultArgs<ExtArgs>
@@ -5070,7 +5141,10 @@ export namespace Prisma {
       daily: boolean
       weekly: boolean
       startTime: Date
-      endTime: Date | null
+      EnableEngagement: boolean
+      Engagment: number
+      meetingDuration: number
+      meetingLink: string
       hostId: number
     }, ExtArgs["result"]["meeting"]>
     composites: {}
@@ -5504,7 +5578,10 @@ export namespace Prisma {
     readonly daily: FieldRef<"Meeting", 'Boolean'>
     readonly weekly: FieldRef<"Meeting", 'Boolean'>
     readonly startTime: FieldRef<"Meeting", 'DateTime'>
-    readonly endTime: FieldRef<"Meeting", 'DateTime'>
+    readonly EnableEngagement: FieldRef<"Meeting", 'Boolean'>
+    readonly Engagment: FieldRef<"Meeting", 'Int'>
+    readonly meetingDuration: FieldRef<"Meeting", 'Int'>
+    readonly meetingLink: FieldRef<"Meeting", 'String'>
     readonly hostId: FieldRef<"Meeting", 'Int'>
   }
     
@@ -5940,6 +6017,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     ImagePath: 'ImagePath',
+    codeVerified: 'codeVerified',
     createdAt: 'createdAt',
     active: 'active',
     code: 'code',
@@ -5959,6 +6037,7 @@ export namespace Prisma {
     createAt: 'createAt',
     organizationCode: 'organizationCode',
     domainName: 'domainName',
+    totalParticipants: 'totalParticipants',
     domainRestrictionFlag: 'domainRestrictionFlag',
     ownerId: 'ownerId'
   };
@@ -5984,7 +6063,10 @@ export namespace Prisma {
     daily: 'daily',
     weekly: 'weekly',
     startTime: 'startTime',
-    endTime: 'endTime',
+    EnableEngagement: 'EnableEngagement',
+    Engagment: 'Engagment',
+    meetingDuration: 'meetingDuration',
+    meetingLink: 'meetingLink',
     hostId: 'hostId'
   };
 
@@ -6049,6 +6131,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -6059,13 +6148,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -6095,6 +6177,7 @@ export namespace Prisma {
     email?: StringFilter<"Users"> | string
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
+    codeVerified?: BoolNullableFilter<"Users"> | boolean | null
     createdAt?: DateTimeFilter<"Users"> | Date | string
     active?: BoolFilter<"Users"> | boolean
     code?: StringNullableFilter<"Users"> | string | null
@@ -6112,6 +6195,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
+    codeVerified?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     active?: SortOrder
     code?: SortOrderInput | SortOrder
@@ -6132,6 +6216,7 @@ export namespace Prisma {
     name?: StringFilter<"Users"> | string
     password?: StringFilter<"Users"> | string
     ImagePath?: StringNullableFilter<"Users"> | string | null
+    codeVerified?: BoolNullableFilter<"Users"> | boolean | null
     createdAt?: DateTimeFilter<"Users"> | Date | string
     active?: BoolFilter<"Users"> | boolean
     code?: StringNullableFilter<"Users"> | string | null
@@ -6149,6 +6234,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrderInput | SortOrder
+    codeVerified?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     active?: SortOrder
     code?: SortOrderInput | SortOrder
@@ -6171,6 +6257,7 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Users"> | string
     password?: StringWithAggregatesFilter<"Users"> | string
     ImagePath?: StringNullableWithAggregatesFilter<"Users"> | string | null
+    codeVerified?: BoolNullableWithAggregatesFilter<"Users"> | boolean | null
     createdAt?: DateTimeWithAggregatesFilter<"Users"> | Date | string
     active?: BoolWithAggregatesFilter<"Users"> | boolean
     code?: StringNullableWithAggregatesFilter<"Users"> | string | null
@@ -6190,6 +6277,7 @@ export namespace Prisma {
     createAt?: DateTimeFilter<"Organization"> | Date | string
     organizationCode?: StringFilter<"Organization"> | string
     domainName?: StringNullableFilter<"Organization"> | string | null
+    totalParticipants?: IntFilter<"Organization"> | number
     domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
     owner?: XOR<UsersScalarRelationFilter, UsersWhereInput>
@@ -6205,6 +6293,7 @@ export namespace Prisma {
     createAt?: SortOrder
     organizationCode?: SortOrder
     domainName?: SortOrderInput | SortOrder
+    totalParticipants?: SortOrder
     domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
     owner?: UsersOrderByWithRelationInput
@@ -6223,6 +6312,7 @@ export namespace Prisma {
     ImagePath?: StringNullableFilter<"Organization"> | string | null
     createAt?: DateTimeFilter<"Organization"> | Date | string
     domainName?: StringNullableFilter<"Organization"> | string | null
+    totalParticipants?: IntFilter<"Organization"> | number
     domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
     owner?: XOR<UsersScalarRelationFilter, UsersWhereInput>
@@ -6238,6 +6328,7 @@ export namespace Prisma {
     createAt?: SortOrder
     organizationCode?: SortOrder
     domainName?: SortOrderInput | SortOrder
+    totalParticipants?: SortOrder
     domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
     _count?: OrganizationCountOrderByAggregateInput
@@ -6258,6 +6349,7 @@ export namespace Prisma {
     createAt?: DateTimeWithAggregatesFilter<"Organization"> | Date | string
     organizationCode?: StringWithAggregatesFilter<"Organization"> | string
     domainName?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    totalParticipants?: IntWithAggregatesFilter<"Organization"> | number
     domainRestrictionFlag?: BoolWithAggregatesFilter<"Organization"> | boolean
     ownerId?: IntWithAggregatesFilter<"Organization"> | number
   }
@@ -6329,7 +6421,10 @@ export namespace Prisma {
     daily?: BoolFilter<"Meeting"> | boolean
     weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
-    endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    EnableEngagement?: BoolFilter<"Meeting"> | boolean
+    Engagment?: IntFilter<"Meeting"> | number
+    meetingDuration?: IntFilter<"Meeting"> | number
+    meetingLink?: StringFilter<"Meeting"> | string
     hostId?: IntFilter<"Meeting"> | number
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     host?: XOR<UsersScalarRelationFilter, UsersWhereInput>
@@ -6343,7 +6438,10 @@ export namespace Prisma {
     daily?: SortOrder
     weekly?: SortOrder
     startTime?: SortOrder
-    endTime?: SortOrderInput | SortOrder
+    EnableEngagement?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
+    meetingLink?: SortOrder
     hostId?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
     host?: UsersOrderByWithRelationInput
@@ -6360,7 +6458,10 @@ export namespace Prisma {
     daily?: BoolFilter<"Meeting"> | boolean
     weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
-    endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    EnableEngagement?: BoolFilter<"Meeting"> | boolean
+    Engagment?: IntFilter<"Meeting"> | number
+    meetingDuration?: IntFilter<"Meeting"> | number
+    meetingLink?: StringFilter<"Meeting"> | string
     hostId?: IntFilter<"Meeting"> | number
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     host?: XOR<UsersScalarRelationFilter, UsersWhereInput>
@@ -6374,7 +6475,10 @@ export namespace Prisma {
     daily?: SortOrder
     weekly?: SortOrder
     startTime?: SortOrder
-    endTime?: SortOrderInput | SortOrder
+    EnableEngagement?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
+    meetingLink?: SortOrder
     hostId?: SortOrder
     _count?: MeetingCountOrderByAggregateInput
     _avg?: MeetingAvgOrderByAggregateInput
@@ -6394,7 +6498,10 @@ export namespace Prisma {
     daily?: BoolWithAggregatesFilter<"Meeting"> | boolean
     weekly?: BoolWithAggregatesFilter<"Meeting"> | boolean
     startTime?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
-    endTime?: DateTimeNullableWithAggregatesFilter<"Meeting"> | Date | string | null
+    EnableEngagement?: BoolWithAggregatesFilter<"Meeting"> | boolean
+    Engagment?: IntWithAggregatesFilter<"Meeting"> | number
+    meetingDuration?: IntWithAggregatesFilter<"Meeting"> | number
+    meetingLink?: StringWithAggregatesFilter<"Meeting"> | string
     hostId?: IntWithAggregatesFilter<"Meeting"> | number
   }
 
@@ -6403,6 +6510,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -6420,6 +6528,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -6436,6 +6545,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6453,6 +6563,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6470,6 +6581,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -6483,6 +6595,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6497,6 +6610,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6512,6 +6626,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
@@ -6526,6 +6641,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     ownerId: number
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
@@ -6539,6 +6655,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
@@ -6553,6 +6670,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -6567,6 +6685,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     ownerId: number
   }
@@ -6578,6 +6697,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -6589,6 +6709,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
   }
@@ -6643,7 +6764,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     organization: OrganizationCreateNestedOneWithoutMeetingInput
     host: UsersCreateNestedOneWithoutMeetingsInput
   }
@@ -6656,7 +6780,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     hostId: number
   }
 
@@ -6666,7 +6793,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     organization?: OrganizationUpdateOneRequiredWithoutMeetingNestedInput
     host?: UsersUpdateOneRequiredWithoutMeetingsNestedInput
   }
@@ -6679,7 +6809,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     hostId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -6691,7 +6824,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     hostId: number
   }
 
@@ -6701,7 +6837,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
   }
 
   export type MeetingUncheckedUpdateManyInput = {
@@ -6712,7 +6851,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     hostId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -6755,6 +6897,11 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -6825,6 +6972,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
+    codeVerified?: SortOrder
     createdAt?: SortOrder
     active?: SortOrder
     code?: SortOrder
@@ -6843,6 +6991,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
+    codeVerified?: SortOrder
     createdAt?: SortOrder
     active?: SortOrder
     code?: SortOrder
@@ -6857,6 +7006,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     ImagePath?: SortOrder
+    codeVerified?: SortOrder
     createdAt?: SortOrder
     active?: SortOrder
     code?: SortOrder
@@ -6921,6 +7071,14 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6970,12 +7128,14 @@ export namespace Prisma {
     createAt?: SortOrder
     organizationCode?: SortOrder
     domainName?: SortOrder
+    totalParticipants?: SortOrder
     domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
 
   export type OrganizationAvgOrderByAggregateInput = {
     id?: SortOrder
+    totalParticipants?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -6987,6 +7147,7 @@ export namespace Prisma {
     createAt?: SortOrder
     organizationCode?: SortOrder
     domainName?: SortOrder
+    totalParticipants?: SortOrder
     domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
@@ -6999,12 +7160,14 @@ export namespace Prisma {
     createAt?: SortOrder
     organizationCode?: SortOrder
     domainName?: SortOrder
+    totalParticipants?: SortOrder
     domainRestrictionFlag?: SortOrder
     ownerId?: SortOrder
   }
 
   export type OrganizationSumOrderByAggregateInput = {
     id?: SortOrder
+    totalParticipants?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -7059,13 +7222,18 @@ export namespace Prisma {
     daily?: SortOrder
     weekly?: SortOrder
     startTime?: SortOrder
-    endTime?: SortOrder
+    EnableEngagement?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
+    meetingLink?: SortOrder
     hostId?: SortOrder
   }
 
   export type MeetingAvgOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
     hostId?: SortOrder
   }
 
@@ -7077,7 +7245,10 @@ export namespace Prisma {
     daily?: SortOrder
     weekly?: SortOrder
     startTime?: SortOrder
-    endTime?: SortOrder
+    EnableEngagement?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
+    meetingLink?: SortOrder
     hostId?: SortOrder
   }
 
@@ -7089,13 +7260,18 @@ export namespace Prisma {
     daily?: SortOrder
     weekly?: SortOrder
     startTime?: SortOrder
-    endTime?: SortOrder
+    EnableEngagement?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
+    meetingLink?: SortOrder
     hostId?: SortOrder
   }
 
   export type MeetingSumOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    Engagment?: SortOrder
+    meetingDuration?: SortOrder
     hostId?: SortOrder
   }
 
@@ -7147,6 +7323,10 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -7446,6 +7626,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7545,6 +7730,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -7588,6 +7781,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberCreateNestedManyWithoutOrganizationInput
@@ -7601,6 +7795,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
     members?: OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
@@ -7643,7 +7838,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     organization: OrganizationCreateNestedOneWithoutMeetingInput
   }
 
@@ -7655,7 +7853,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
   }
 
   export type MeetingCreateOrConnectWithoutHostInput = {
@@ -7695,6 +7896,7 @@ export namespace Prisma {
     createAt?: DateTimeFilter<"Organization"> | Date | string
     organizationCode?: StringFilter<"Organization"> | string
     domainName?: StringNullableFilter<"Organization"> | string | null
+    totalParticipants?: IntFilter<"Organization"> | number
     domainRestrictionFlag?: BoolFilter<"Organization"> | boolean
     ownerId?: IntFilter<"Organization"> | number
   }
@@ -7752,7 +7954,10 @@ export namespace Prisma {
     daily?: BoolFilter<"Meeting"> | boolean
     weekly?: BoolFilter<"Meeting"> | boolean
     startTime?: DateTimeFilter<"Meeting"> | Date | string
-    endTime?: DateTimeNullableFilter<"Meeting"> | Date | string | null
+    EnableEngagement?: BoolFilter<"Meeting"> | boolean
+    Engagment?: IntFilter<"Meeting"> | number
+    meetingDuration?: IntFilter<"Meeting"> | number
+    meetingLink?: StringFilter<"Meeting"> | string
     hostId?: IntFilter<"Meeting"> | number
   }
 
@@ -7761,6 +7966,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -7777,6 +7983,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -7798,7 +8005,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     host: UsersCreateNestedOneWithoutMeetingsInput
   }
 
@@ -7809,7 +8019,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     hostId: number
   }
 
@@ -7860,6 +8073,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7876,6 +8090,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7925,6 +8140,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     meeting?: MeetingCreateNestedManyWithoutOrganizationInput
@@ -7938,6 +8154,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     ownerId: number
     meeting?: MeetingUncheckedCreateNestedManyWithoutOrganizationInput
@@ -7953,6 +8170,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -7969,6 +8187,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -8002,6 +8221,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
@@ -8015,6 +8235,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -8036,6 +8257,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8052,6 +8274,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8069,6 +8292,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     owner: UsersCreateNestedOneWithoutOrganizationInput
     members?: OrganizationMemberCreateNestedManyWithoutOrganizationInput
@@ -8082,6 +8306,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
     ownerId: number
     members?: OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
@@ -8097,6 +8322,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -8113,6 +8339,7 @@ export namespace Prisma {
     email: string
     password: string
     ImagePath?: string | null
+    codeVerified?: boolean | null
     createdAt?: Date | string
     active?: boolean
     code?: string | null
@@ -8146,6 +8373,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     owner?: UsersUpdateOneRequiredWithoutOrganizationNestedInput
     members?: OrganizationMemberUpdateManyWithoutOrganizationNestedInput
@@ -8159,6 +8387,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     ownerId?: IntFieldUpdateOperationsInput | number
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -8180,6 +8409,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8196,6 +8426,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     ImagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    codeVerified?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     active?: BoolFieldUpdateOperationsInput | boolean
     code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8214,6 +8445,7 @@ export namespace Prisma {
     createAt?: Date | string
     organizationCode: string
     domainName?: string | null
+    totalParticipants?: number
     domainRestrictionFlag?: boolean
   }
 
@@ -8231,7 +8463,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
   }
 
   export type OrganizationUpdateWithoutOwnerInput = {
@@ -8241,6 +8476,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     meeting?: MeetingUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUpdateManyWithoutOrganizationNestedInput
@@ -8254,6 +8490,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
     meeting?: MeetingUncheckedUpdateManyWithoutOrganizationNestedInput
     members?: OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -8267,6 +8504,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organizationCode?: StringFieldUpdateOperationsInput | string
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalParticipants?: IntFieldUpdateOperationsInput | number
     domainRestrictionFlag?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -8293,7 +8531,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     organization?: OrganizationUpdateOneRequiredWithoutMeetingNestedInput
   }
 
@@ -8305,7 +8546,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
   }
 
   export type MeetingUncheckedUpdateManyWithoutHostInput = {
@@ -8316,7 +8560,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
   }
 
   export type MeetingCreateManyOrganizationInput = {
@@ -8326,7 +8573,10 @@ export namespace Prisma {
     daily?: boolean
     weekly?: boolean
     startTime: Date | string
-    endTime?: Date | string | null
+    EnableEngagement?: boolean
+    Engagment?: number
+    meetingDuration?: number
+    meetingLink?: string
     hostId: number
   }
 
@@ -8342,7 +8592,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     host?: UsersUpdateOneRequiredWithoutMeetingsNestedInput
   }
 
@@ -8353,7 +8606,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     hostId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -8364,7 +8620,10 @@ export namespace Prisma {
     daily?: BoolFieldUpdateOperationsInput | boolean
     weekly?: BoolFieldUpdateOperationsInput | boolean
     startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    EnableEngagement?: BoolFieldUpdateOperationsInput | boolean
+    Engagment?: IntFieldUpdateOperationsInput | number
+    meetingDuration?: IntFieldUpdateOperationsInput | number
+    meetingLink?: StringFieldUpdateOperationsInput | string
     hostId?: IntFieldUpdateOperationsInput | number
   }
 

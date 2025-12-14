@@ -8,6 +8,7 @@ import { MemberValidator } from "./MemberChecks.ts";
 import type { Member } from "../../Domain Layer/DTOs/OrganizationMemberDTOs/memberDTOs.ts";
 import type { InternalUserDTO } from "../../Domain Layer/DTOs/userDTOs/InternalUser.ts";
 import type { OrganizationDTOs } from "../../Domain Layer/DTOs/OrganizationDTOs/organizationDTO.ts";
+
 export class MemberService {
 
     private MemberDataStorage:IOrganizationMemberService;
@@ -58,12 +59,15 @@ export class MemberService {
             throw new ApplicationError(403 , 'Code is wrong')
         }
 
+        organization.totalParticipants +=1;
+        const update = await this.OrganizationDataStorage.updateOrganization(organization.id,organization);
+        console.log(update)
         const mem: Member = {
             organizationId: organization.id,
             userId: id,
             joinedAt: new Date()
         }
-
+        
         const createdMem:Member = await this.MemberDataStorage.addMember(mem)
         return createdMem;
 

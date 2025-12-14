@@ -87,15 +87,35 @@ userRoute.post('/activateAccount',verifyUser,   async (req:any, res:any) => {
   }
 });
 
+userRoute.post('/VerfiyCode',verifyUser,   async (req:any, res:any) => {
+  try{
+
+      const code = req.body;
+      console.log('Activate: ' , code)
+      const userRes:UserResponseDTO = await userService.ActivateAccount(req.user.id , code.code)
+      return res.status(200).json({user:userRes});
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
+
 userRoute.post('/ForgetPassword',  async (req:any, res:any) => {
   try{
 
       const email = req.body;
-      const resObj:boolean = await userService.forgetPassword(email)
-      if (!res){
-        return res.status(400).send('Error while Processing')
+      console.log('---> from Body: []' , email.email)
+      const resObj:boolean = await userService.forgetPassword(email.email)
+      if (!resObj){
+        console.log('--- > ');
+        return res.status(400).json({ message: "Bad Request" });
       }
-      return res.status(200);
+      console.log('<--- ');
+      return res.status(200).json({ message: "Reset link sent to email" });
 
   }catch(err){
     if (err instanceof ApplicationError){
@@ -110,12 +130,33 @@ userRoute.post('/ForgetPassword',  async (req:any, res:any) => {
 userRoute.post('/resetPassword',  async (req:any, res:any) => {
   try{
 
-      const {email,code, password} = req.body;
-      const resObj:boolean = await userService.resetPassword(email , code , password);
-      if (!res){
+      const {email, password} = req.body;
+      const resObj:InternalUserDTO = await userService.resetPassword(email , password);
+      if (!resObj){
+        return res.status(400).json('Error while Processing')
+      }
+      const token:string = generateToken(resObj.id , resObj.email);
+      return res.status(200).json({'token': token});
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
+
+userRoute.post('/verifyResetCode',  async (req:any, res:any) => {
+  try{
+
+      console.log('[body]', req.body);
+      const {email,code} = req.body;
+      const resObj:InternalUserDTO = await userService.verfiycode(email , code)
+      if (!resObj){
         return res.status(400).send('Error while Processing')
       }
-      return res.status(200);
+      return res.status(200).json({"message":"code verify Successfully"});
 
   }catch(err){
     if (err instanceof ApplicationError){

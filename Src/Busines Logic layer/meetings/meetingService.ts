@@ -17,16 +17,9 @@ export class MeetingService {
 
     async createMeeting(meeting:MeetingDTOs ):Promise<MeetingDTOs> {
         const startTime = meeting.startTime instanceof Date ? meeting.startTime : new Date(meeting.startTime);
-        const endTime = meeting.endTime ? (meeting.endTime instanceof Date ? meeting.endTime : new Date(meeting.endTime)) : null;
 
         const validTime = this.validation.isTimeValid(startTime);
         const organization =await this.validation.isOrganizationExists(meeting.organizationId);
-        if (endTime){
-            const validEndTime = this.validation.isValidEndTime(startTime , endTime)
-            if (!validEndTime){
-                throw new ApplicationError(400,"End time is Not Valid!")
-            }
-        }
 
         if (!validTime ){
             throw new ApplicationError(400 , "Start Time is not Valid");
@@ -41,12 +34,6 @@ export class MeetingService {
     async updateMeeting(meeting:MeetingDTOs ):Promise<MeetingDTOs> {
         const validTime = this.validation.isTimeValid(meeting.startTime);
         const organization =await this.validation.isOrganizationExists(meeting.organizationId);
-        if (meeting.endTime){
-            const validEndTime = this.validation.isValidEndTime(meeting.startTime , meeting.endTime)
-            if (!validEndTime){
-                throw new ApplicationError(400,"End Time is not Valid")
-            }
-        }
 
         if (!validTime ){
             throw new ApplicationError(400 , "End Time is not valid");

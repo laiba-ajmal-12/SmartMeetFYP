@@ -22,6 +22,7 @@ export function verifyUser(req: any, res: any, next: any) {
     }
 
     req.user = payload; 
+    console.log('moving to next --- ')
     next();
 }
 

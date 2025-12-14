@@ -6,6 +6,8 @@ import { OrganizationMemberDbRepo } from "../Database/Member/OrganizationMember.
 import { OrganizationDbRepo } from "../Database/OrganizationRepo/organization.ts";
 //@ts-ignore
 import { MeetingDbRepo } from "../Database/Meeting/meetingRepo.ts";
+//@ts-ignore
+import { ApplicationError } from "../../Busines Logic layer/ErrorHandling/appErrors.ts";
 
 const userFetcher:userDbRepo = new userDbRepo()
 const organmMember:OrganizationMemberDbRepo = new OrganizationMemberDbRepo();
@@ -19,7 +21,11 @@ export const resolvers = {
         },
 
         getOrganizationbyId:async (_:any, args:any , context:any)=>{
-            return await organ.getOrganizationById(args.id);
+            const organization=  await organ.getOrganizationByHostOrMember(context.userId ,args.id)
+            if(organization == null){
+              throw new ApplicationError(400 , "Organization not found or access denied");
+            }
+            return organization;
         },
         getMeetingById:async (_:any , args:any , context:any)=>{
             return await meetings.getMeetingbyid(args.id)
@@ -30,6 +36,9 @@ export const resolvers = {
   Users: {
     member:async (obj:any)=>{
         return await organmMember.getOrganizationByMember(obj.id);
+    },
+    ownedOrganizations:async (obj:any)=>{
+      return await organ.getOrganizationByHost(obj.id)
     }
   },
   OrganizationMember:{
@@ -41,11 +50,23 @@ export const resolvers = {
     }
   },
   Organization:{
-    meeting: async (obj:any)=>{
-        return await meetings.getMeetingbyOrganization(obj.id);
+    meeting: async (obj:any , args:any)=>{
+        console.log( '[Time ] : ' ,  args.time);
+        return await meetings.getMeetingbyTime(args.time, obj.id ,  args.limit);
+    },
+    organizationCode: (obj:any , args:any, context:any)=>{
+        if(obj.ownerId == context.userId){
+          return obj.organizationCode
+        }
+        else{
+          return null
+        }
     },
     members: async (obj:any) =>{
         return await organmMember.getAllMemberByOrganiztion(obj.id);
+    },
+    owner: async (obj:any) =>{
+      return await userFetcher.getUserbyId(obj.ownerId);
     }
   },
   Meeting:{
@@ -58,5 +79,4 @@ export const resolvers = {
   }
 
 };
-
 

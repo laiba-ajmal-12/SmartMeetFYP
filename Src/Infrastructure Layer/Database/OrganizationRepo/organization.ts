@@ -10,12 +10,31 @@ export class OrganizationDbRepo implements IOrganizationService{
         this.postSQlClient.$connect()
     }
     async createOrganization(user: OrganizationDTOs): Promise<OrganizationDTOs> {
-        const users  = await this.postSQlClient.organization.create({data:user})  
+        const org = {
+            name: user.name,
+            description: user.description,
+            createAt: user.createAt,
+            organizationCode: user.organizationCode,
+            domainName: user.domainName,
+            totalParticipants: user.totalParticipants,
+            domainRestrictionFlag: user.domainRestrictionFlag,
+            ownerId: user.ownerId
+        }
+        const users  = await this.postSQlClient.organization.create({data:org})  
         return users;
     }
     async updateOrganization(ids : number ,organ: OrganizationDTOs): Promise<OrganizationDTOs> {
-        const { id, ...updateData } = organ;
-        const users  = await this.postSQlClient.organization.update({where:{id : ids} , data:updateData})  
+        const org = {
+            name: organ.name,
+            description: organ.description,
+            createAt: organ.createAt,
+            organizationCode: organ.organizationCode,
+            domainName:organ.domainName,
+            totalParticipants:organ.totalParticipants,
+            domainRestrictionFlag: organ.domainRestrictionFlag,
+            ownerId: organ.ownerId
+        }
+        const users  = await this.postSQlClient.organization.update({where:{id : ids} , data:org})  
         return users;
     }
     async getOrganizationById(id:number):Promise<OrganizationDTOs | null>{
@@ -33,5 +52,22 @@ export class OrganizationDbRepo implements IOrganizationService{
     async getOrganizationByHost(ids: number): Promise<OrganizationDTOs[]> {
         const users:OrganizationDTOs[] = await this.postSQlClient.organization.findMany({where:{ownerId : ids}}) ; 
         return users;
+    }
+
+    async getOrganizationByHostOrMember(userId: number , orgId:number): Promise<OrganizationDTOs| null> {
+        const org = await this.postSQlClient.organization.findFirst({
+                where: {
+                    id: orgId,
+                    OR: [
+                    { ownerId: userId },
+                    {
+                        members: {
+                        some: { userId }
+                        }
+                    }
+                    ]
+                }
+        });
+        return org;
     }
 }

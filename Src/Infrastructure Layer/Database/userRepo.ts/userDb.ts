@@ -21,7 +21,9 @@ export class userDbRepo implements IUserService{
                 code: user.code ?? null,                    
                 accountType: user.accountType ?? null,
                 role: user.role ?? null,
-                codeActivationTime: user.codeActivationTime ?? null
+                codeActivationTime: user.codeActivationTime ?? null,
+                codeVerified: user.codeVerified ?? false
+                
             };
         
         const users  = await this.postSQlClient.users.create({data:userInterl})  
@@ -34,11 +36,12 @@ export class userDbRepo implements IUserService{
                 email: user.email,
                 password: user.password,
                 ImagePath: user.ImagePath ?? null,         
-                active: false,
+                active: user.active,
                 code: user.code ?? null,                    
                 accountType: user.accountType ?? null,
                 role: user.role ?? null,
-                codeActivationTime: user.codeActivationTime ?? null
+                codeActivationTime: user.codeActivationTime ?? null,
+                codeVerified: user.codeVerified ?? false
         };
         
 

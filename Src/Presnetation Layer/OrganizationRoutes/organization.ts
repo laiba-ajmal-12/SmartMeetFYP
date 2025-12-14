@@ -32,7 +32,7 @@ organRoute.post('/CreateOrganization',verifyUser ,upload.single("image"),  async
         console.log("[Object Recivied]: " , organ)
         organ.domainRestrictionFlag = Boolean(organ.domainRestrictionFlag);
         const created:OrganizationDTOs = await OrganService.createOrganization(organ)
-        return res.status(201).send(created)
+        return res.status(201).json({"Organization":created});
     }catch(error){
 
         if (req.file) {
@@ -79,8 +79,8 @@ organRoute.put('/UpdateOrganization', verifyUser, upload.single("image") , async
 
 organRoute.get('/changeOrganizationCode/:id',verifyUser, async (req:any, res:any) =>{
     try{
-        const updated = await OrganService.updateOrganizationCode(Number(req.params.id) , req.user.id)
-        return res.status(200).send(updated)
+        const code = await OrganService.updateOrganizationCode(Number(req.params.id) , req.user.id)
+        return res.status(200).json({"organizationCode": code})
 
     }catch(error){
         if (error instanceof ApplicationError){

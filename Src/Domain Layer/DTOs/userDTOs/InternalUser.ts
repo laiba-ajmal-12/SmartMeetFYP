@@ -9,4 +9,5 @@ export interface InternalUserDTO {
   codeActivationTime?:Date | null; 
   accountType?: string |null
   role?:string |null
+  codeVerified?: boolean| null
 }

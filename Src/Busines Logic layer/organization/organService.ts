@@ -36,9 +36,12 @@ export class OrganizationService {
         }
         console.log('[All Cases Clear] : ----')
         organ.organizationCode=''
+        organ.totalParticipants = 1;
+        organ.createAt = new Date;
         let crOrgan:OrganizationDTOs =  await this.OrganDataStorage.createOrganization(organ);
         crOrgan.organizationCode =  String(crOrgan.id)+String(this.validation.getRandomFiveDigit());
         crOrgan = await this.updateOrganization(crOrgan)
+        console.log('[Created!]:' , crOrgan)
         return crOrgan;
     }
 
@@ -57,7 +60,7 @@ export class OrganizationService {
         return organization;
     }
 
-    async updateOrganizationCode(id:number , ownerId:number):Promise<OrganizationDTOs>{
+    async updateOrganizationCode(id:number , ownerId:number):Promise<string>{
         
         const organ:OrganizationDTOs | null = await this.OrganDataStorage.getOrganizationById(id);
         
@@ -70,7 +73,7 @@ export class OrganizationService {
 
         organ.organizationCode = String(organ.id) + String(this.validation.getRandomFiveDigit());
         await this.updateOrganization(organ);
-        return organ;        
+        return organ.organizationCode;        
     }
 
 

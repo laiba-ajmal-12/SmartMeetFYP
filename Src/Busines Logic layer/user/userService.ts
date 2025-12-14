@@ -34,6 +34,9 @@ export class UserService {
         if(!await this.validation.isEmailUnique(user.email)){
             throw new ApplicationError(400,"Bad Request");
         }
+        if(!user.password || user.password.trim().length < 6){
+            throw new ApplicationError(400,"Password must be at least 6 characters")
+        }
         user.code = String(this.validation.getRandomFiveDigit())
         user.codeActivationTime =new Date();
         user.code && await this.sendingEmails.sendCode(user.email , user.code)
@@ -101,32 +104,62 @@ export class UserService {
         if(user == null){
             throw new ApplicationError(404,"Not Found")
         }
+        const cooldown = 0 * 60 * 1000
+        const now = Date.now()
+        if(user.codeActivationTime && (new Date(user.codeActivationTime).getTime() + cooldown) > now){
+            const waitMs = (new Date(user.codeActivationTime).getTime() + cooldown) - now
+            const waitMin = Math.ceil(waitMs / 1000 / 60)
+            throw new ApplicationError(400, `Wait ${waitMin} minutes before requesting new code`)
+        }
         user.code = String(this.validation.getRandomFiveDigit())
         user.codeActivationTime =new Date();
-        await this.dataStorage.updateUser(user.id , user);
         await this.sendingEmails.sendCode(user.email, user.code);
+        await this.dataStorage.updateUser(user.id , user);
         return true;
     }
 
 
-     async resetPassword(email:string,code:string , newPassowrd:string):Promise<boolean> {
+    async verfiycode(email:string,code:string):Promise<InternalUserDTO> {
 
-        const user:InternalUserDTO | null = await this.dataStorage.getUserbyEmail(email)
-        if(user == null){
-            throw new ApplicationError(404,"Not Found")
+        const user = await this.dataStorage.getUserbyEmail(email);
+        if(!user) throw new ApplicationError(404,"Not Found");
+
+        if (user.codeActivationTime && new Date(user.codeActivationTime).getTime() + 10*60*1000 < Date.now()){
+            throw new ApplicationError(400,"Activation Code is Expired! Try Again");
         }
-        if (user.codeActivationTime && new Date(user.codeActivationTime).getTime()+10 * 60 * 1000 < Date.now()){
-            throw new ApplicationError(400,"Activation Code is Expire! Try Again")
+
+        if(user.code !== code){
+            throw new ApplicationError(400,"Wrong Code");
         }
-        if(user.code !== code ){
-            throw new ApplicationError(400,"Wrong Code")
+
+        user.codeVerified = true;
+        const updated:InternalUserDTO =  await this.dataStorage.updateUser(user.id, user);
+        console.log('[Updated User!]:  ' ,updated  )
+
+        return updated;
+    }
+
+
+    async resetPassword(email:string,newPassword:string):Promise<InternalUserDTO> {
+
+        const user = await this.dataStorage.getUserbyEmail(email);
+        if(!user) throw new ApplicationError(404,"Not Found");
+
+        if(!user.codeVerified){
+            throw new ApplicationError(400,"Please verify your OTP/Code first");
         }
+
+        if(!newPassword || newPassword.trim().length < 6){
+            throw new ApplicationError(400,"Password must be at least 6 characters");
+        }
+
+        user.password = await this.hasher.hashPassword(newPassword.trim());
         user.code = null;
         user.codeActivationTime = null;
-        user.password = newPassowrd.trim();
-        user.password = await this.hasher.hashPassword(user.password)
+        user.codeVerified = false;
 
-        await this.dataStorage.updateUser(user.id , user);
-        return true;
+        await this.dataStorage.updateUser(user.id,user);
+        return user;
     }
+
 }

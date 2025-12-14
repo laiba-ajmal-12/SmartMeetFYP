@@ -6,6 +6,7 @@ export interface OrganizationDTOs{
   createAt:Date 
   organizationCode:string
   domainName:string | null
+  totalParticipants: number
   domainRestrictionFlag: boolean 
   ownerId:number 
 }

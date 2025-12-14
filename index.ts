@@ -21,10 +21,12 @@ import MeetingRoute from "./Src/Presnetation Layer/MeetingRoutes/Meeting.ts";
 import { resolvers } from "./Src/Infrastructure Layer/GraphQL/resolver.ts";
 //@ts-ignore
 import { verifyUser } from "./Src/Presnetation Layer/MiddleWares/jwtAuthMiddleware.ts";
-
+import { fileURLToPath } from "url";
 const app = express();
 const port = 4000;
 const json = bodyParser.json
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const typeDefs = readFileSync(
   path.join("./Src/Infrastructure Layer/GraphQL/schema.graphql"),
   "utf-8"
@@ -46,6 +48,11 @@ const startServer = async () => {
     verifyUser,
     cors(),
     bodyParser.json(),
+    (req, res, next) => {
+        console.log(">>> /graphql incoming headers:", req.headers);
+        console.log(">>> /graphql incoming body:", JSON.stringify(req.body).slice(0,1000));
+        next();
+    },
     expressMiddleware(server, {
 
       context: async ( {req}) => {
@@ -57,8 +64,10 @@ const startServer = async () => {
     })
   );
   app.use(bodyParser.json({ limit: "10mb" }));
-  app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
   app.use(cors())
+  // Serve uploads folder
+  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
   
   // REST routes
   app.use("/api", userRoute);

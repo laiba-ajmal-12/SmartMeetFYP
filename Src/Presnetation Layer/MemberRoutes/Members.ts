@@ -21,9 +21,9 @@ const memberService:MemberService = new MemberService( new OrganizationDbRepo, n
 MemberRoute.post('/JoinOrganization',verifyUser , async (req:any , res:any ) =>{
     try{
         const code =  req.body.code
-        console.log('[Body]: ' , code)
+        console.log('[Body]: ' ,  code)
         const created = await memberService.joinOrganization(req.user.id , code)
-        return res.status(201).send(created)
+        return res.status(201).json({'message':'added!'})
     }catch(error){
 
         if (error instanceof ApplicationError){

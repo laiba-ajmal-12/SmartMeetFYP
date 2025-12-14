@@ -18,19 +18,34 @@ const meetingService:MeetingService = new MeetingService(new OrganizationDbRepo 
 
 MeetingRoute.post('/CreateMeeting',verifyUser , async (req , res ) =>{
     try{
-        const meeting:MeetingDTOs =  req.body
+        const meeting =  req.body
         console.log('[Body]: '  , meeting)
-        const created = await meetingService.createMeeting(meeting)
-        return res.status(201).send(created)
+
+        const meetingCreated:MeetingDTOs = {
+            id:meeting.id,
+            name:meeting.name,
+            description:meeting.description,
+            organizationId:Number(meeting.organizationId),
+            startTime:new Date(`${meeting.date}T${meeting.time}:00`),
+            daily: Boolean(meeting.daily) ,
+            EnableEngagement: Boolean(meeting.EnableEngagement),
+            weekly: meeting.weekly,
+            hostId:Number(meeting.hostId),
+            meetingDuration: Number(meeting.meetingDuration),
+            meetingLink:meeting.meetingLink,
+            Engagment:Number(meeting.Engagment),
+        }
+        const created = await meetingService.createMeeting(meetingCreated)
+        return res.status(201).json(created)
     }catch(error){
 
         if (error instanceof ApplicationError){
-            return res.status(error.status).send({"message":error.message}) 
+            return res.status(error.status).json({"message":error.message}) 
         }
         else{
             //@ts-ignore
             console.error('[Error]: ' , error.message)
-            return res.status(500).send({"message":"Internal Server Error"})
+            return res.status(500).json({"message":"Internal Server Error"})
         }
     }
 })
@@ -41,16 +56,16 @@ MeetingRoute.put('/UpdateMeeting', verifyUser, async (req , res ) =>{
         
         const meeting:MeetingDTOs =  req.body
         const updated = await meetingService.updateMeeting(meeting)
-        return res.status(204).send(updated)
+        return res.status(204).json(updated)
 
     }catch(error){
         if (error instanceof ApplicationError){
-            return res.status(error.status).send({"message":error.message}) 
+            return res.status(error.status).json({"message":error.message}) 
         }
         else{
             //@ts-ignore
             console.error('[Error]: ' , error.message)
-            return res.status(500).send({"message":"Internal Server Error"})
+            return res.status(500).json({"message":"Internal Server Error"})
         }
     }
 })
@@ -59,16 +74,16 @@ MeetingRoute.delete('/DeleteMeeting/:meetingID',verifyUser, async (req:any, res:
     try{
         const meeting:number = Number(req.params.meetingID)
         const result = await meetingService.cancelMeeting(req.user.id , meeting)
-        return res.status(204).send()
+        return res.status(204).json({'message':'Deleted!'})
 
     }catch(error){
         if (error instanceof ApplicationError){
-            return res.status(error.status).send({"message":error.message}) 
+            return res.status(error.status).js({"message":error.message}) 
         }
         else{
             //@ts-ignore
             console.error('[Error]: ' , error.message)
-            return res.status(500).send({"message":"Internal Server Error"})
+            return res.status(500).json({"message":"Internal Server Error"})
         }
     }
 })

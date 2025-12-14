@@ -4,8 +4,11 @@ export interface MeetingDTOs{
   description:string| null
   organizationId:number 
   startTime:Date
-  endTime:Date | null
   daily: boolean 
+  EnableEngagement:boolean
   weekly: boolean
   hostId:number
+  meetingDuration:number
+  meetingLink:string
+  Engagment:number
 }

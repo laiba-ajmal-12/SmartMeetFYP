@@ -10,6 +10,7 @@ type Users {
   createdAt: String!
   organization: [Organization!]
   member: [OrganizationMember!]
+  ownedOrganizations:[Organization!]
 }
 
 type Organization {
@@ -18,12 +19,13 @@ type Organization {
   description: String!
   ImagePath: String
   createAt: String!
-  organizationCode: String!
+  organizationCode: String
   domainName: String
   domainRestrictionFlag: Boolean!
-  ownerId: Int!
-  owner: Users!
-  meeting: [Meeting!]
+  ownerId: Int
+  totalParticipants:Int
+  owner: Users
+  meeting(time: String  = "0", limit:Int = 0): [Meeting!]
   members: [OrganizationMember!]
 }
 
@@ -44,8 +46,11 @@ type Meeting {
   daily: Boolean!
   weekly: Boolean!
   startTime: String!
-  endTime: String
   hostId: Int!
+  EnableEngagement:Boolean!
+  Engagment:Int!
+  meetingDuration:Int!
+  meetingLink:String!
   organization: Organization!
   host: Users!
 }

@@ -15,6 +15,7 @@ model Users {
   email     String    @unique
   password  String
   ImagePath String?
+  codeVerified Boolean?
   createdAt DateTime  @default(now())
   active Boolean @default(false)
   code String? 
@@ -36,6 +37,7 @@ model Organization{
   createAt DateTime  @default(now())
   organizationCode String @unique
   domainName String?
+  totalParticipants Int @default(1)
   domainRestrictionFlag Boolean @default(false)
   ownerId Int 
   owner Users @relation(fields: [ownerId] ,references: [id])
@@ -72,7 +74,10 @@ model Meeting{
   daily Boolean @default(false)
   weekly Boolean @default(false)
   startTime DateTime
-  endTime DateTime?
+  EnableEngagement Boolean @default(true)
+  Engagment Int @default(0)
+  meetingDuration Int @default(30)
+  meetingLink String @default("")
   hostId Int
   host Users @relation(fields: [hostId] , references: [id])
 

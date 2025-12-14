@@ -9,15 +9,21 @@ datasource PostSQLDB {
 }
 
 model Users {
-  id           Int                  @id @default(autoincrement())
-  name         String
-  email        String               @unique
-  password     String
-  ImagePath    String?
-  createdAt    DateTime             @default(now())
-  organization Organization[]
-  member       OrganizationMember[]
-  meetings     Meeting[]
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  email              String               @unique
+  password           String
+  ImagePath          String?
+  codeVerified       Boolean?
+  createdAt          DateTime             @default(now())
+  active             Boolean              @default(false)
+  code               String?
+  codeActivationTime DateTime?
+  role               String?              @default("user")
+  accountType        String?              @default("Basic")
+  organization       Organization[]
+  member             OrganizationMember[]
+  meetings           Meeting[]
 }
 
 model Organization {
@@ -56,17 +62,20 @@ model OrganizationMember {
 }
 
 model Meeting {
-  id             Int          @id @default(autoincrement())
-  name           String
-  description    String?
-  organizationId Int
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  daily          Boolean      @default(false)
-  weekly         Boolean      @default(false)
-  startTime      DateTime
-  endTime        DateTime?
-  hostId         Int
-  host           Users        @relation(fields: [hostId], references: [id])
+  id              Int          @id @default(autoincrement())
+  name            String
+  description     String?
+  organizationId  Int
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  daily           Boolean      @default(false)
+  weekly          Boolean      @default(false)
+  startTime       DateTime
+  Engagment       Int          @default(0)
+  meetingDuration Int          @default(30)
+  meetingLink     String       @default("")
+  endTime         DateTime?
+  hostId          Int
+  host            Users        @relation(fields: [hostId], references: [id])
 
   @@index([organizationId])
   @@index([hostId])
