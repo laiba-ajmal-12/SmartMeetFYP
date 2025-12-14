@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Mic, 
   MicOff, 
@@ -17,9 +17,7 @@ import {
   Send,
   X,
   Maximize2,
-  Minimize2,
-  Grid,
-  List
+  Minimize2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,7 +49,7 @@ export default function MeetingRoom() {
   const [hasVideo, setHasVideo] = useState(true);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [showParticipants, setShowParticipants] = useState(true);
+  const [showParticipants, setShowParticipants] = useState(false);
   const [meetingDuration, setMeetingDuration] = useState(0);
   const [chatMessage, setChatMessage] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -60,7 +58,6 @@ export default function MeetingRoom() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeScreenShare, setActiveScreenShare] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const mediaRoutesRef = useRef<MediaRoutes | null>(null);
   const remoteContainerRef = useRef<HTMLDivElement>(null);
@@ -68,24 +65,18 @@ export default function MeetingRoom() {
   const chatMessagesEndRef = useRef<HTMLDivElement>(null);
   const participantsContainerRef = useRef<HTMLDivElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
-  const videoGridRef = useRef<HTMLDivElement>(null);
 
   const ROOM_ID = "room1";
 
-  // Calculate dynamic grid layout
-  const gridConfig = useMemo(() => {
-    const count = participants.length;
-    if (count === 0) return { cols: 1, rows: 1, height: 'h-96' };
-    if (count === 1) return { cols: 1, rows: 1, height: 'h-96' };
-    if (count === 2) return { cols: 2, rows: 1, height: 'h-80' };
-    if (count <= 4) return { cols: 2, rows: 2, height: 'h-[70vh]' };
-    if (count <= 9) return { cols: 3, rows: 3, height: 'h-[70vh]' };
-    return { cols: 4, rows: Math.ceil(count / 4), height: 'h-[80vh]' };
-  }, [participants.length]);
-
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      
+      if (mobile) {
+        setShowChat(false);
+        setShowParticipants(false);
+      }
     };
     
     checkMobile();
@@ -312,6 +303,44 @@ export default function MeetingRoom() {
     return participant ? participant.name : `User ${socketId.slice(0, 4)}`;
   };
 
+  // Calculate responsive grid layout
+  const getGridLayout = () => {
+    const count = participants.length;
+    
+    if (isMobile) {
+      // Mobile: Always single column for better mobile experience
+      return {
+        gridClass: "grid-cols-1",
+        containerClass: "space-y-4"
+      };
+    }
+    
+    // Desktop responsive grid
+    if (count <= 2) {
+      return {
+        gridClass: "grid-cols-1 md:grid-cols-2",
+        containerClass: "gap-4 md:gap-6"
+      };
+    } else if (count <= 4) {
+      return {
+        gridClass: "grid-cols-1 md:grid-cols-2",
+        containerClass: "gap-4 md:gap-6"
+      };
+    } else if (count <= 6) {
+      return {
+        gridClass: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+        containerClass: "gap-4 md:gap-6"
+      };
+    } else {
+      return {
+        gridClass: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+        containerClass: "gap-4 md:gap-6"
+      };
+    }
+  };
+
+  const gridLayout = getGridLayout();
+
   return (
     <div className="h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col" ref={mainContainerRef}>
       <video id="localVideo" autoPlay playsInline muted className="hidden" />
@@ -411,27 +440,7 @@ export default function MeetingRoom() {
           ) : (
             <div className="h-full">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <h2 className="text-lg font-semibold text-gray-800">Participants ({participants.length})</h2>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant={viewMode === 'grid' ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode('grid')}
-                      className="rounded-full"
-                    >
-                      <Grid className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === 'list' ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode('list')}
-                      className="rounded-full"
-                    >
-                      <List className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
+                <h2 className="text-lg font-semibold text-gray-800">Participants ({participants.length})</h2>
                 <div className="flex items-center space-x-2">
                   <Button
                     variant="ghost"
@@ -444,20 +453,13 @@ export default function MeetingRoom() {
                 </div>
               </div>
               
-              <div 
-                ref={videoGridRef}
-                className={`${gridConfig.height} ${viewMode === 'grid' ? 'grid gap-4 md:gap-6' : 'flex flex-col gap-4'} overflow-auto p-1`}
-                style={viewMode === 'grid' ? {
-                  gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))`,
-                  gridTemplateRows: `repeat(${gridConfig.rows}, minmax(200px, 1fr))`
-                } : {}}
-              >
+              <div className={`grid ${gridLayout.gridClass} ${gridLayout.containerClass} overflow-auto p-1`}>
                 {participants.map((participant) => (
                   <div
                     key={participant.id}
-                    className={`relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-xl hover:shadow-2xl transition-all duration-300 ${
-                      viewMode === 'list' ? 'h-48' : ''
-                    } ${participant.isLocal ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
+                    className={`relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-xl hover:shadow-2xl transition-all duration-300 aspect-video ${
+                      participant.isLocal ? 'ring-2 ring-blue-500 ring-offset-2' : ''
+                    }`}
                   >
                     {participant.isLocal && !participant.hasVideo && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
@@ -493,17 +495,17 @@ export default function MeetingRoom() {
                       />
                     )}
 
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-3 md:p-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2 md:space-x-3">
                           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-md">
                             <span className="text-white text-xs font-bold">
                               {participant.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                             </span>
                           </div>
                           <div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-white font-semibold text-sm truncate max-w-[120px] md:max-w-[150px]">
+                            <div className="flex items-center space-x-1 md:space-x-2">
+                              <span className="text-white font-semibold text-sm truncate max-w-[100px] md:max-w-[150px]">
                                 {participant.name}
                               </span>
                               {activeScreenShare === participant.id && (
@@ -597,7 +599,7 @@ export default function MeetingRoom() {
 
           {showParticipants && !showChat && (
             <div className="h-[calc(100vh-200px)] md:h-[calc(100vh-180px)] overflow-y-auto" ref={participantsContainerRef}>
-              <div className="p-6">
+              <div className="p-4 md:p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Participants ({participants.length})
                 </h3>
@@ -659,7 +661,7 @@ export default function MeetingRoom() {
 
           {showChat && (
             <div className="flex flex-col h-[calc(100vh-200px)] md:h-[calc(100vh-180px)]">
-              <div className="flex-1 p-6 overflow-y-auto">
+              <div className="flex-1 p-4 md:p-6 overflow-y-auto">
                 <div className="space-y-4">
                   {chatMessages.length === 0 ? (
                     <div className="text-center py-12">
@@ -685,7 +687,7 @@ export default function MeetingRoom() {
                   <div ref={chatMessagesEndRef} />
                 </div>
               </div>
-              <div className="p-6 border-t bg-white">
+              <div className="p-4 md:p-6 border-t bg-white">
                 <div className="flex gap-3">
                   <Input
                     type="text"
@@ -709,9 +711,9 @@ export default function MeetingRoom() {
         </div>
       </div>
 
-      <div className="bg-white/95 backdrop-blur-sm border-t border-gray-200 px-6 py-4 z-30 shadow-lg">
+      <div className="bg-white/95 backdrop-blur-sm border-t border-gray-200 px-4 md:px-6 py-4 z-30 shadow-lg">
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-center items-center space-x-3 md:space-x-6">
+          <div className="flex justify-center items-center space-x-2 md:space-x-4 lg:space-x-6">
             <Button
               variant={isMuted ? "destructive" : "secondary"}
               size={isMobile ? "icon" : "lg"}
@@ -746,8 +748,19 @@ export default function MeetingRoom() {
               variant={showChat ? "default" : "secondary"}
               size={isMobile ? "icon" : "lg"}
               onClick={() => {
-                setShowChat(!showChat);
-                setShowParticipants(!showChat);
+                if (isMobile) {
+                  setShowChat(!showChat);
+                  setShowParticipants(!showChat);
+                } else {
+                  // On desktop, toggle between chat and participants
+                  if (showChat) {
+                    setShowParticipants(true);
+                    setShowChat(false);
+                  } else {
+                    setShowChat(true);
+                    setShowParticipants(false);
+                  }
+                }
               }}
               className={`rounded-full ${showChat ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg'} transition-all duration-300`}
             >
@@ -755,23 +768,38 @@ export default function MeetingRoom() {
               {!isMobile && <span className="ml-2">Chat</span>}
             </Button>
 
-            <Button
-              variant="secondary"
-              size={isMobile ? "icon" : "lg"}
-              className="rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <Settings className="w-5 h-5 md:w-6 md:h-6" />
-              {!isMobile && <span className="ml-2">Settings</span>}
-            </Button>
-
             {!isMobile && (
-              <Button
-                variant="secondary"
-                size="lg"
-                className="rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                <MoreVertical className="w-5 h-5" />
-              </Button>
+              <>
+                <Button
+                  variant={showParticipants && !showChat ? "default" : "secondary"}
+                  size="lg"
+                  onClick={() => {
+                    setShowParticipants(!showParticipants);
+                    setShowChat(false);
+                  }}
+                  className={`rounded-full ${showParticipants && !showChat ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg'} transition-all duration-300`}
+                >
+                  <Users className="w-5 h-5" />
+                  <span className="ml-2">Participants</span>
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  <Settings className="w-5 h-5" />
+                  <span className="ml-2">Settings</span>
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md hover:shadow-lg transition-all duration-300"
+                >
+                  <MoreVertical className="w-5 h-5" />
+                </Button>
+              </>
             )}
           </div>
         </div>
