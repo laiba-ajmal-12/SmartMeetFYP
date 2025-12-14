@@ -1,40 +1,37 @@
 'use client';
 
 import { useState } from 'react';
-import { Video, Eye, EyeOff, ArrowLeft, Mail, Lock, User, Github } from 'lucide-react';
+import { Video, Eye, EyeOff, ArrowLeft, Mail, Lock, User, Github, Router } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios  from 'axios';
 import { error } from 'console';
+import { useRouter } from 'next/navigation'
 
 export default function Activate() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [logError, setIsError] = useState(true);
   const [formData, setFormData] = useState({
-    code: '',
+    email: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   console.log("Sending data:", formData);
-  console.log("Token:", localStorage.getItem("token"));
 
   try {
     let result = await axios.post(
-      "http://localhost:4000/api/activateAccount",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+      "http://localhost:4000/api/ForgetPassword",
+      formData
     );
-
-    if (result.data) {
+    console.log('result --> ' , result)
+    if (result.status == 200) {
+      
       console.log('Done! ' , result.data);
-      window.location.href = "/main";
+      localStorage.setItem('email' , formData.email)
+      router.push('/forgetRequest/newpassword')
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -89,11 +86,8 @@ export default function Activate() {
 
           {/* Welcome Message */}
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-rich-black mb-2">
-              Join SmartMeet
-            </h2>
             <p className="text-onyx-gray/70">
-                Enter the Code to Activate the Account
+                Enter the Email to Reset Password
             </p>
           </div>
 
@@ -104,9 +98,9 @@ export default function Activate() {
                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
                 <Input
                   type="text"
-                  placeholder="Code"
-                  value={formData.code}
-                  onChange={(e) => handleInputChange('code', e.target.value)}
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
                   className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
                   required
                 />
@@ -116,7 +110,7 @@ export default function Activate() {
               type="submit"
               className="w-full bg-gradient-to-r from-royal-blue to-deep-wine hover:from-deep-wine hover:to-royal-blue text-white py-3 h-12 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              Create Account
+              Send code
             </Button>
           </form>
 

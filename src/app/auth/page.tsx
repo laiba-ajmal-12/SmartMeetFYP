@@ -59,7 +59,7 @@ export default function Auth() {
       let result = await axios.post(`http://localhost:4000/api/login` , formData)
       if(result.data){
         localStorage.setItem('token' , result.data.Token)
-        router.push('/dashboard'); 
+        router.push('/main'); 
       }
     }
     // Redirect to meeting room for demo
@@ -249,9 +249,11 @@ export default function Auth() {
                   <input type="checkbox" className="rounded border-gray-300 text-royal-blue focus:ring-royal-blue" />
                   <span>Remember me</span>
                 </label>
-                <a href="#" className="text-royal-blue hover:text-deep-wine font-medium">
+                <Button
+                  onClick={()=>router.push('/forgetRequest/findAccount')}
+                  className="bg-transparent hover:bg-transparent border-0 p-0 text-royal-blue font-medium hover:text-deep-wine transition-colors duration-300">
                   Forgot password?
-                </a>
+                </Button>
               </div>
             )}
 

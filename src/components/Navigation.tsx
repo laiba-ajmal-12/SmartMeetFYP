@@ -45,7 +45,7 @@ export default function Navigation() {
             <a href="#about" className="text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium">
               About
             </a>
-            <a href="/dashboard" className="text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium">
+            <a href="/main" className="text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium">
              Dashboard
             </a>
             <a href="/auth" className="text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium">

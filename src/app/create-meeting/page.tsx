@@ -16,18 +16,30 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useRouter, useSearchParams } from "next/navigation";
+import axios from 'axios';
 
 export default function CreateMeeting() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const userId = Number(searchParams.get("userId"));
+  const organId = Number(searchParams.get("organizationId"));
+  console.log('[organizationId]: ', organId)
+  console.log('[userId]: ' ,userId )
   const [formData, setFormData] = useState({
-    title: '',
+    name: '',
     description: '',
-    date: '',
-    time: '',
-    duration: '60',
+    date:'',
+    time:'',
+    meetingDuration: '30',
     enableEngagement: true,
-    enableRecording: false,
-    requirePassword: false,
-    password: ''
+    daily:false,
+    weekly:false,
+    hostId:userId,
+    meetingLink: '', 
+    organizationId:organId,
+    startTime:new Date(),
   });
   
   const [meetingCreated, setMeetingCreated] = useState(false);
@@ -49,8 +61,13 @@ export default function CreateMeeting() {
     
     setMeetingId(id);
     setMeetingLink(link);
-    setMeetingCreated(true);
+    
+    return link
   };
+
+  function back(){
+    router.push(`/create-meeting?userId=${userId}&organizationId=${organId}`);
+  }
 
   const copyToClipboard = async () => {
     try {
@@ -62,9 +79,32 @@ export default function CreateMeeting() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     generateMeetingLink();
+    formData.meetingLink = generateMeetingLink();
+    formData.startTime=  new Date(`${formData.date}T${formData.time}:00`);
+    try{
+     const result = await axios.post(
+            "http://localhost:4000/api/CreateMeeting",
+            formData,
+            {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                }
+              }
+          )
+        if (result.status ==201){
+          setMeetingCreated(true);
+        }
+    }catch(e){
+      //@ts-ignore
+      console.error('[Error]',e.message);
+      //@ts-ignore
+      alert(e.message);
+    }
+
   };
 
   if (meetingCreated) {
@@ -85,7 +125,7 @@ export default function CreateMeeting() {
               Meeting Created Successfully! 🎉
             </h1>
             <p className="text-lg text-onyx-gray/80 mb-8">
-              Your meeting "{formData.title}" is ready. Share the link below with your participants.
+              Your meeting "{formData.name}" is ready. Share the link below with your participants.
             </p>
 
             {/* Meeting Details */}
@@ -121,16 +161,16 @@ export default function CreateMeeting() {
                         <span>Engagement Tracking</span>
                       </div>
                     )}
-                    {formData.enableRecording && (
+                    {formData.daily && (
                       <div className="flex items-center">
                         <FileText className="w-4 h-4 mr-2 text-deep-wine" />
-                        <span>Recording Enabled</span>
+                        <span>Meet Daily</span>
                       </div>
                     )}
-                    {formData.requirePassword && (
+                    {formData.weekly && (
                       <div className="flex items-center">
                         <Settings className="w-4 h-4 mr-2 text-deep-wine" />
-                        <span>Password Protected</span>
+                        <span>weekly</span>
                       </div>
                     )}
                   </div>
@@ -173,7 +213,7 @@ export default function CreateMeeting() {
               <Button
                 variant="outline"
                 className="border-2 border-royal-blue text-royal-blue hover:bg-royal-blue hover:text-white px-8 py-3 rounded-xl font-semibold text-lg transition-all duration-200"
-                onClick={() => window.location.href = '/dashboard'}
+                onClick={back}
               >
                 Back to Dashboard
               </Button>
@@ -207,7 +247,7 @@ export default function CreateMeeting() {
             {/* Back Button */}
             <Button
               variant="ghost"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={back}
               className="text-onyx-gray hover:text-royal-blue"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -241,8 +281,8 @@ export default function CreateMeeting() {
                 <Input
                   type="text"
                   placeholder="e.g., Weekly Team Standup"
-                  value={formData.title}
-                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
                   className="w-full px-4 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
                   required
                 />
@@ -266,7 +306,7 @@ export default function CreateMeeting() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-rich-black mb-2">
-                    Date (Optional)
+                    Date 
                   </label>
                   <div className="relative">
                     <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
@@ -300,8 +340,8 @@ export default function CreateMeeting() {
                   Expected Duration (minutes)
                 </label>
                 <select
-                  value={formData.duration}
-                  onChange={(e) => handleInputChange('duration', e.target.value)}
+                  value={formData.meetingDuration}
+                  onChange={(e) => handleInputChange('meetingDuration', e.target.value)}
                   className="w-full px-4 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200 bg-white"
                 >
                   <option value="15">15 minutes</option>
@@ -333,40 +373,28 @@ export default function CreateMeeting() {
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.enableRecording}
-                      onChange={(e) => handleInputChange('enableRecording', e.target.checked)}
+                      checked={formData.weekly}
+                      onChange={(e) => handleInputChange('weekly', e.target.checked)}
                       className="w-5 h-5 text-royal-blue border-2 border-gray-300 rounded focus:ring-royal-blue focus:ring-2"
                     />
                     <div>
-                      <span className="font-medium text-rich-black">Enable Recording</span>
-                      <p className="text-sm text-onyx-gray/60">Automatically record the meeting for later review</p>
+                      <span className="font-medium text-rich-black">Weekly</span>
+                      <p className="text-sm text-onyx-gray/60">Meeting will be on weekly basis</p>
                     </div>
                   </label>
 
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={formData.requirePassword}
-                      onChange={(e) => handleInputChange('requirePassword', e.target.checked)}
+                      checked={formData.daily}
+                      onChange={(e) => handleInputChange('daily', e.target.checked)}
                       className="w-5 h-5 text-royal-blue border-2 border-gray-300 rounded focus:ring-royal-blue focus:ring-2"
                     />
                     <div>
-                      <span className="font-medium text-rich-black">Require Password</span>
-                      <p className="text-sm text-onyx-gray/60">Add an extra layer of security</p>
+                      <span className="font-medium text-rich-black">Daily</span>
+                      <p className="text-sm text-onyx-gray/60">Meet on Daily basis</p>
                     </div>
                   </label>
-
-                  {formData.requirePassword && (
-                    <div className="ml-8 mt-3">
-                      <Input
-                        type="text"
-                        placeholder="Enter meeting password"
-                        value={formData.password}
-                        onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="w-full px-4 py-2 h-10 rounded-lg border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -374,7 +402,7 @@ export default function CreateMeeting() {
               <Button
                 type="submit"
                 className="w-full bg-gradient-to-r from-royal-blue to-deep-wine hover:from-deep-wine hover:to-royal-blue text-white py-4 h-14 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                disabled={!formData.title.trim()}
+                disabled={!formData.name.trim()}
               >
                 <Video className="w-5 h-5 mr-2" />
                 Generate Meeting Link

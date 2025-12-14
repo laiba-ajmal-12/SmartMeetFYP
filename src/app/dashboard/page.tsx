@@ -1,120 +1,143 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Video, Plus, Users, ChartBar as BarChart3, FileText, Calendar, Clock, Eye, Settings, LogOut, Copy, ExternalLink, TrendingUp, Award, Target, Bell, Search, Filter, MoveHorizontal as MoreHorizontal, ArrowUpRight, Zap, Shield, Globe , ArrowLeft} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import Loader from '@/components/ui/loader';
 
-interface Meeting {
-  id: string;
-  title: string;
-  date: string;
-  participants: number;
-  engagement: number;
-  duration: string;
-  status: 'completed' | 'upcoming' | 'in-progress';
-}
-
-interface StatCard {
-  title: string;
-  value: string;
-  subtitle: string;
-  icon: any;
-  trend: string;
-  trendUp: boolean;
-  color:string;
-}
 
 export default function Dashboard() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [userId , setUserId] = useState<number | null>(null);
+  const [organId , setorganId] = useState<number | null>(null);
+  const [loading , setloading]= useState(true);
+  const [data , setData] = useState(null);
+  const [admin , setAdmin] = useState(null);
+  const [member , setmember] = useState([]);
+  const [meetings , setmeeting] = useState([])
+  const [upcoming , setUpcomings] = useState([])
+  const [runing , setRuningMeeting] = useState([]);
+  const [memberView , setMemberView] = useState(false);
+  const [owner , setOwner] = useState(null)
+  const [organizationCode , setorganizationCode] = useState(null);
+ 
+  useEffect(() => {
+    setUserId(Number(searchParams.get("userId")));
+    setorganId(Number(searchParams.get("organizationId")));
+  }, []);
 
-  // Dummy data
-  const stats: StatCard[] = [
-    {
-      title: 'Meetings Hosted',
-      value: '47',
-      subtitle: 'This month (+12 from last)',
-      icon: Video,
-      trend: '+12%',
-      trendUp: true,
-      color: 'from-royal-blue/20 to-royal-blue/10'
-    },
-    {
-      title: 'Average Engagement',
-      value: '87%',
-      subtitle: 'Across all meetings (+5% up)',
-      icon: Target,
-      trend: '+5%',
-      trendUp: true,
-      color: 'from-green-500/20 to-green-400/10'
-    },
-    {
-      title: 'Total Participants',
-      value: '324',
-      subtitle: 'Unique attendees (+18% growth)',
-      icon: Users,
-      trend: '+18%',
-      trendUp: true,
-      color: 'from-deep-wine/20 to-deep-wine/10'
-    },
-    {
-      title: 'Reports Generated',
-      value: '42',
-      subtitle: 'Automated insights (+8 new)',
-      icon: FileText,
-      trend: '+8%',
-      trendUp: true,
-      color: 'from-purple-500/20 to-purple-400/10'
-    }
-  ];
+  useEffect(()=>{
+    if (!organId) return;
+    const fectData = async ()=>{ 
+      const query = `{ getOrganizationbyId(id: ${organId}) { id name description organizationCode createAt ownerId totalParticipants owner { id name ImagePath} meeting { id name startTime Engagment meetingDuration } members { id joinedAt user{ id name ImagePath} } } }`
 
-  const recentMeetings: Meeting[] = [
-    {
-      id: '1',
-      title: 'Product Strategy Review',
-      date: '2024-01-15',
-      participants: 8,
-      engagement: 92,
-      duration: '45 min',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      title: 'Weekly Team Standup',
-      date: '2024-01-14',
-      participants: 12,
-      engagement: 78,
-      duration: '30 min',
-      status: 'completed'
-    },
-    {
-      id: '3',
-      title: 'Client Presentation',
-      date: '2024-01-13',
-      participants: 6,
-      engagement: 95,
-      duration: '60 min',
-      status: 'completed'
-    },
-    {
-      id: '4',
-      title: 'Q1 Planning Session',
-      date: '2024-01-12',
-      participants: 15,
-      engagement: 84,
-      duration: '90 min',
-      status: 'completed'
-    },
-    {
-      id: '5',
-      title: 'Design Review',
-      date: '2024-01-18',
-      participants: 5,
-      engagement: 0,
-      duration: '45 min',
-      status: 'upcoming'
+        try{
+        console.log('token: ' , localStorage.getItem("token"))
+
+        const result = await axios.post(
+            "http://localhost:4000/graphql",
+            { 'query':query },
+            {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              }
+            }
+         )
+          setAdmin(result.data.data.getOrganizationbyId.owner);
+          setData(result.data.data.getOrganizationbyId);
+          setorganizationCode(result.data.data.getOrganizationbyId.organizationCode)
+          setloading(false);
+          if( result.data.data.getOrganizationbyId.members && result.data.data.getOrganizationbyId.members.length > 0){
+            setmember(result.data.data.getOrganizationbyId.members);
+          }
+          if( result.data.data.getOrganizationbyId.meeting && result.data.data.getOrganizationbyId.meeting.length > 0){
+            const meetingData = result.data.data.getOrganizationbyId.meeting;
+            setmeeting(meetingData);
+            //set Up-Coming Meeting 
+            const upComings = meetingData
+            .filter(item => {
+              const meetingDate = new Date(Number(item.startTime));
+                return meetingDate > new Date();
+              })
+              .sort((a, b) => Number(a.startTime) - Number(b.startTime)) 
+              .slice(0, 4); 
+              setUpcomings(upComings);
+
+              //set Running Meeting 
+              const onGo = meetingData.filter(item => {
+                const meetingStart = new Date(Number(item.startTime));
+                const meetingEnd = new Date(meetingStart.getTime() + Number(item.meetingDuration)* 60000); 
+                console.log(meetingEnd.getHours()+':' + meetingEnd.getMinutes()+':' + meetingEnd.getSeconds())// duration in minutes
+                const now = new Date();
+                return now >= meetingStart && now <= meetingEnd;
+              });
+              setRuningMeeting(onGo);
+              console.log('running Meeting: ___ ' , onGo)
+          }
+          console.log(result.data.data.getOrganizationbyId)
+          setloading(false)
+        }catch(error){
+          console.error('[Error]: ' )
+          //@ts-ignore
+          alert(error.message)
+        }
+
+  }
+  fectData();
+
+    
+
+  } , [organId])
+
+  function createMeeting(){
+    router.push(`/create-meeting?userId=${userId}&organizationId=${organId}`);
+  }
+
+  async function changeOrganizationCode(){
+    const result = await axios.get(
+            `http://localhost:4000/api/changeOrganizationCode/${organId}`,
+            {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              }
+      }
+    )
+    setorganizationCode(result.data.organizationCode);
+  }
+
+  function getRemainingMinutes(startTime: string | number, meetingDuration: number): number {
+    const start = new Date(Number(startTime)); 
+    const durationMs = Number(meetingDuration) * 60000; 
+    const end = new Date(start.getTime() + durationMs); 
+    const now = new Date();
+    const timeLeftMs = end.getTime() - now.getTime();
+
+    return timeLeftMs > 0 ? Math.ceil(timeLeftMs / 60000) : 0; 
+}
+
+  function findStatus(startTime: Date, duration: number): string {
+    const now = new Date();
+    const dateObj = new Date(Number(startTime)); 
+    const endTime = new Date(dateObj.getTime() + Number(duration) * 60000);
+    if (now > endTime) {
+      return 'completed';
+    } else if (now < dateObj) {
+      return 'upcoming';
+    } else {
+      return 'upcoming';
     }
-  ];
+
+  }
+
+
+
 
   const chartData = [
     { month: 'Jul', engagement: 78, meetings: 12 },
@@ -126,11 +149,6 @@ export default function Dashboard() {
     { month: 'Jan', engagement: 92, meetings: 47 }
   ];
 
-  const upcomingMeetings = [
-    { id: '1', title: 'Q1 Strategy Review', time: '2:00 PM', participants: 8, type: 'important' },
-    { id: '2', title: 'Design System Update', time: '4:30 PM', participants: 5, type: 'regular' },
-    { id: '3', title: 'Client Presentation', time: 'Tomorrow 10:00 AM', participants: 12, type: 'client' }
-  ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -151,6 +169,66 @@ export default function Dashboard() {
     if (engagement >= 60) return 'text-yellow-600';
     return 'text-red-500';
   };
+
+  function formatMeetingTime(meetingTime: string | number | Date): string {
+    const date = new Date(Number(meetingTime));
+    if (isNaN(date.getTime())) return "Invalid Date";
+
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    const timeStr = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+
+    // Today
+    if (
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear()
+    ) {
+      return `Today at ${timeStr}`;
+    }
+
+    // Tomorrow
+    if (
+      date.getDate() === tomorrow.getDate() &&
+      date.getMonth() === tomorrow.getMonth() &&
+      date.getFullYear() === tomorrow.getFullYear()
+    ) {
+      return `Tomorrow at ${timeStr}`;
+    }
+
+    // This week
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6); // Saturday
+
+    if (date >= weekStart && date <= weekEnd) {
+      return `${dayNames[date.getDay()]} at ${timeStr}`;
+    }
+
+    return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${timeStr}`;
+}
+
+
+  if(loading){
+    return (
+      <div className='w-screen h-screen flex justify-center items-center'>
+        <Loader/>
+      </div>
+    )
+  }
+
+  function getImageUrl(imagePath: string): string {
+    const normalizedPath = imagePath.replace(/\\/g, "/");
+    console.log('[Pic - Path]: '  ,`http://localhost:4000/${normalizedPath}` )
+    return `http://localhost:4000/${normalizedPath}`;
+  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-alice-white to-white">
@@ -200,40 +278,37 @@ export default function Dashboard() {
                 </Button>
               </div>
 
-              <Button
+              {admin && admin.id == userId && <Button
                 className="bg-gradient-to-r from-royal-blue to-royal-blue/90 hover:from-deep-wine hover:to-deep-wine/90 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
-                onClick={() => window.location.href = '/create-meeting'}
+                onClick={createMeeting}
               >
                 <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
                 Create Meeting
-              </Button>
+              </Button>}
 
               {/* Profile Menu */}
-              <div className="relative">
-                <button
-                  className="w-10 h-10 bg-gradient-to-br from-royal-blue to-deep-wine rounded-xl flex items-center justify-center text-white font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+              {organizationCode && <div className="relative">
+                <Button
+                className="bg-gradient-to-r from-royal-blue to-royal-blue/90 hover:from-deep-wine hover:to-deep-wine/90 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
                 >
-                  JD
-                </button>
+                  <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-300" />
+                  Code
+                </Button>
                 
                 {showProfileMenu && (
                   <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-alice-white/50 py-3 z-50">
                     <div className="px-4 py-2 border-b border-alice-white">
-                      <p className="font-semibold text-rich-black">John Doe</p>
-                      <p className="text-sm text-onyx-gray">john@company.com</p>
+                      <p className="font-semibold text-rich-black">code</p>
+                      <p className="text-sm text-onyx-gray">{organizationCode}</p>
                     </div>
-                    <button className="w-full text-left px-4 py-2 text-onyx-gray hover:bg-alice-white hover:text-royal-blue transition-colors flex items-center">
+                    <button onClick={changeOrganizationCode} className="w-full text-left px-4 py-2 text-onyx-gray hover:bg-alice-white hover:text-royal-blue transition-colors flex items-center">
                       <Settings className="w-4 h-4 mr-3" />
-                      Settings
-                    </button>
-                    <button className="w-full text-left px-4 py-2 text-onyx-gray hover:bg-alice-white hover:text-deep-wine transition-colors flex items-center">
-                      <LogOut className="w-4 h-4 mr-3" />
-                      Logout
+                      Change Code
                     </button>
                   </div>
                 )}
-              </div>
+              </div>}
             </div>
           </div>
         </div>
@@ -255,10 +330,10 @@ export default function Dashboard() {
             Back to home
           </Button>
               <h1 className="text-4xl font-bold text-rich-black mb-3">
-                Welcome back, John 👋
+                {data && data.name}
               </h1>
               <p className="text-xl text-onyx-gray/70 mb-4">
-                Here's a quick look at your recent meetings and engagement trends.
+                {data && data.description}
               </p>
               <div className="flex items-center space-x-6 text-sm text-onyx-gray/60">
                 <div className="flex items-center space-x-2">
@@ -276,17 +351,17 @@ export default function Dashboard() {
             <div className="mt-6 lg:mt-0">
               <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-1 shadow-sm border border-alice-white/50">
                 <div className="flex space-x-1">
-                  {['7d', '30d', '90d'].map((range) => (
+                  {['Meetings', 'Members', '90d'].map((range) => (
                     <button
                       key={range}
-                      onClick={() => setSelectedTimeRange(range)}
+                      onClick={() => setMemberView(!memberView)}
                       className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                         selectedTimeRange === range
                           ? 'bg-royal-blue text-white shadow-sm'
                           : 'text-onyx-gray hover:text-royal-blue hover:bg-royal-blue/5'
                       }`}
                     >
-                      {range === '7d' ? 'Last 7 days' : range === '30d' ? 'Last 30 days' : 'Last 90 days'}
+                      {range === 'Meetings' ? 'Meetings' : range === 'Members' ? 'Members' : 'Last 90 days'}
                     </button>
                   ))}
                 </div>
@@ -294,36 +369,41 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
+        
+        
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
+          {runing.map((stat, index) => {
+            const Icon = Video;
             return (
               <div
-                key={index}
+                key={stat.id}
                 className="group bg-white/70 backdrop-blur-sm rounded-3xl p-6 card-shadow hover:card-shadow-hover transition-all duration-300 transform hover:-translate-y-2 border border-white/50 relative overflow-hidden"
               >
                 {/* Background Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br from-royal-blue/20 to-royal-blue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                 
                 <div className="relative">
                   <div className="flex items-center justify-between mb-6">
-                    <div className={`w-14 h-14 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={`w-14 h-14 bg-gradient-to-br from-royal-blue/20 to-royal-blue/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                       <Icon className="w-7 h-7 text-royal-blue" />
                     </div>
-                    <div className={`flex items-center text-sm font-bold px-3 py-1 rounded-full ${
-                      stat.trendUp ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
-                    }`}>
-                      <TrendingUp className={`w-4 h-4 mr-1 ${!stat.trendUp ? 'rotate-180' : ''}`} />
-                      {stat.trend}
+                    <div className={`flex items-center text-sm font-bold px-3 py-1 rounded-full text-red-700 bg-red-100`}>
+                      {getRemainingMinutes(stat.startTime , stat.meetingDuration) }min Left
                     </div>
                   </div>
-                  <div className="text-4xl font-bold text-rich-black mb-2 group-hover:text-royal-blue transition-colors duration-300">
-                    {stat.value}
-                  </div>
                   <div className="text-sm text-onyx-gray/70 leading-relaxed">
-                    {stat.subtitle}
+                    {stat.name}
+                  </div>
+                  <div className="w-full mt-3 text-sm text-onyx-gray/70 leading-relaxed">
+                  <Button
+                    className="bg-gradient-to-r  from-royal-blue to-royal-blue/90 hover:from-deep-wine hover:to-deep-wine/90 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+                     onClick={() => {
+                        window.location.href = "https://superformidable-briella-ergodic.ngrok-free.dev/meeting";
+                   }}
+                  >
+                    Join Meeting
+                  </Button>
                   </div>
                 </div>
               </div>
@@ -331,7 +411,7 @@ export default function Dashboard() {
           })}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-8">
+        {!memberView &&  <div className="grid lg:grid-cols-3 gap-8 mb-8">
           {/* Recent Meetings */}
           <div className="lg:col-span-2">
             <div className="bg-white/70 backdrop-blur-sm rounded-3xl card-shadow border border-white/50">
@@ -352,31 +432,30 @@ export default function Dashboard() {
                     <tr className="border-b border-alice-white/50">
                       <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Meeting</th>
                       <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Date</th>
-                      <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Participants</th>
+                      <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Duration</th>
                       <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Engagement</th>
-                      <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Action</th>
+                      {admin && admin.id == userId && <th className="text-left py-5 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Action</th>}
                     </tr>
                   </thead>
                   <tbody>
-                    {recentMeetings.map((meeting) => (
-                      <tr key={meeting.id} className="border-b border-alice-white/30 hover:bg-royal-blue/5 transition-all duration-200 group">
+                    {meetings && meetings.map((meet) => (
+                      <tr key={meet.id} className="border-b border-alice-white/30 hover:bg-royal-blue/5 transition-all duration-200 group">
                         <td className="py-5 px-6">
                           <div>
-                            <div className="font-semibold text-rich-black group-hover:text-royal-blue transition-colors">{meeting.title}</div>
-                            <div className="text-sm text-onyx-gray/70 mt-1">{meeting.duration}</div>
+                            <div className="font-semibold text-rich-black group-hover:text-royal-blue transition-colors">{meet.name}</div>
+                            <div className="text-sm text-onyx-gray/70 mt-1">{meet.meetingDuration} min</div>
                           </div>
                         </td>
                         <td className="py-5 px-6 text-onyx-gray font-medium">
-                          {new Date(meeting.date).toLocaleDateString()}
+                          {new Date(Number(meet.startTime)).toLocaleDateString()}
                         </td>
                         <td className="py-5 px-6">
                           <div className="flex items-center text-onyx-gray font-medium">
-                            <Users className="w-4 h-4 mr-2" />
-                            {meeting.participants}
+                            {meet.meetingDuration} min
                           </div>
                         </td>
                         <td className="py-5 px-6">
-                          {meeting.status === 'upcoming' ? (
+                          {meet.status === 'upcoming' ? (
                             <span className={`px-4 py-2 rounded-full text-xs font-bold ${getStatusColor(meeting.status)}`}>
                               Upcoming
                             </span>
@@ -385,36 +464,36 @@ export default function Dashboard() {
                               <div className="w-12 bg-alice-white rounded-full h-2">
                                 <div
                                   className={`h-2 rounded-full ${
-                                    meeting.engagement >= 90 ? 'bg-green-500' :
-                                    meeting.engagement >= 75 ? 'bg-royal-blue' :
-                                    meeting.engagement >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                    meet.Engagment >= 90 ? 'bg-green-500' :
+                                    meet.Engagment >= 75 ? 'bg-royal-blue' :
+                                    meet.Engagment >= 60 ? 'bg-yellow-500' : 'bg-red-500'
                                   }`}
-                                  style={{ width: `${meeting.engagement}%` }}
+                                  style={{ width: `${meet.Engagment}%` }}
                                 ></div>
                               </div>
-                              <span className={`font-bold text-sm ${getEngagementColor(meeting.engagement)}`}>
-                                {meeting.engagement}%
+                              <span className={`font-bold text-sm ${getEngagementColor(meet.Engagment)}`}>
+                                {meet.Engagment}%
                               </span>
                             </div>
                           )}
                         </td>
-                        <td className="py-5 px-6">
+                        {admin && admin.id == userId && <td className="py-5 px-6">
                           <Button
-                            variant={meeting.status === 'upcoming' ? "outline" : "default"}
+                            variant={findStatus(meet.startTime , meet.meetingDuration) === 'upcoming' ? "outline" : "default"}
                             size="sm"
-                            className={meeting.status === 'upcoming' 
+                            className={findStatus(meet.startTime , meet.meetingDuration) === 'upcoming' 
                               ? "text-royal-blue hover:text-white hover:bg-royal-blue border-royal-blue/20 hover:border-royal-blue transition-all duration-200"
                               : "bg-royal-blue hover:bg-deep-wine text-white transition-all duration-200"
                             }
                             onClick={() => {
-                              if (meeting.status === 'upcoming') {
-                                window.location.href = `/create-meeting?edit=${meeting.id}`;
+                              if (findStatus(meet.startTime , meet.meetingDuration) === 'upcoming') {
+                                window.location.href = `/create-meeting?edit=${meet.id}`;
                               } else {
-                                window.location.href = `/reports/${meeting.id}`;
+                                window.location.href = `/reports/${meet.id}`;
                               }
                             }}
                           >
-                            {meeting.status === 'upcoming' ? (
+                            {findStatus(meet.startTime , meet.meetingDuration) === 'upcoming' ? (
                               <>
                                 <Settings className="w-4 h-4 mr-2" />
                                 Edit
@@ -426,7 +505,7 @@ export default function Dashboard() {
                               </>
                             )}
                           </Button>
-                        </td>
+                        </td>}
                       </tr>
                     ))}
                   </tbody>
@@ -435,9 +514,42 @@ export default function Dashboard() {
             </div>
           </div>
 
+
+          
+
           {/* Right Sidebar */}
           <div className="lg:col-span-1">
-            <div className="space-y-6">
+              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 card-shadow border border-white/50">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-rich-black">Upcoming</h3>
+                  <Calendar className="w-5 h-5 text-royal-blue" />
+                </div>
+                <div className="space-y-4">
+                  {upcoming && upcoming.map((meet) => (
+                    <div key={meet.id} className="group p-4 rounded-2xl hover:bg-royal-blue/5 transition-all duration-200 border border-transparent hover:border-royal-blue/20">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-rich-black group-hover:text-royal-blue transition-colors text-sm">
+                            {meet.name}
+                          </h4>
+                          <div className="flex items-center space-x-3 mt-2">
+                            <div className="flex items-center text-xs text-onyx-gray/60">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {formatMeetingTime(meet.startTime)}
+                            </div>
+                            <div className="flex items-center text-xs text-onyx-gray/60">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {meet.meetingDuration} min
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+            <div className="space-y-6 mt-4">
               {/* Engagement Trends */}
               <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 card-shadow border border-white/50">
                 <div className="flex items-center justify-between mb-6">
@@ -468,39 +580,7 @@ export default function Dashboard() {
               </div>
 
               {/* Upcoming Meetings */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 card-shadow border border-white/50">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold text-rich-black">Upcoming</h3>
-                  <Calendar className="w-5 h-5 text-royal-blue" />
-                </div>
-                <div className="space-y-4">
-                  {upcomingMeetings.map((meeting) => (
-                    <div key={meeting.id} className="group p-4 rounded-2xl hover:bg-royal-blue/5 transition-all duration-200 border border-transparent hover:border-royal-blue/20">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-rich-black group-hover:text-royal-blue transition-colors text-sm">
-                            {meeting.title}
-                          </h4>
-                          <div className="flex items-center space-x-3 mt-2">
-                            <div className="flex items-center text-xs text-onyx-gray/60">
-                              <Clock className="w-3 h-3 mr-1" />
-                              {meeting.time}
-                            </div>
-                            <div className="flex items-center text-xs text-onyx-gray/60">
-                              <Users className="w-3 h-3 mr-1" />
-                              {meeting.participants}
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`w-3 h-3 rounded-full ${
-                          meeting.type === 'important' ? 'bg-deep-wine' :
-                          meeting.type === 'client' ? 'bg-royal-blue' : 'bg-green-500'
-                        }`}></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
 
               {/* Quick Actions */}
               <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 card-shadow border border-white/50">
@@ -534,10 +614,110 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
+
+        {memberView && <div>        
+          <div className="bg-white/70 backdrop-blur-sm rounded-3xl card-shadow-hover border border-white/50">
+            <div className="p-8 border-b border-alice-white/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-rich-black mb-2">Members</h3>
+                  <p className="text-onyx-gray/60">List of All the Members of this organization</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-alice-white/50 bg-alice-white/30">
+                    <th className="text-left py-6 px-8 text-sm font-bold text-rich-black uppercase tracking-wider">Member</th>
+                    <th className="text-left py-6 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Join Date</th>
+                    <th className="text-left py-6 px-6 text-sm font-bold text-rich-black uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {admin && <tr key={admin.id} className="border-b border-alice-white/30 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-deep-wine/5 transition-all duration-300 group">
+                      <td className="py-6 px-8">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-royal-blue to-deep-wine rounded-2xl flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform duration-300"
+                            style={
+                              { 
+                                backgroundImage: `url(${getImageUrl(admin.ImagePath)})`,
+                                backgroundSize: "cover",  
+                                backgroundPosition: "center", 
+                                backgroundRepeat: "no-repeat" 
+                              }
+                            
+                          }
+                          >
+                          </div>
+                          <div>
+                            <div className="font-bold text-rich-black group-hover:text-royal-blue transition-colors">
+                              {admin.name}
+                            </div>
+                            <div className="text-sm text-onyx-gray/60">Host</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-6 px-6">
+                        {data && new Date(Number(data.createAt)).toLocaleDateString()}
+                      </td>
+                      <td className="py-6 px-6">
+                        <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-bold border`}>
+                          <span className="capitalize">Host</span>
+                        </div>
+                      </td>
+                    </tr>}
+                  {member.map((participant) => (
+                    <tr key={participant.id} className="border-b border-alice-white/30 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-deep-wine/5 transition-all duration-300 group">
+                      <td className="py-6 px-8">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-royal-blue to-deep-wine rounded-2xl flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform duration-300"
+                            style={{ 
+                              
+                              backgroundImage: `url(${getImageUrl(participant.user.ImagePath)})`,
+                                backgroundSize: "cover",  
+                                backgroundPosition: "center", 
+                                backgroundRepeat: "no-repeat" 
+                          
+                          
+                          }}
+                          >
+                          </div>
+                          <div>
+                            <div className="font-bold text-rich-black group-hover:text-royal-blue transition-colors">
+                              {participant.user.name}
+                            </div>
+                            <div className="text-sm text-onyx-gray/60">Member</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-6 px-6">
+                         {new Date(Number(participant.joinedAt)).toLocaleDateString()}
+                      </td>
+                      <td className="py-6 px-6">
+                        <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-bold border`}>
+                          <span className="capitalize">Member</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            {/* Table Footer */}
+            <div className="p-6 bg-alice-white/30 border-t border-alice-white/50">
+              <div className="flex items-center justify-between text-sm text-onyx-gray/60">
+                <span>Showing {member.length+1} participants</span>
+              </div>
+            </div>
+          </div>
+        </div>}
 
         {/* Bottom Section - Recent Activity */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-white/50">
+        <div className="bg-white/70 mt-9 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-white/50">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-bold text-rich-black mb-2">Recent Activity</h2>
