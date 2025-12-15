@@ -94,6 +94,20 @@ npm install
 # Start frontend development server
 npm run dev
 ```
+### Cv Setup
+
+```terminal(run these commands on terminal)
+# Step 1: Create and Activate Virtual Environment (Recommended)
+python -m venv cv_env
+# Windows
+cv_env\Scripts\activate
+# Linux / macOS
+source cv_env/bin/activate
+# Step 2: Install Required Libraries
+pip install opencv-python mediapipe numpy matplotlib jupyter
+# Step 3: Launch Jupyter Notebook
+jupyter notebook
+```
 
 ### Environment Variables
 
