@@ -6,7 +6,7 @@ Smart Meet is an online meeting platform which is designed to help hosts underst
 
 This platform addresses that problem by monitoring participant attentiveness and attention during meetings using computer vision techniques such as head pose estimation, and gaze tracking. At the end of each session, Smart Meet generates automated reports that summarize individual participant engagement as well as overall session productivity. This allows hosts to objectively evaluate how effective and engaging their meetings were.
 
-## Features Implemented (Sprint 1 – MVP)
+## Features Implemented
 
 The following features are fully implemented in the current MVP:
 
@@ -34,9 +34,7 @@ The following features are fully implemented in the current MVP:
 
 ### Reports & Analytics
 
-* Automated post-meeting engagement reports
 * Participant-level attentiveness analysis
-* Session-level productivity summary based on participant attention
  
 ## Technologies Used
 
@@ -126,7 +124,7 @@ All Sprint 1 features were developed in feature-specific branches and merged int
 
 The following items are planned for future sprints:
 
-* Video mode during meetings (participants cannot currently see each other)
+* Cross platform video transfer
 * Improvement and optimization of CV module
 * Real-time warnings when participant attentiveness drops below a threshold
 * Attendance calculation based on attention metrics
