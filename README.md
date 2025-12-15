@@ -108,7 +108,7 @@ All Sprint 1 features were developed in feature-specific branches and merged int
 
 The following items are planned for future sprints:
 
-* Video mode during meetings (participants cannot currently see each other)
-* Improvement and optimization of CV module
+* Cross platform video transfer
+* post meeting engagement reports
 * Real-time warnings when participant attentiveness drops below a threshold
 * Attendance calculation based on attention metrics
