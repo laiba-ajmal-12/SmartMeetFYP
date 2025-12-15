@@ -1,4 +1,4 @@
-# Smart Meet – An Online Meeting Platform with Engagement Tracking and Automated Reports
+   # Smart Meet – An Online Meeting Platform with Engagement Tracking and Automated Reports
 
 # Project Description
 
@@ -16,25 +16,6 @@ The following features are fully implemented in the current MVP:
 * Host role with ability to create organizations
 * Host can add participants to organizations and meetings
 * Meeting scheduling and listing for hosts
-* Real-time meeting controls:
-    * Join / Leave meeting
-    * Microphone on/off
-    * Audio mute/unmute
-    * In-meeting chat
-    * Screen sharing
-
-### Computer Vision & Engagement Tracking
-
-* Face detection (face present or not)
-* Head pose movement analysis (right or left)
-* Eye gaze tracking
-* Attention and attentiveness detection logic
-* Computer vision preprocessing using OpenCV
-* MediaPipe-based facial landmark extraction
-
-### Reports & Analytics
-
-* Participant-level attentiveness analysis
  
 ## Technologies Used
 
@@ -66,7 +47,7 @@ npm run dev
 * `master` – Production-ready code
 * `develop` – Stable development branch
 
-### Feature & Supporting Branches (Sprint 1)
+### Feature & Supporting Branches
 
 * `feature/ui`
 * `cv`
