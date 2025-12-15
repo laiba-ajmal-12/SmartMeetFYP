@@ -93,7 +93,7 @@ A `.env` file is required for both frontend and backend. It typically includes:
 * `master` – Production-ready code
 * `develop` – Stable development branch
 
-### Feature & Supporting Branches (Sprint 1)
+### Feature & Supporting Branches 
 
 * `feature/ui`
 * `cv`
