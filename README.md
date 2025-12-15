@@ -74,7 +74,7 @@ A `.env` file is required for both frontend and backend. It typically includes:
 * `master` – Production-ready code
 * `develop` – Stable development branch
 
-### Feature & Supporting Branches (Sprint 1)
+### Feature & Supporting Branches
 
 * `feature/ui`
 * `cv`
@@ -82,8 +82,6 @@ A `.env` file is required for both frontend and backend. It typically includes:
 * `Backend`
 * `server`
 * `integration_b`
-
-All Sprint 1 features were developed in feature-specific branches and merged into `develop` and `master` after integration.
 
 ## TODOs
 
