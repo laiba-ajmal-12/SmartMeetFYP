@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Meet – An Online Meeting Platform with Engagement Tracking and Automated Reports
 
-## Getting Started
+# Project Description
 
-First, run the development server:
+Smart Meet is an online meeting platform which is designed to help hosts understand how engaged participants are during online meetings. In traditional online meetings, hosts often struggle to know whether participants are actively listening or simply just physically present and mentally absent. Most users just join the meeting but don't listen it.
 
-```bash
+This platform addresses that problem by monitoring participant attentiveness and attention during meetings using computer vision techniques such as head pose estimation, and gaze tracking. At the end of each session, Smart Meet generates automated reports that summarize individual participant engagement as well as overall session productivity. This allows hosts to objectively evaluate how effective and engaging their meetings were.
+
+## Features Implemented 
+
+The following features are fully implemented in the current MVP:
+
+## Core Platform Features
+
+* User authentication (Sign Up / Login)
+* Host role with ability to create organizations
+* Host can add participants to organizations and meetings
+* Meeting scheduling and listing for hosts
+* Real-time meeting controls:
+    * Join / Leave meeting
+    * Microphone on/off
+    * Audio mute/unmute
+    * In-meeting chat
+    * Screen sharing
+
+### Computer Vision & Engagement Tracking
+
+* Face detection (face present or not)
+* Head pose movement analysis (right or left)
+* Eye gaze tracking
+* Attention and attentiveness detection logic
+* Computer vision preprocessing using OpenCV
+* MediaPipe-based facial landmark extraction
+
+### Reports & Analytics
+
+* Participant-level attentiveness analysis
+ 
+## Technologies Used
+
+### Frontend
+
+* Next.js
+* Tailwind CSS
+
+## Setup Instructions
+
+### Prerequisites
+
+* npm
+  
+### Frontend Setup
+
+```terminal(run these commands on terminal)
+# Navigate to frontend directory
+npm install
+
+# Start frontend development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Repository Structure & Branching
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Main Branches
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* `master` – Production-ready code
+* `develop` – Stable development branch
 
-## Learn More
+### Feature & Supporting Branches (Sprint 1)
 
-To learn more about Next.js, take a look at the following resources:
+* `feature/ui`
+* `cv`
+* `Smart-Meet-Server-only`
+* `Backend`
+* `server`
+* `integration_b`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All Sprint 1 features were developed in feature-specific branches and merged into `develop` and `master` after integration.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## TODOs
 
-## Deploy on Vercel
+The following items are planned for future sprints:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Responsiveness
