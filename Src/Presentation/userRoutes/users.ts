@@ -26,7 +26,7 @@ const port = 3000;
 
 
 userRoute.use(express.json());
-const userService = new UserService(new hashPassword(), new userDbRepo() , new BrevoEmail("smartmeet07@gmail.com"))
+const userService = new UserService(new hashPassword(), new userDbRepo() , new BrevoEmail(`${process.env.SENDER_EMAIL}`));
 
 userRoute.post("/signup", upload.single("image"), async (req, res) => {
   try{

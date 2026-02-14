@@ -65,7 +65,7 @@ const startServer = async () => {
   app.use("/api", organRoute);
   app.use("/api", MeetingRoute);
   app.use("/api", MemberRoute);
-
+ 
   app.get("/check", (req, res) => {
     console.log("server checked!");
     res.status(200).json("Everything is okay");

@@ -18,11 +18,13 @@ import fs from 'fs/promises';
 import { verifyUser} from "../MiddleWares/jwtAuthMiddleware.js";
 //@ts-ignore
 import { MeetingDbRepo } from "../../Infrastructure/Database/Meeting/meetingRepo.js";
+import { BrevoEmail } from "../../Infrastructure/Email/email.js";
 
 
 const organRoute = express.Router()
 organRoute.use(express.json());
 const OrganService: OrganizationService = new OrganizationService(new OrganizationDbRepo() , new userDbRepo() , new OrganizationMemberDbRepo(),new MeetingDbRepo);
+const emailService: BrevoEmail = new BrevoEmail(`${process.env.SENDER_EMAIL}`)
 
 organRoute.post('/CreateOrganization',verifyUser ,upload.single("image"),  async (req:any , res:any) =>{
     try{
@@ -116,6 +118,29 @@ organRoute.delete('/DeleteOrganization/:id',verifyUser ,upload.single("image"), 
         }
     }
 })
+
+organRoute.post('/SendEmail', verifyUser, async (req:any, res:any) =>{
+    try{
+        const {receivers , content , time} = req.body
+        console.log("Requesting came here is : ", req.body)
+        const result = await emailService.sendEmail(receivers, content, time);
+        if (result) {
+            return res.status(200).json({ message: "Emails sent successfully" });
+        } else {
+            return res.status(500).json({ message: "Failed to send emails" });
+        }
+    }catch(error){
+        if (error instanceof ApplicationError){
+            return res.status(error.status).send({"message":error.message}) 
+        }
+        else{
+            //@ts-ignore
+            console.error('[Error]: ' , error.message)
+            return res.status(500).send({"message":"Internal Server Error"})
+        }
+    }
+})
+
 
 
 
