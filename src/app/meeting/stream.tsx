@@ -6,6 +6,7 @@ import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk"
 import { StreamChat } from "stream-chat"
 import { Chat } from "stream-chat-react"
 import "stream-chat-react/dist/css/v2/index.css"
+import { API_PREFIX } from "@/constants/api";
 
 export const STREAM_API_KEY = process.env.NEXT_PUBLIC_STREAM_KEY
 
@@ -46,7 +47,7 @@ export default function StreamVideoWrapper({
       const appToken = localStorage.getItem("token")
       if (!appToken) return
 
-      const gqlRes = await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/graphql", {
+      const gqlRes = await fetch(`${API_PREFIX}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +65,7 @@ export default function StreamVideoWrapper({
       }
       const user = gqlJson.data.getUserbyId
 
-      const meetingRes = await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/graphql", {
+      const meetingRes = await fetch(`${API_PREFIX}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +88,7 @@ export default function StreamVideoWrapper({
       setUserIdNumber(user.id)
       setUserRole(role)
 
-      const joinRes = await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/JoinMeeting", {
+      const joinRes = await fetch(`${API_PREFIX}/api/JoinMeeting`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +158,7 @@ export default function StreamVideoWrapper({
       const face = Math.random()
 
       try {
-        await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/metrics", {
+        await fetch(`${API_PREFIX}/api/metrics`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +193,7 @@ export default function StreamVideoWrapper({
 
       if (userRole === "Host") {
         try {
-          await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/end", {
+          await fetch(`${API_PREFIX}/api/end`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -207,7 +208,7 @@ export default function StreamVideoWrapper({
         await onEnd()
       } else {
         try {
-          await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/leave", {
+          await fetch(`${API_PREFIX}/api/leave`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -231,7 +232,7 @@ export default function StreamVideoWrapper({
       cameraOnRef.current = false
       const token = localStorage.getItem("token")
       try {
-        await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/camera-off", {
+        await fetch(`${API_PREFIX}/api/camera-off`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -253,7 +254,7 @@ export default function StreamVideoWrapper({
       cameraOnRef.current = true
       const token = localStorage.getItem("token")
       try {
-        await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/camera-on", {
+        await fetch(`${API_PREFIX}/api/camera-on`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -273,7 +274,7 @@ export default function StreamVideoWrapper({
     const handleEnd = async () => {
       const token = localStorage.getItem("token")
       try {
-        await fetch("https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/end", {
+        await fetch(`${API_PREFIX}/api/end`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

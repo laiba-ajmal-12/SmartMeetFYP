@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react';
 const features = [
   {
     icon: BarChart3,
-    title: 'Real-time Analytics',
-    description: 'Track participant engagement and attention levels with live dashboards and instant insights.',
+    title: 'High Accuracy Engagement Tracking',
+    description: 'Track participant engagement and attention levels with high accuracy.',
   },
   {
     icon: FileText,
@@ -27,7 +27,7 @@ const features = [
   {
     icon: Users,
     title: 'Advanced Collaboration',
-    description: 'Breakout rooms, screen sharing, whiteboard, and recording capabilities.',
+    description: 'In-meeting chat, Screen sharing enhancing seamless communication among participants.',
   },
   {
     icon: Clock,
@@ -67,7 +67,7 @@ export default function Features() {
         {/* How It Works Carousel */}
         <div className="mb-32">
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 text-center">
-            How It <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Works</span>
+            How It <span className="text-gradient">Works</span>
           </h2>
           <p className="text-center text-gray-600 mb-16 text-lg">Follow these simple steps to get started</p>
           
@@ -137,7 +137,6 @@ export default function Features() {
               ))}
             </div>
 
-            {/* Navigation Arrows */}
             <button
               onClick={() => setCurrentStep((prev) => (prev - 1 + workflowSteps.length) % workflowSteps.length)}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300 hover:scale-110"
@@ -161,58 +160,50 @@ export default function Features() {
 
         {/* Features Grid */}
         <div className="mb-20" id="features">
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Powerful Features for <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Modern Teams</span>
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <div
-                  key={index}
-                  className="group relative"
-                >
-                  {/* Glow effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-700/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                  
-                  <div className="relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 group-hover:border-blue-200 overflow-hidden">
-                    {/* Animated background gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-blue-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    {/* Content */}
-                    <div className="relative z-10">
-                      {/* Icon with animated background */}
-                      <div className="relative mb-6 inline-block">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-                        <div className="relative w-20 h-20 bg-gradient-to-br from-blue-500/10 to-blue-700/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                          <Icon className="w-10 h-10 text-blue-600 group-hover:text-blue-700 transition-colors duration-300" strokeWidth={1.5} />
-                        </div>
-                      </div>
-                      
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-blue-800 group-hover:bg-clip-text transition-all duration-300">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
-                    
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                    
-                    {/* Corner accent */}
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  </div>
-                </div>
-              );
-            })}
+  <div className="text-center mb-16">
+    <h3 className="text-4xl font-bold text-gray-900 mb-4">
+      Everything You Need for <span className="text-gradient 0 bg-clip-text text-transparent">Better Meetings</span>
+    </h3>
+    <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+      Comprehensive post-meeting analytics and actionable insights delivered after every session
+    </p>
+  </div>
+  
+  <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
+    {features.map((feature, index) => {
+      const Icon = feature.icon;
+      
+      return (
+        <div
+          key={index}
+          className="relative bg-white rounded-2xl p-8 border border-gray-100 shadow-lg"
+        >
+          <div className="flex items-start gap-6">
+            <div className="flex-shrink-0">
+              <div className="w-14 h-14 rounded-xl bg-royal-blue flex items-center justify-center shadow-lg">
+                <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <h4 className="text-xl font-bold text-gray-900 mb-3">
+                {feature.title}
+              </h4>
+              <p className="text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
           </div>
         </div>
+      );
+    })}
+  </div>
+</div>
 
         {/* Contact CTA */}
         <div className="text-center" id="contact">
-          <div className="relative bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-12 lg:p-16 shadow-2xl max-w-4xl mx-auto overflow-hidden group">
-            {/* Animated background elements */}
+          <div className="relative bg-royal-blue rounded-3xl p-12 lg:p-16 shadow-2xl max-w-4xl mx-auto overflow-hidden group">
+          
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
             <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
             
@@ -226,7 +217,7 @@ export default function Features() {
               </p>
               
               {/* Contact Form */}
-              <div className="max-w-xl mx-auto bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+              <div className="max-w-xl mx-auto bg-gradient backdrop-blur-md rounded-2xl p-8 border border-white/20">
                 <div className="grid gap-4">
                   <input
                     type="text"
@@ -243,10 +234,10 @@ export default function Features() {
                     rows={4}
                     className="w-full px-6 py-4 rounded-xl bg-white/95 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 resize-none"
                   ></textarea>
-                  <button className="w-full bg-white text-blue-600 px-8 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-white/50 relative overflow-hidden group/btn">
-                    <span className="relative z-10">Send Message</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-blue-800/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                  </button>
+                <button className="w-full bg-black text-white px-8 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/50 relative overflow-hidden group/btn">
+  <span className="relative z-10">Send Message</span>
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-700/20 to-blue-900/20 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+</button>
                 </div>
               </div>
             </div>
