@@ -50,7 +50,7 @@ export default function Navigation() {
             </a>
             <Button 
               className="bg-royal-blue hover:bg-deep-wine text-white px-6 py-2 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              onClick={() => window.location.href = '/create-meeting'}
+              onClick={() => window.location.href = '/main'}
             >
               My Organization
             </Button>
@@ -69,17 +69,14 @@ export default function Navigation() {
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg rounded-b-2xl mx-4 mt-2">
             <div className="px-6 py-4 space-y-4">
+              <a href="#howwork" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
+                Get Started
+              </a>
               <a href="#features" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
                 Features
               </a>
-              <a href="#pricing" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
-                Pricing
-              </a>
-              <a href="#about" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
-                About
-              </a>
-              <a href="/dashboard" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
-                DashBoard
+              <a href="#contact" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
+                Contact us
               </a>
               <a href="/auth" className="block text-onyx-gray hover:text-royal-blue transition-colors duration-200 font-medium py-2">
                 Login
@@ -87,9 +84,9 @@ export default function Navigation() {
 
               <Button 
                 className="w-full bg-royal-blue hover:bg-deep-wine text-white py-3 rounded-xl font-semibold"
-                onClick={() => window.location.href = '/meeting'}
+                onClick={() => window.location.href = '/main'}
               >
-                Host a Meeting
+                My Organization
               </Button>
             </div>
           </div>

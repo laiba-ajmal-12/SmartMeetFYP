@@ -46,7 +46,7 @@ export default function Auth() {
       if (formData.image instanceof File) {
         data.append('image', formData.image); 
       }
-      let result = await axios.post(`http://localhost:4000/api/signup` , data)
+      const result= await axios.post(`https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/signup` , data)
       console.log('-->: bef' , result.data);
       if(result.data){
           console.log(formData, 'inside -- ');
@@ -56,7 +56,7 @@ export default function Auth() {
       }
     }
     else{
-      let result = await axios.post(`http://localhost:4000/api/login` , formData)
+      const result= await axios.post(`https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/login` , formData)
       if(result.data){
         localStorage.setItem('token' , result.data.Token)
         router.push('/main'); 

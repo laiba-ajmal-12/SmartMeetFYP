@@ -42,7 +42,7 @@ export default function CreateMeeting() {
     e.preventDefault();
       console.log('called!')
         const result = await axios.post(
-            "http://localhost:4000/api/CreateOrganization",
+            "https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/CreateOrganization",
             formData,
             {
               headers: {

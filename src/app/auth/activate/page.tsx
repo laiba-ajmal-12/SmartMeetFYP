@@ -21,8 +21,8 @@ export default function Activate() {
   console.log("Token:", localStorage.getItem("token"));
 
   try {
-    let result = await axios.post(
-      "http://localhost:4000/api/activateAccount",
+    const result= await axios.post(
+      "https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/activateAccount",
       formData,
       {
         headers: {

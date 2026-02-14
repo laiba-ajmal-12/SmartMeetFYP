@@ -22,8 +22,8 @@ export default function Activate() {
   console.log("Sending data:", formData);
 
   try {
-    let result = await axios.post(
-      "http://localhost:4000/api/ForgetPassword",
+    const result= await axios.post(
+      "https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/ForgetPassword",
       formData
     );
     console.log('result --> ' , result)

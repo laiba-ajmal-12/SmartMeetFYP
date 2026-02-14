@@ -8,7 +8,7 @@ import axios  from 'axios';
 import { error } from 'console';
 import { useRouter } from 'next/navigation'
 
-export default function join_organization() {
+export default function JoinOrganization() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [logError, setIsError] = useState(true);
@@ -24,8 +24,8 @@ export default function join_organization() {
   console.log('Token' , localStorage.getItem('token'))
 
   try {
-    let result = await axios.post(
-      "http://localhost:4000/api/JoinOrganization",
+    const result= await axios.post(
+      "https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/api/JoinOrganization",
       formData,
       {
         headers: {
