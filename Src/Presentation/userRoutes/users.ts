@@ -26,7 +26,8 @@ const port = 3000;
 
 
 userRoute.use(express.json());
-const userService = new UserService(new hashPassword(), new userDbRepo() , new BrevoEmail(`${process.env.SENDER_EMAIL}`));
+const emailService: BrevoEmail = new BrevoEmail(`${process.env.SENDER_EMAIL}`)
+const userService = new UserService(new hashPassword(), new userDbRepo() , emailService);
 
 userRoute.post("/signup", upload.single("image"), async (req, res) => {
   try{
@@ -157,6 +158,25 @@ userRoute.post('/verifyResetCode',  async (req:any, res:any) => {
         return res.status(400).send('Error while Processing')
       }
       return res.status(200).json({"message":"code verify Successfully"});
+
+  }catch(err){
+    if (err instanceof ApplicationError){
+      return res.status(err.status).json({"message":err.message})
+    }
+    console.error("[Error] ", err)
+    return res.status(500).json({ "message": "Internal Server Error" })
+  }
+});
+
+
+userRoute.post('/getFeedback', verifyUser, async (req:any, res:any) => {
+  try{
+      const {name , email , response} = req.body;
+      const resObj:boolean = await emailService.submitResponse(name , email , response);
+      if (!resObj){
+        return res.status(400).json({ message: "Bad Request" });
+      }
+      return res.status(200).json({ message: "Feedback submitted successfully" });
 
   }catch(err){
     if (err instanceof ApplicationError){

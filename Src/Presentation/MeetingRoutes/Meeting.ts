@@ -180,7 +180,7 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
     p.gazeSum += gaze || 0
     p.faceSum += face || 0
     p.samples++
-    console.log("Particiapnt stats here are : ", p)
+    
     return res.send({ ok: true })
   } catch (error) {
     console.error("Metrics error:", error)

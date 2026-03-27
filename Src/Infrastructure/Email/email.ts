@@ -46,4 +46,22 @@ export class BrevoEmail implements IEmailService {
             return false;
         }
     }
+
+    async submitResponse(name: string, email: string, response: string): Promise<boolean> {
+        const msg = new SendSmtpEmail();
+        msg.sender = { name: "SmartMeet", email: this.senderemail };
+        msg.to = [{ email: this.senderemail }];  
+        msg.subject = `Response from ${name}`;
+        msg.htmlContent = `<p>${name} (${email}) has responded: <strong>${response}</strong></p>`;
+        msg.textContent = `${name} (${email}) has responded: ${response}`;
+
+        try {
+            await this.transactionalApi.sendTransacEmail(msg);
+            console.log("Response submitted successfully via Brevo!");
+            return true;
+        } catch (error: any) {
+            console.error("Error submitting response via Brevo:", error);
+            return false;
+        }
+    }
 }
