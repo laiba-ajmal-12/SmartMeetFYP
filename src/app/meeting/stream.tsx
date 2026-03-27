@@ -1,12 +1,12 @@
 'use client';
 
-
 import { useEffect, useRef, useState, ReactNode } from "react"
 import { StreamVideo, StreamVideoClient } from "@stream-io/video-react-sdk"
 import { StreamChat } from "stream-chat"
 import { Chat } from "stream-chat-react"
 import "stream-chat-react/dist/css/v2/index.css"
 import { API_PREFIX } from "@/constants/api";
+import { Loader2 } from "lucide-react";
 
 export const STREAM_API_KEY = process.env.NEXT_PUBLIC_STREAM_KEY
 
@@ -170,13 +170,13 @@ export default function StreamVideoWrapper({
             attention,
             gaze,
             face,
-            window: 5
+            window: 20
           })
         })
       } catch (err) {
         console.error("Metrics update failed", err)
       }
-    }, 5000)
+    }, 20000)
   }
 
   const stopMetricsLoop = () => {
@@ -309,7 +309,17 @@ export default function StreamVideoWrapper({
   }, [])
 
   if (!videoClient || !chatClient) {
-    return <div className="h-screen flex items-center justify-center">Connecting…</div>
+    return (
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-alice-white to-white">
+        <div className="text-center">
+          <div className="w-20 h-20 bg-gradient-to-br from-royal-blue/10 to-deep-wine/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <Loader2 className="w-10 h-10 text-royal-blue animate-spin" />
+          </div>
+          <p className="text-xl font-semibold text-rich-black mb-2">Connecting to meeting...</p>
+          <p className="text-sm text-onyx-gray/60">Setting up your video and chat</p>
+        </div>
+      </div>
+    )
   }
 
   return (

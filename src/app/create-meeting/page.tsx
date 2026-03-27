@@ -10,7 +10,6 @@ import {
   Zap,
   Loader2,
   AlertCircle,
-  Mail,
   Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,6 +41,7 @@ function CreateMeetingContent() {
   const userId = Number(searchParams.get("userId"));
   const organId = Number(searchParams.get("organizationId"));
   
+  const [isScheduleNow, setIsScheduleNow] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -110,6 +110,23 @@ function CreateMeetingContent() {
     fetchMembers();
   }, [organId]);
 
+  useEffect(() => {
+    if (isScheduleNow) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      
+      setFormData(prev => ({
+        ...prev,
+        date: `${year}-${month}-${day}`,
+        time: `${hours}:${minutes}`
+      }));
+    }
+  }, [isScheduleNow]);
+
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
@@ -128,12 +145,14 @@ function CreateMeetingContent() {
       return false;
     }
 
-    const selectedDateTime = new Date(`${formData.date}T${formData.time}:00`);
-    const now = new Date();
+    if (!isScheduleNow) {
+      const selectedDateTime = new Date(`${formData.date}T${formData.time}:00`);
+      const now = new Date();
 
-    if (selectedDateTime <= now) {
-      setError('Meeting time must be in the future. Please select a later date and time.');
-      return false;
+      if (selectedDateTime <= now) {
+        setError('Meeting time must be in the future. Please select a later date and time.');
+        return false;
+      }
     }
 
     return true;
@@ -143,7 +162,7 @@ function CreateMeetingContent() {
     if (!notifyMembers || memberEmails.length === 0) return;
 
     const meetingDateTime = new Date(`${formData.date}T${formData.time}:00`);
-    const meetingLink = `${window.location.origin}/meeting?userId=${userId}&meetingId=${meetingId}`;
+    const meetingLink = `${window.location.origin}/join?meetingId=${meetingId}&organizationId=${organId}`;
     
     const emailContent = `
       <html>
@@ -390,13 +409,6 @@ function CreateMeetingContent() {
               </p>
             </div>
 
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-red-800 text-sm">{error}</p>
-              </div>
-            )}
-
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-rich-black mb-2">
@@ -427,39 +439,66 @@ function CreateMeetingContent() {
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-rich-black mb-2">
-                    Date *
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
-                    <Input
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => handleInputChange('date', e.target.value)}
-                      className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
-                      required
+              <div className="bg-gradient-to-br from-alice-white to-white rounded-2xl p-6 border border-gray-100">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-rich-black">Schedule Time</h3>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isScheduleNow}
+                      onChange={(e) => setIsScheduleNow(e.target.checked)}
+                      className="w-4 h-4 text-royal-blue border-2 border-gray-300 rounded focus:ring-royal-blue focus:ring-2"
                       disabled={isLoading}
                     />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-rich-black mb-2">
-                    Time *
+                    <span className="text-sm font-medium text-rich-black">Start Now</span>
                   </label>
-                  <div className="relative">
-                    <Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40" />
-                    <Input
-                      type="time"
-                      value={formData.time}
-                      onChange={(e) => handleInputChange('time', e.target.value)}
-                      className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
-                      required
-                      disabled={isLoading}
-                    />
-                  </div>
                 </div>
+
+                {!isScheduleNow && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-rich-black mb-2">
+                        Date *
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40 pointer-events-none" />
+                        <Input
+                          type="date"
+                          value={formData.date}
+                          onChange={(e) => handleInputChange('date', e.target.value)}
+                          min={new Date().toISOString().split('T')[0]}
+                          className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-rich-black mb-2">
+                        Time *
+                      </label>
+                      <div className="relative">
+                        <Clock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-onyx-gray/40 pointer-events-none" />
+                        <Input
+                          type="time"
+                          value={formData.time}
+                          onChange={(e) => handleInputChange('time', e.target.value)}
+                          className="pl-12 py-3 h-12 rounded-xl border-2 border-gray-200 focus:border-royal-blue focus:ring-2 focus:ring-royal-blue/20 transition-all duration-200"
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {isScheduleNow && (
+                  <div className="bg-royal-blue/5 rounded-xl p-4 border border-royal-blue/20">
+                    <p className="text-sm text-royal-blue font-medium">
+                      Meeting will start immediately after creation
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -498,29 +537,38 @@ function CreateMeetingContent() {
                     </div>
                   </label>
 
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={notifyMembers}
-                      onChange={(e) => setNotifyMembers(e.target.checked)}
-                      className="w-5 h-5 text-royal-blue border-2 border-gray-300 rounded focus:ring-royal-blue focus:ring-2"
-                      disabled={isLoading}
-                    />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-rich-black">Notify Organization Members</span>
-                        {memberEmails.length > 0 && (
-                          <span className="flex items-center text-xs text-onyx-gray/60 bg-alice-white px-2 py-1 rounded-full">
-                            <Users className="w-3 h-3 mr-1" />
-                            {memberEmails.length} member{memberEmails.length !== 1 ? 's' : ''}
-                          </span>
-                        )}
+                  {!isScheduleNow && (
+                    <label className="flex items-center space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={notifyMembers}
+                        onChange={(e) => setNotifyMembers(e.target.checked)}
+                        className="w-5 h-5 text-royal-blue border-2 border-gray-300 rounded focus:ring-royal-blue focus:ring-2"
+                        disabled={isLoading}
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-rich-black">Notify Organization Members</span>
+                          {memberEmails.length > 0 && (
+                            <span className="flex items-center text-xs text-onyx-gray/60 bg-alice-white px-2 py-1 rounded-full">
+                              <Users className="w-3 h-3 mr-1" />
+                              {memberEmails.length} member{memberEmails.length !== 1 ? 's' : ''}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-onyx-gray/60">Send email notifications with meeting link to all members</p>
                       </div>
-                      <p className="text-sm text-onyx-gray/60">Send email notifications with meeting link to all members</p>
-                    </div>
-                  </label>
+                    </label>
+                  )}
                 </div>
               </div>
+
+                {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <p className="text-red-800 text-sm">{error}</p>
+              </div>
+            )}
 
               <Button
                 type="submit"
@@ -535,7 +583,7 @@ function CreateMeetingContent() {
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Video className="w-5 h-5" />
-                    Create Meeting
+                    {isScheduleNow ? 'Create & Start Meeting' : 'Create Meeting'}
                   </span>
                 )}
               </Button>

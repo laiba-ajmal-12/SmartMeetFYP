@@ -8,6 +8,9 @@ import {
   ParticipantView,
   useCall,
   Call,
+  hasAudio,
+  hasVideo,
+  hasScreenShare,
 } from '@stream-io/video-react-sdk'
 import '@stream-io/video-react-sdk/dist/css/styles.css'
 
@@ -37,6 +40,8 @@ import {
   X,
   Maximize2,
   Minimize2,
+  User,
+  ScreenShare,
 } from 'lucide-react'
 
 import StreamVideoWrapper from './stream'
@@ -71,9 +76,15 @@ function MeetingPage() {
 
   if (!userId || !meetingId) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center">
-          <p className="text-gray-600">Loading meeting parameters...</p>
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-alice-white via-white to-alice-white">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-royal-blue/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-deep-wine/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="text-center relative z-10">
+          <div className="w-24 h-24 bg-gradient-to-br from-royal-blue/10 to-deep-wine/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <Loader2 className="w-12 h-12 text-royal-blue animate-spin" />
+          </div>
+          <p className="text-2xl font-bold text-rich-black mb-2">Preparing meeting...</p>
+          <p className="text-sm text-onyx-gray/60">Please wait</p>
         </div>
       </div>
     )
@@ -96,10 +107,14 @@ function MeetingPage() {
 export default function Page() {
   return (
     <Suspense fallback={
-      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-700 font-medium">Loading...</p>
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-alice-white via-white to-alice-white">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-royal-blue/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-deep-wine/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="text-center relative z-10">
+          <div className="w-24 h-24 bg-gradient-to-br from-royal-blue/10 to-deep-wine/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <Loader2 className="w-12 h-12 text-royal-blue animate-spin" />
+          </div>
+          <p className="text-2xl font-bold text-rich-black">Loading...</p>
         </div>
       </div>
     }>
@@ -120,21 +135,49 @@ function MeetingRoom({ callId, meetingId }: { callId: string; meetingId: string 
 
     const join = async () => {
       try {
-        const c = client.call('default', callId)
-        await c.join({ create: true })
-        
-        // Enable camera and mic
-        await c.camera.enable()
-        await c.microphone.enable()
-        
-        setCall(c)
-      } catch (e) {
-        console.error('Join failed:', e)
-        setError(e instanceof Error ? e.message : 'Failed to join meeting')
-      }
-    }
+        const preferencesString = sessionStorage.getItem('meetingPreferences');
+        let micEnabled = false;
+        let videoEnabled = false;
 
-    join()
+        if (preferencesString) {
+          try {
+            const preferences = JSON.parse(preferencesString);
+            micEnabled = preferences.micEnabled || false;
+            videoEnabled = preferences.videoEnabled || false;
+            sessionStorage.removeItem('meetingPreferences');
+          } catch (error) {
+            console.error('Error parsing preferences:', error);
+          }
+        }
+
+        const c = client.call('default', callId);
+
+        // Disable both devices BEFORE joining so the call starts in the correct state
+        await c.camera.disable();
+        await c.microphone.disable();
+
+        // Join the call — other participants will immediately see correct mute/video state
+        await c.join({ create: true });
+
+        // Selectively enable based on user's pre-join preferences
+        if (videoEnabled) {
+          await c.camera.enable();
+        }
+
+        if (micEnabled) {
+          await c.microphone.enable();
+        }
+
+        // Only render the call UI after everything is configured
+        setCall(c);
+
+      } catch (e) {
+        console.error('Join failed:', e);
+        setError(e instanceof Error ? e.message : 'Failed to join meeting');
+      }
+    };
+
+    join();
   }, [client, callId])
 
   useEffect(() => {
@@ -147,16 +190,17 @@ function MeetingRoom({ callId, meetingId }: { callId: string; meetingId: string 
 
   if (error) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 px-4">
-        <div className="text-center max-w-md w-full mx-auto p-6 sm:p-8 bg-white rounded-2xl shadow-lg">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <X className="w-8 h-8 text-red-600" />
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-100 px-4">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-red-500/5 rounded-full blur-3xl"></div>
+        <div className="text-center max-w-md w-full mx-auto p-10 bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 relative z-10">
+          <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <X className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Failed to Join</h3>
-          <p className="text-sm sm:text-base text-gray-600 mb-4">{error}</p>
+          <h3 className="text-2xl font-bold text-rich-black mb-3">Failed to Join Meeting</h3>
+          <p className="text-onyx-gray/70 mb-8">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="w-full sm:w-auto px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            className="w-full bg-gradient-to-r from-royal-blue to-deep-wine hover:from-deep-wine hover:to-royal-blue text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
             Try Again
           </button>
@@ -167,10 +211,15 @@ function MeetingRoom({ callId, meetingId }: { callId: string; meetingId: string 
 
   if (!call) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-700 font-medium">Joining meeting...</p>
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-alice-white via-white to-alice-white">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-royal-blue/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-deep-wine/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="text-center relative z-10">
+          <div className="w-24 h-24 bg-gradient-to-br from-royal-blue/10 to-deep-wine/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <Loader2 className="w-12 h-12 text-royal-blue animate-spin" />
+          </div>
+          <p className="text-2xl font-bold text-rich-black mb-2">Joining meeting...</p>
+          <p className="text-sm text-onyx-gray/60">Connecting to video call</p>
         </div>
       </div>
     )
@@ -185,7 +234,7 @@ function MeetingRoom({ callId, meetingId }: { callId: string; meetingId: string 
 
 function MeetingWithChat({ meetingId }: { meetingId: string }) {
   const { client: chatClient } = useChatContext()
-  const [showChat, setShowChat] = useState(false) // Default to false on mobile
+  const [showChat, setShowChat] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -214,34 +263,32 @@ function MeetingWithChat({ meetingId }: { meetingId: string }) {
   if (!channel) return null
 
   return (
-    <div className="h-screen flex bg-gradient-to-br from-gray-50 to-gray-100 relative">
+    <div className="h-screen flex bg-gradient-to-br from-alice-white to-white relative overflow-hidden">
       <div className="flex-1 flex flex-col">
         <MeetingUI onToggleChat={() => setShowChat(!showChat)} showChat={showChat} />
       </div>
 
-      {/* Chat Sidebar - overlay on mobile */}
       {showChat && (
         <>
-          {/* Backdrop for mobile */}
           {isMobile && (
             <div 
-              className="fixed inset-0 bg-black/50 z-40 md:hidden"
+              className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
               onClick={() => setShowChat(false)}
             />
           )}
           
           <div className={`
-            ${isMobile ? 'fixed inset-y-0 right-0 z-50 w-full max-w-sm' : 'w-[360px]'}
-            border-l bg-white shadow-2xl
+            ${isMobile ? 'fixed inset-y-0 right-0 z-50 w-full max-w-sm' : 'w-[380px]'}
+            border-l border-gray-200 bg-white shadow-2xl
           `}>
             <Chat client={chatClient} theme="messaging light">
               <Channel channel={channel}>
                 <Window>
-                  <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
-                    <h3 className="font-semibold text-gray-800">Meeting Chat</h3>
+                  <div className="flex items-center justify-between px-5 py-4 border-b bg-gradient-to-r from-royal-blue/5 to-deep-wine/5">
+                    <h3 className="font-bold text-gray-800 text-lg">Meeting Chat</h3>
                     <button
                       onClick={() => setShowChat(false)}
-                      className="p-1.5 hover:bg-gray-200 rounded-lg transition-colors"
+                      className="p-2 hover:bg-gray-200 rounded-xl transition-all duration-200"
                     >
                       <X size={20} className="text-gray-600" />
                     </button>
@@ -271,15 +318,17 @@ function MeetingUI({
     useParticipants,
     useMicrophoneState,
     useCameraState,
+    useScreenShareState,  
   } = useCallStateHooks()
 
   const participants = useParticipants()
   const { microphone, isMute } = useMicrophoneState()
   const { camera, isMute: cameraOff } = useCameraState()
+  const { screenShare, isMute: isNotSharing } = useScreenShareState() 
+  const isLocalUserSharing = !isNotSharing  
 
   const [meetingDuration, setMeetingDuration] = useState(0)
   const [focusedParticipant, setFocusedParticipant] = useState<string | null>(null)
-  const [isScreenSharing, setIsScreenSharing] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => setMeetingDuration(v => v + 1), 1000)
@@ -308,26 +357,17 @@ function MeetingUI({
     } catch (e) {
       console.error('Camera toggle failed:', e)
     }
-  }
+  } 
 
   const toggleScreenShare = async () => {
-    if (!call) return
     try {
-      if (isScreenSharing) {
-        // Stop screen sharing
-        await call.screenShare.disable()
-        setIsScreenSharing(false)
+      if (isLocalUserSharing) {
+        await screenShare.disable()
       } else {
-        // Start screen sharing
-        await call.screenShare.enable()
-        setIsScreenSharing(true)
+        await screenShare.enable()
       }
     } catch (e) {
       console.error('Screen share toggle failed:', e)
-      // Reset state on error
-      setIsScreenSharing(false)
-      
-      // Provide user-friendly error message
       const errorMessage = e instanceof Error ? e.message : 'Unknown error'
       if (errorMessage.includes('Permission denied') || errorMessage.includes('NotAllowedError')) {
         alert('Screen share permission was denied. Please allow screen sharing in your browser settings.')
@@ -345,7 +385,7 @@ function MeetingUI({
     
     try {
       await call.leave()
-      window.location.href = '/'
+      window.location.href = '/main'
     } catch (e) {
       console.error('Leave failed:', e)
     }
@@ -357,7 +397,6 @@ function MeetingUI({
   const nameOf = (p: any) =>
     p.isLocalParticipant ? 'You' : p.name || p.userId || 'Guest'
 
-  // Determine grid layout based on participant count
   const getGridClass = () => {
     const count = participants.length
     if (focusedParticipant) return 'grid-cols-1'
@@ -369,7 +408,6 @@ function MeetingUI({
     return 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
   }
 
-  // Get aspect ratio class
   const getAspectClass = () => {
     const count = participants.length
     if (focusedParticipant || count === 1) return 'aspect-video'
@@ -382,103 +420,106 @@ function MeetingUI({
     : participants
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <header className="bg-white px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center border-b shadow-sm shrink-0">
-        <h1 className="font-semibold text-base sm:text-xl text-gray-800 truncate">Meeting Room</h1>
-        <div className="flex gap-2 sm:gap-6 text-xs sm:text-sm text-gray-600">
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-gray-100 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
-            <Clock size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-            <span className="font-medium">{formatDuration(meetingDuration)}</span>
+    <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
+      <header className="bg-white/90 backdrop-blur-lg px-4 sm:px-8 py-4 sm:py-5 flex justify-between items-center border-b border-gray-200 shadow-sm shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-royal-blue to-deep-wine rounded-xl flex items-center justify-center shadow-md">
+            <Video className="w-5 h-5 text-white" />
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-gray-100 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
-            <Users size={14} className="text-gray-500 sm:w-4 sm:h-4" />
-            <span className="font-medium">{participants.length}</span>
+          <h1 className="font-bold text-lg sm:text-xl text-rich-black">Meeting Room</h1>
+        </div>
+        <div className="flex gap-3 sm:gap-4 text-xs sm:text-sm">
+          <div className="flex items-center gap-2 bg-gradient-to-r from-royal-blue/10 to-deep-wine/10 px-3 sm:px-4 py-2 rounded-xl border border-royal-blue/20">
+            <Clock size={16} className="text-royal-blue sm:w-[18px] sm:h-[18px]" />
+            <span className="font-semibold text-rich-black">{formatDuration(meetingDuration)}</span>
+          </div>
+          <div className="flex items-center gap-2 bg-gradient-to-r from-royal-blue/10 to-deep-wine/10 px-3 sm:px-4 py-2 rounded-xl border border-royal-blue/20">
+            <Users size={16} className="text-deep-wine sm:w-[18px] sm:h-[18px]" />
+            <span className="font-semibold text-rich-black">{participants.length}</span>
           </div>
         </div>
       </header>
 
-      {/* Participant Grid */}
-      <div className="flex-1 p-2 sm:p-4 md:p-6 overflow-auto">
-        <div className={`grid gap-2 sm:gap-3 md:gap-4 ${getGridClass()} h-full content-start`}>
-          {displayParticipants.map(p => (
-            <div 
-              key={p.sessionId} 
-              className={`relative bg-gray-900 rounded-lg sm:rounded-xl overflow-hidden shadow-lg ${getAspectClass()} group`}
-              onClick={() => {
-                if (participants.length > 1) {
-                  setFocusedParticipant(focusedParticipant === p.sessionId ? null : p.sessionId)
-                }
-              }}
-            >
-              {/* Participant View */}
-              <div className="absolute inset-0">
-                <ParticipantView participant={p} />
-              </div>
-
-              {/* Focus/Unfocus button - show on hover for desktop, always show on mobile */}
-              {participants.length > 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
+      <div className="flex-1 p-3 sm:p-6 md:p-8 overflow-auto">
+        <div className={`grid gap-3 sm:gap-4 md:gap-5 ${getGridClass()} h-full content-start`}>
+          {displayParticipants.map(p => {
+            const isVideoOff = p.isLocalParticipant ? cameraOff : !hasVideo(p)
+            const isAudioOff = p.isLocalParticipant ? isMute : !hasAudio(p)
+            const isSharingScreen = hasScreenShare(p)
+            
+            return (
+              <div 
+                key={p.sessionId} 
+                className={`relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-2xl ${getAspectClass()} group transition-all duration-300 hover:shadow-royal-blue/20 hover:scale-[1.02]`}
+                onClick={() => {
+                  if (participants.length > 1) {
                     setFocusedParticipant(focusedParticipant === p.sessionId ? null : p.sessionId)
-                  }}
-                  className="absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/60 backdrop-blur-sm p-1.5 sm:p-2 rounded-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity z-10"
-                  title={focusedParticipant === p.sessionId ? "Exit focus" : "Focus on participant"}
-                >
-                  {focusedParticipant === p.sessionId ? (
-                    <Minimize2 size={16} className="text-white sm:w-5 sm:h-5" />
-                  ) : (
-                    <Maximize2 size={16} className="text-white sm:w-5 sm:h-5" />
-                  )}
-                </button>
-              )}
-
-              {/* Status indicators */}
-              <div className="absolute top-2 sm:top-4 right-2 sm:right-4 flex gap-1 sm:gap-2 z-10">
-                {p.isLocalParticipant ? (
-                  <>
-                    {isMute && (
-                      <div className="bg-red-500 p-1.5 sm:p-2.5 rounded-full shadow-lg">
-                        <MicOff size={14} className="text-white sm:w-[18px] sm:h-[18px]" />
+                  }
+                }}
+              >
+                {isVideoOff ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-royal-blue/20 via-deep-wine/10 to-royal-blue/20">
+                    <div className="text-center">
+                      <div className="w-24 h-24 sm:w-36 sm:h-36 bg-gradient-to-br from-royal-blue to-deep-wine rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl ring-4 ring-white/10">
+                        <User className="w-12 h-12 sm:w-20 sm:h-20 text-white" />
                       </div>
-                    )}
-                    {cameraOff && (
-                      <div className="bg-red-500 p-1.5 sm:p-2.5 rounded-full shadow-lg">
-                        <VideoOff size={14} className="text-white sm:w-[18px] sm:h-[18px]" />
-                      </div>
-                    )}
-                  </>
+                      <p className="text-white text-base sm:text-xl font-bold drop-shadow-lg">{nameOf(p)}</p>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    {!p.audioStream && (
-                      <div className="bg-red-500 p-1.5 sm:p-2.5 rounded-full shadow-lg">
-                        <MicOff size={14} className="text-white sm:w-[18px] sm:h-[18px]" />
-                      </div>
-                    )}
-                    {!p.videoStream && (
-                      <div className="bg-red-500 p-1.5 sm:p-2.5 rounded-full shadow-lg">
-                        <VideoOff size={14} className="text-white sm:w-[18px] sm:h-[18px]" />
-                      </div>
-                    )}
-                  </>
+                  <div className="absolute inset-0">
+                    <ParticipantView participant={p} />
+                  </div>
                 )}
-              </div>
 
-              {/* Name badge */}
-              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 bg-black/80 backdrop-blur-sm text-white px-2 sm:px-4 py-1 sm:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm font-semibold shadow-lg max-w-[calc(100%-1rem)] sm:max-w-[calc(100%-2rem)] truncate z-10">
-                {nameOf(p)}
+                {participants.length > 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setFocusedParticipant(focusedParticipant === p.sessionId ? null : p.sessionId)
+                    }}
+                    className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-black/70 backdrop-blur-md p-2 sm:p-2.5 rounded-xl opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-200 z-10 hover:bg-black/90 hover:scale-110"
+                    title={focusedParticipant === p.sessionId ? "Exit focus" : "Focus on participant"}
+                  >
+                    {focusedParticipant === p.sessionId ? (
+                      <Minimize2 size={18} className="text-white sm:w-5 sm:h-5" />
+                    ) : (
+                      <Maximize2 size={18} className="text-white sm:w-5 sm:h-5" />
+                    )}
+                  </button>
+                )}
+
+                <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex gap-2 z-10">
+                  {isSharingScreen && (
+                    <div className="bg-green-500 p-2 sm:p-2.5 rounded-xl shadow-lg animate-pulse">
+                      <ScreenShare size={16} className="text-white sm:w-[18px] sm:h-[18px]" />
+                    </div>
+                  )}
+                  {isAudioOff && (
+                    <div className="bg-red-500 p-2 sm:p-2.5 rounded-xl shadow-lg">
+                      <MicOff size={16} className="text-white sm:w-[18px] sm:h-[18px]" />
+                    </div>
+                  )}
+                  {isVideoOff && (
+                    <div className="bg-red-500 p-2 sm:p-2.5 rounded-xl shadow-lg">
+                      <VideoOff size={16} className="text-white sm:w-[18px] sm:h-[18px]" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-black/80 backdrop-blur-md text-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-2xl max-w-[calc(100%-1.5rem)] sm:max-w-[calc(100%-2rem)] truncate z-10 border border-white/10">
+                  {nameOf(p)}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
-        {/* Show focused participant info */}
         {focusedParticipant && participants.length > 1 && (
-          <div className="mt-4 text-center">
+          <div className="mt-6 text-center">
             <button
               onClick={() => setFocusedParticipant(null)}
-              className="text-sm text-gray-600 hover:text-gray-800 underline"
+              className="text-sm sm:text-base text-royal-blue hover:text-deep-wine font-semibold underline transition-colors"
             >
               Show all participants
             </button>
@@ -486,70 +527,71 @@ function MeetingUI({
         )}
       </div>
 
-      {/* Control Bar */}
-      <div className="bg-white border-t px-2 sm:px-6 py-3 sm:py-5 shadow-lg shrink-0">
-        <div className="flex justify-center items-center gap-1.5 sm:gap-3 flex-wrap">
+      <div className="bg-white/90 backdrop-blur-lg border-t border-gray-200 px-3 sm:px-8 py-4 sm:py-6 shadow-2xl shrink-0">
+        <div className="flex justify-center items-center gap-2 sm:gap-4 flex-wrap">
           <button
             onClick={toggleMic}
-            className={`p-3 sm:p-4 rounded-full transition-all shadow-md ${
+            className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 ${
               isMute
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white'
+                : 'bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200'
             }`}
             title={isMute ? 'Unmute' : 'Mute'}
           >
-            {isMute ? <MicOff size={18} className="sm:w-5 sm:h-5" /> : <Mic size={18} className="sm:w-5 sm:h-5" />}
+            {isMute ? <MicOff size={20} className="sm:w-6 sm:h-6" /> : <Mic size={20} className="sm:w-6 sm:h-6" />}
           </button>
 
           <button
             onClick={toggleCam}
-            className={`p-3 sm:p-4 rounded-full transition-all shadow-md ${
+            className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 ${
               cameraOff
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                ? 'bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white'
+                : 'bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200'
             }`}
             title={cameraOff ? 'Turn on camera' : 'Turn off camera'}
           >
-            {cameraOff ? <VideoOff size={18} className="sm:w-5 sm:h-5" /> : <Video size={18} className="sm:w-5 sm:h-5" />}
+            {cameraOff ? <VideoOff size={20} className="sm:w-6 sm:h-6" /> : <Video size={20} className="sm:w-6 sm:h-6" />}
           </button>
 
           <button
             onClick={toggleScreenShare}
-            className={`p-3 sm:p-4 rounded-full transition-all shadow-md hidden sm:flex ${
-              isScreenSharing
-                ? 'bg-blue-500 hover:bg-blue-600 text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 hidden sm:flex ${
+              isLocalUserSharing
+                ? 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white'
+                : 'bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200'
             }`}
-            title={isScreenSharing ? 'Stop sharing' : 'Share screen'}
+            title={isLocalUserSharing ? 'Stop sharing' : 'Share screen'}
           >
-            {isScreenSharing ? <MonitorOff size={18} className="sm:w-5 sm:h-5" /> : <Monitor size={18} className="sm:w-5 sm:h-5" />}
+            {isLocalUserSharing ? <MonitorOff size={20} className="sm:w-6 sm:h-6" /> : <Monitor size={20} className="sm:w-6 sm:h-6" />}
           </button>
 
           <button
             onClick={onToggleChat}
-            className={`p-3 sm:p-4 rounded-full transition-all shadow-md relative ${
+            className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 ${
               showChat
-                ? 'bg-blue-500 hover:bg-blue-600 text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                ? 'bg-gradient-to-br from-royal-blue to-deep-wine text-white'
+                : 'bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200'
             }`}
             title="Toggle chat"
           >
-            <MessageSquare size={18} className="sm:w-5 sm:h-5" />
+            <MessageSquare size={20} className="sm:w-6 sm:h-6" />
           </button>
+
+          <div className="hidden sm:block w-px h-12 bg-gray-300 mx-2"></div>
 
           <button
             onClick={leave}
-            className="p-3 sm:p-4 rounded-full bg-gray-100 hover:bg-red-500 hover:text-white text-red-600 transition-all ml-1 sm:ml-2 shadow-md"
+            className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110"
             title="Leave meeting"
           >
-            <PhoneOff size={18} className="sm:w-5 sm:h-5" />
+            <PhoneOff size={20} className="sm:w-6 sm:h-6" />
           </button>
 
           <button
-            className="p-3 sm:p-4 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all shadow-md hidden sm:flex"
+            className="p-4 sm:p-5 rounded-2xl bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110 hidden sm:flex"
             title="Settings"
           >
-            <Settings size={18} className="sm:w-5 sm:h-5" />
+            <Settings size={20} className="sm:w-6 sm:h-6" />
           </button>
         </div>
       </div>

@@ -387,7 +387,10 @@ export default function Dashboard() {
                                   disabled={buttonLoading && organ.id === data?.id}
                                 >
                                   {buttonLoading && organ.id === data?.id ? (
-                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    <span className="flex items-center justify-center gap-2">
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Loading...
+                    </span>
                                   ) : null}
                                   Schedule and View Meetings
                                 </Button>

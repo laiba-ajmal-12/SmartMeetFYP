@@ -58,7 +58,7 @@ export default function ReportPage({ params }: { params: { id: string } }) {
         const query = `query { getMeetingById(id: ${meetingId}) { id name description organizationId startTime daily weekly EnableEngagement Engagment meetingDuration meetingLink hostId participants { id meetingId userId totalActiveSeconds avgAttention avgGaze avgFace firstJoinTime lastLeaveTime user { id name ImagePath } } } }`;
 
         const res = await axios.post(
-          'https://handsome-demetria-goodmeet-eb9fb43d.koyeb.app/graphql',
+          `${process.env.NEXT_PUBLIC_API_PREFIX}/graphql`,
           { query },
           {
             headers: {

@@ -141,7 +141,7 @@ function DashboardContent() {
   }
 
   function joinMeeting(meetingId: string) {
-    router.push(`/meeting?userId=${userId}&meetingId=${meetingId}`);
+    router.push(`/join?meetingId=${meetingId}&organizationId=${organId}`);
   }
 
   async function changeOrganizationCode() {
@@ -171,19 +171,27 @@ function DashboardContent() {
     return timeLeftMs > 0 ? Math.ceil(timeLeftMs / 60000) : 0; 
   }
 
-  function findStatus(startTime: string | Date, duration: number): string {
-    const now = new Date();
-    const dateObj = new Date(Number(startTime)); 
-    const endTime = new Date(dateObj.getTime() + Number(duration) * 60000);
-    
-    if (now > endTime) {
-      return 'completed';
-    } else if (now < dateObj) {
-      return 'upcoming';
-    } else {
-      return 'in-progress';
-    }
+function findStatus(startTime: string | Date | number, duration: number): string {
+  const now = new Date();
+
+  let start: Date;
+
+  if (typeof startTime === 'number') {
+    start = new Date(startTime);
+  } else if (!isNaN(Number(startTime))) {
+    start = new Date(Number(startTime));
+  } else {
+    start = new Date(startTime);
   }
+
+  if (isNaN(start.getTime())) return 'invalid';
+
+  const end = new Date(start.getTime() + duration * 60000);
+
+  if (now >= end) return 'completed';
+  if (now < start) return 'upcoming';
+  return 'in-progress';
+}
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -544,10 +552,15 @@ function DashboardContent() {
                                     }
                                   }}
                                 >
-                                  {findStatus(meet.startTime, meet.meetingDuration) === 'upcoming' ? (
+                                 {findStatus(meet.startTime, meet.meetingDuration) === 'upcoming' ? (
                                     <>
                                       <Settings className="w-4 h-4 mr-2" />
                                       Edit
+                                    </>
+                                  ) : findStatus(meet.startTime, meet.meetingDuration) === 'in-progress' ? (
+                                    <>
+                                      <Video className="w-4 h-4 mr-2" />
+                                      Join Meeting
                                     </>
                                   ) : (
                                     <>
@@ -555,6 +568,7 @@ function DashboardContent() {
                                       View Report
                                     </>
                                   )}
+
                                 </Button>
                               </td>
                             )}
