@@ -181,6 +181,7 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
     p.faceSum += face || 0
     p.samples++
     
+    console.log("participant metrics updated:",p)
     return res.send({ ok: true })
   } catch (error) {
     console.error("Metrics error:", error)
@@ -260,6 +261,7 @@ MeetingRoute.post("/leave", async (req, res) => {
 
 MeetingRoute.post("/end", verifyUser, async (req, res) => {
   try {
+    console.log("End meeting request received")
     const { meetingId } = req.body
     if (!meetingId) {
       return res.status(400).json({ ok: false, message: "meetingId required" })
@@ -269,9 +271,7 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
     if (!meeting) {
       return res.status(404).json({ ok: false, message: "Meeting not found" })
     }
-    const meetingEndTime = Date.now()
-    const meetingDurationSeconds =
-      Math.floor((meetingEndTime - meeting.startTime) / 1000)
+    const meetingEndTime = new Date()
     for (const participant of meeting.participants.values()) {
       const {
         userId,
@@ -293,7 +293,7 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
         avgGaze: avgGaze,
         totalActiveSeconds: participant.totalActiveSeconds,
         firstJoinTime: participant.currentJoinTime,
-        lastLeaveTime: new Date()
+        lastLeaveTime: meetingEndTime
       }
       await meetingService.createMeetingParticipant(meetingSession)
     }

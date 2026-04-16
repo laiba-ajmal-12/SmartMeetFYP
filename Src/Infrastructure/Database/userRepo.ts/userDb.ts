@@ -1,13 +1,13 @@
 import type { InternalUserDTO } from "../../../Domain/DTOs/userDTOs/InternalUser.js";
 import  type {IUserService} from "../../../Domain/InterFaces/IUserService.js";
 //@ts-ignore
-import PostSQLClinet from "../dbCon.js"
+import PostSQLClient from "../dbCon.js"
 
 export class userDbRepo implements IUserService{
     private postSQlClient;
     constructor(){
-        this.postSQlClient = PostSQLClinet.getClient();
-        this.postSQlClient.$connect()
+        this.postSQlClient = PostSQLClient.getClient();
+        // this.postSQlClient.$connect()
     }
     async createUser(user:InternalUserDTO): Promise<InternalUserDTO> {
         console.log('inside User ---- > ' , user)

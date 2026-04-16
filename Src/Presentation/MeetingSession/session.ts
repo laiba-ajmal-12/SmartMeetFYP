@@ -15,8 +15,8 @@ export type ParticipantStats = {
 export type MeetingSession = {
   meetingId: string
   hostId: number
-  startTime: number
-  endTime?: number
+  startTime: Date
+  endTime?: Date
   participants: Map<number, ParticipantStats>
 }
 
@@ -26,7 +26,7 @@ export function createMeeting(meetingId: string, hostId: number) {
   meetings.set(meetingId, {
     meetingId,
     hostId,
-    startTime: Date.now(),
+    startTime: new Date(),
     participants: new Map()
   })
 }

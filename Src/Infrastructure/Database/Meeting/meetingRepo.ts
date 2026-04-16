@@ -1,14 +1,14 @@
 import type { MeetingDTOs, MeetingParticipantDto } from "../../../Domain/DTOs/MeetingDTOs/meetingDTOs.js";
 import type { IMeetingService } from "../../../Domain/InterFaces/IMeetingService.js";
 //@ts-ignore
-import PostSQLClinet from "../dbCon.js"
+import PostSQLClient from "../dbCon.js"
 
 export class MeetingDbRepo implements IMeetingService{
     private postSQlClient;
 
     constructor(){
-        this.postSQlClient = PostSQLClinet.getClient();
-        this.postSQlClient.$connect()
+        this.postSQlClient = PostSQLClient.getClient();
+        // this.postSQlClient.$connect()
     }
     async createMeetingParticpant(meet: MeetingParticipantDto): Promise<MeetingParticipantDto> 
     {

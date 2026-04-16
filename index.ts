@@ -13,6 +13,7 @@ import MemberRoute from "./Src/Presentation/MemberRoutes/Members.js";
 import MeetingRoute from "./Src/Presentation/MeetingRoutes/Meeting.js";
 import { resolvers } from "./Src/Infrastructure/GraphQL/resolver.js";
 import { verifyUser } from "./Src/Presentation/MiddleWares/jwtAuthMiddleware.js";
+import PostSQLClient from "./Src/Infrastructure/Database/dbCon.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -26,6 +27,8 @@ const typeDefs = readFileSync(
 );
 
 const startServer = async () => {
+
+  await PostSQLClient.connectWithRetry();
   const server = new ApolloServer({ typeDefs, resolvers });
   await server.start();
 

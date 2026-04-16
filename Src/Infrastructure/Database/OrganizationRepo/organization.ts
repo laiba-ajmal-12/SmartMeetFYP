@@ -1,13 +1,13 @@
 //@ts-ignore
-import PostSQLClinet from "../dbCon.js"
+import PostSQLClient from "../dbCon.js"
 import type { IOrganizationService } from "../../../Domain/InterFaces/IOrganizationService.js";
 import type { OrganizationDTOs } from "../../../Domain/DTOs/OrganizationDTOs/organizationDTO.js";
 
 export class OrganizationDbRepo implements IOrganizationService{
     private postSQlClient;
     constructor(){
-        this.postSQlClient = PostSQLClinet.getClient();
-        this.postSQlClient.$connect()
+        this.postSQlClient = PostSQLClient.getClient();
+        // this.postSQlClient.$connect()
     }
     async createOrganization(user: OrganizationDTOs): Promise<OrganizationDTOs> {
         const org = {

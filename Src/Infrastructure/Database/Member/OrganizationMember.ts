@@ -1,4 +1,4 @@
-import PostSQLClinet from "../dbCon.js"
+import PostSQLClient from "../dbCon.js"
 import type { IOrganizationMemberService } from "../../../Domain/InterFaces/IOrganizatiobMemberService.js";
 import type { Member } from "../../../Domain/DTOs/OrganizationMemberDTOs/MemberDTOs.js";
 
@@ -6,8 +6,8 @@ export class OrganizationMemberDbRepo implements IOrganizationMemberService{
     private postSQlClient;
 
     constructor(){
-        this.postSQlClient = PostSQLClinet.getClient();
-        this.postSQlClient.$connect()
+        this.postSQlClient = PostSQLClient.getClient();
+        // this.postSQlClient.$connect()
     }
 
     async addMember(user:Member): Promise<Member> {
