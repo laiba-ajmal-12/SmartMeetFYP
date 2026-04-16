@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ArrowLeft, Download, FileSpreadsheet, Calendar, Clock, Users, TrendingUp, Eye, Target, Award, ChartBar as BarChart3, ChartPie as PieChart, Activity, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Circle as XCircle, Share2, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { API_PREFIX } from '@/constants/api';
 
 interface MeetingParticipantDto {
   id: number;
@@ -58,7 +59,7 @@ export default function ReportPage({ params }: { params: { id: string } }) {
         const query = `query { getMeetingById(id: ${meetingId}) { id name description organizationId startTime daily weekly EnableEngagement Engagment meetingDuration meetingLink hostId participants { id meetingId userId totalActiveSeconds avgAttention avgGaze avgFace firstJoinTime lastLeaveTime user { id name ImagePath } } } }`;
 
         const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_PREFIX}/graphql`,
+          `${API_PREFIX}/graphql`,
           { query },
           {
             headers: {
@@ -79,7 +80,7 @@ export default function ReportPage({ params }: { params: { id: string } }) {
           setLoading(false);
           return;
         }
-
+          console.log('Fetched meeting data:', data.getMeetingById);  
         setMeeting(data.getMeetingById);
         
         setParticipants(data.getMeetingById.participants || []);
