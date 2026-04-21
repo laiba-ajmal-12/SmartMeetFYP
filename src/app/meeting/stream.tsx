@@ -7,6 +7,8 @@ import { Chat } from "stream-chat-react"
 require( "stream-chat-react/dist/css/v2/index.css")
 import { API_PREFIX } from "@/constants/api";
 import { Loader2 } from "lucide-react";
+import useFaceMesh from "@/mediapipe/FaceMesh";
+
 
 export const STREAM_API_KEY = process.env.NEXT_PUBLIC_STREAM_KEY
 
@@ -16,6 +18,8 @@ interface MeetingDataContextType {
   meetingTotalDuration: number;
   meetingStartTime: number;
   userRole: string | null;
+  videoRef: React.RefObject<HTMLVideoElement | null>
+  onScores: (scores: { attention: number; posture: number }) => void
 }
 
 const MeetingDataContext = createContext<MeetingDataContextType>({
@@ -24,6 +28,9 @@ const MeetingDataContext = createContext<MeetingDataContextType>({
   meetingTotalDuration: 0,
   meetingStartTime: 0,
   userRole: null,
+  videoRef: { current: null } ,
+  onScores: () => {}
+
 })
 
 export const useMeetingData = () => useContext(MeetingDataContext)
@@ -50,7 +57,14 @@ export default function StreamVideoWrapper({ children, userId, meetingId }: Prop
   const videoClientRef = useRef<StreamVideoClient | null>(null)
   const chatClientRef = useRef<StreamChat | null>(null)
 
-  useEffect(() => {
+const videoRef = useRef<HTMLVideoElement>(null)
+const scoresRef = useRef({ attention: 0, posture: 0 })
+
+const onScores = (scores: { attention: number; posture: number }) => {
+  scoresRef.current = scores
+}
+
+useEffect(() => {
     if (!userId || initializedRef.current) return
     initializedRef.current = true
 
@@ -121,10 +135,8 @@ export default function StreamVideoWrapper({ children, userId, meetingId }: Prop
 
     const sendMetrics = async () => {
       if (!cameraOnRef.current) return
-      const attentionVal = Math.random()
-      const gaze = Math.random()
-      const face = Math.random()
-      const postureVal = Math.random()
+      const attentionVal =  scoresRef.current.attention / 100
+      const postureVal = scoresRef.current.posture / 100
 
       setAttention(Math.round(attentionVal * 100))
       setPosture(Math.round(postureVal * 100))
@@ -133,7 +145,7 @@ export default function StreamVideoWrapper({ children, userId, meetingId }: Prop
         await fetch(`${API_PREFIX}/api/metrics`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ meetingId, userId: id, attention: attentionVal, gaze, face, window: 20 })
+          body: JSON.stringify({ meetingId, userId: id, attention: attentionVal, posture: postureVal, window: 20 })
         })
       } catch (err) {
         console.error("Metrics update failed", err)
@@ -141,7 +153,7 @@ export default function StreamVideoWrapper({ children, userId, meetingId }: Prop
     }
 
     sendMetrics()
-    metricsIntervalRef.current = setInterval(sendMetrics, 20000)
+    metricsIntervalRef.current = setInterval(sendMetrics, 20)
   }
 
   const stopMetricsLoop = () => {
@@ -241,7 +253,7 @@ export default function StreamVideoWrapper({ children, userId, meetingId }: Prop
   }
 
   return (
-    <MeetingDataContext.Provider value={{ posture, attention, meetingTotalDuration, meetingStartTime, userRole }}>
+    <MeetingDataContext.Provider value={{ posture, attention, meetingTotalDuration, meetingStartTime, userRole, videoRef, onScores}}>
       <Chat client={chatClient} theme="messaging light">
         <StreamVideo client={videoClient}>{children}</StreamVideo>
       </Chat>

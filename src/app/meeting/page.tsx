@@ -47,6 +47,7 @@ import {
 
 import StreamVideoWrapper, { useMeetingData } from './stream'
 import { useSearchParams } from 'next/navigation'
+import useFaceMesh from '@/mediapipe/FaceMesh';
 
 function MeetingPage() {
   const searchParams = useSearchParams()
@@ -504,10 +505,14 @@ function MeetingUI({
   const participants = useParticipants()
   const { microphone, isMute } = useMicrophoneState()
   const { camera, isMute: cameraOff } = useCameraState()
+  // Added video ref object
+  
+  const mediaStream = camera.state.mediaStream
+
   const { status: screenShareStatus } = useScreenShareState()
   const isLocalUserSharing = screenShareStatus === 'enabled'
 
-  const { meetingTotalDuration, meetingStartTime } = useMeetingData()
+  const { meetingTotalDuration, meetingStartTime, videoRef, onScores } = useMeetingData()
 
   const [focusedParticipant, setFocusedParticipant] = useState<string | null>(null)
   const [screenShareError, setScreenShareError] = useState<string | null>(null)
@@ -554,6 +559,19 @@ function MeetingUI({
       return () => clearTimeout(t)
     }
   }, [screenShareError])
+
+  useFaceMesh(videoRef as React.RefObject<HTMLVideoElement>, onScores)
+
+  // Added UseEffect to set up MediaPipe FaceMesh
+ useEffect(() => {
+    const track = mediaStream?.getVideoTracks()[0]
+    if (!track || !videoRef.current) return
+
+    videoRef.current.srcObject = new MediaStream([track])
+    videoRef.current.play().catch(console.error)
+  }, [mediaStream])
+
+   
 
   const toggleMic = async () => {
     try {
@@ -617,6 +635,7 @@ function MeetingUI({
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
+      <video ref={videoRef} muted playsInline style={{ display: 'none' }} />
 
       {showWarning && remainingSeconds !== null && remainingSeconds > 0 && (
         <div className="shrink-0 mx-4 mt-3 flex items-center gap-3 bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-xl shadow-sm text-sm">
