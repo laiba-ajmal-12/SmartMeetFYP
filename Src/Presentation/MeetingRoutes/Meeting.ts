@@ -160,7 +160,7 @@ MeetingRoute.post("/JoinMeeting", verifyUser, async (req: any, res) => {
 
 MeetingRoute.post("/metrics", async (req: any, res) => {
   try {
-    const { meetingId, userId, attention, gaze, face, window } = req.body
+    const { meetingId, userId, attention, posture, window } = req.body
     if (!meetingId || userId === undefined) {
       return res.status(400).json({ message: "Missing required fields" })
     }
@@ -177,8 +177,7 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
     }
     p.totalActiveSeconds += window || 5
     p.attentionSum += attention || 0
-    p.gazeSum += gaze || 0
-    p.faceSum += face || 0
+    p.faceSum += posture || 0
     p.samples++
     
     console.log("participant metrics updated:",p)
@@ -286,12 +285,12 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       const avgFace = samples > 0 ? faceSum / samples : 0
       const meetingSession: MeetingParticipantDto = {
         id: Number(meetingId),
-        userId: Number(participant.userId),
+        userId: Number(userId),
         meetingId: Number(meetingId),
         avgAttention: avgAttention,
         avgFace: avgFace,
         avgGaze: avgGaze,
-        totalActiveSeconds: participant.totalActiveSeconds,
+        totalActiveSeconds: totalActiveSeconds,
         firstJoinTime: participant.currentJoinTime,
         lastLeaveTime: meetingEndTime
       }
