@@ -7,7 +7,7 @@ It uses computer vision techniques such as head pose and gaze tracking to monito
 
 ## Features Implemented 
 
-The following features are fully implemented in the current MVP:
+The following features are fully implemented :
 
 ## Core Platform Features
 
@@ -21,7 +21,10 @@ The following features are fully implemented in the current MVP:
     * Audio mute/unmute
     * In-meeting chat
     * Screen sharing
- 
+* Cross platform video transfer
+* post meeting engagement reports
+* Real-time detection system
+  
 ## Technologies Used
 
 ### Backend
@@ -59,7 +62,15 @@ npx prisma migrate dev
 # Start backend server
 npm run dev
 ```
+### Frontend Setup
 
+```terminal(run these commands on terminal)
+# Navigate to frontend directory
+npm install
+
+# Start frontend development server
+npm run dev
+```
 ### Environment Variables
 
 A `.env` file is required for both frontend and backend. It typically includes:
@@ -82,12 +93,3 @@ A `.env` file is required for both frontend and backend. It typically includes:
 * `Backend`
 * `server`
 * `integration_b`
-
-## TODOs
-
-The following items are planned for future sprints:
-
-* Video mode during meetings (participants cannot currently see each other)
-* Improvement and optimization of CV module
-* Real-time warnings when participant attentiveness drops below a threshold
-* Attendance calculation based on attention metrics
