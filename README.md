@@ -82,8 +82,8 @@ A `.env` file is required for both frontend and backend. It typically includes:
 
 ### Main Branches
 
-* `master` – Production-ready code
-* `develop` – Stable development branch
+* `BackEnd` – Production-ready code for backend
+* `FrontEnd` –  Production-ready code for frontend
 
 ### Feature & Supporting Branches
 
