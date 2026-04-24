@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Smart Meet is an intelligent online meeting platform designed to analyze participant engagement during virtual sessions. It uses computer vision techniques such as head pose estimation and gaze tracking to monitor attentiveness in real time.
+Smart Meet is an intelligent online meeting platform designed to analyze participant engagement during online sessions. It uses computer vision techniques such as head pose estimation and gaze tracking to monitor attentiveness in real time.
 
 After each meeting, the system generates automated engagement reports, helping hosts evaluate meeting effectiveness and participant involvement.
 
@@ -42,7 +42,6 @@ After each meeting, the system generates automated engagement reports, helping h
 
 * Next.js
 * Tailwind CSS
-* Chart libraries (Chart.js / Recharts)
 
 ### Backend
 
@@ -50,7 +49,6 @@ After each meeting, the system generates automated engagement reports, helping h
 * Express.js
 * REST APIs
 * GraphQL
-* WebRTC
 
 ### Database
 
@@ -125,33 +123,12 @@ npm run start
 
 ---
 
-## Computer Vision Module Setup (Optional)
-
-```bash
-cd <cv-module-folder>
-
-python -m venv venv
-
-# Activate virtual environment
-# Windows
-venv\Scripts\activate
-# Mac/Linux
-source venv/bin/activate
-
-pip install -r requirements.txt
-
-python <entry-file>.py
-```
-
----
-
 ## Environment Variables
 
-Create `.env` files for backend and frontend. Typical variables include:
+Create `.env` files. Typical variables include:
 
 * Database connection string
-* Authentication secrets (JWT or provider-based)
-* API URLs
+* Authentication secrets 
 * Port configurations
 
 ---
@@ -161,7 +138,7 @@ Create `.env` files for backend and frontend. Typical variables include:
 1. Start PostgreSQL database
 2. Start backend server
 3. Start frontend server
-4. (Optional) Start computer vision module
+4. Start computer vision module
 
 Open the application in a browser using the configured frontend URL (for example: [http://localhost:3000](http://localhost:3000)).
 
@@ -206,9 +183,12 @@ After each meeting, the system provides:
 
 ### Supporting Branches
 
-* cv – Computer vision module
-* feature/* – Feature development branches
-* Other experimental or integration branches
+* `feature/ui`
+* `cv`
+* `Smart-Meet-Server-only`
+* `Backend`
+* `server`
+* `integration_b`
 
 ---
 
