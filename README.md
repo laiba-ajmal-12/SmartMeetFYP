@@ -1,95 +1,244 @@
-# Smart Meet – An Online Meeting Platform with Engagement Tracking and Automated Reports
+# Smart Meet – Online Meeting Platform with Engagement Tracking & Automated Reports
 
-# Project Description
+## Project Overview
 
-Smart Meet is an online meeting platform that helps hosts understand how engaged participants are during virtual meetings.
-It uses computer vision techniques such as head pose and gaze tracking to monitor attentiveness in real time. At the end of each session, the system generates automated reports showing individual participation and overall meeting productivity, allowing hosts to evaluate meeting effectiveness objectively.
+Smart Meet is an intelligent online meeting platform designed to analyze participant engagement during virtual sessions. It uses computer vision techniques such as head pose estimation and gaze tracking to monitor attentiveness in real time.
 
-## Features Implemented 
+After each meeting, the system generates automated engagement reports, helping hosts evaluate meeting effectiveness and participant involvement.
 
-The following features are fully implemented :
+---
 
-## Core Platform Features
+## Features
+
+### Core Platform Features
 
 * User authentication (Sign Up / Login)
-* Host role with ability to create organizations
-* Host can add participants to organizations and meetings
-* Meeting scheduling and listing for hosts
+* Role-based access (Host and Participants)
+* Organization creation and management
+* Participant management within organizations
+* Meeting scheduling and listing
 * Real-time meeting controls:
-    * Join / Leave meeting
-    * Microphone on/off
-    * Audio mute/unmute
-    * In-meeting chat
-    * Screen sharing
-* Cross platform video transfer
-* post meeting engagement reports
-* Real-time detection system
-  
-## Technologies Used
+
+  * Join and leave meetings
+  * Microphone mute/unmute
+  * In-meeting chat
+  * Screen sharing
+* Cross-platform video communication
+* Post-meeting engagement reports
+
+### Engagement Tracking
+
+* Real-time face-based attention detection
+* Head pose estimation
+* Gaze tracking
+* Engagement scoring
+* Automated report generation
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* Next.js
+* Tailwind CSS
+* Chart libraries (Chart.js / Recharts)
 
 ### Backend
 
 * Node.js
 * Express.js
-* REST APIs (for create/update/delete operations)
-* GraphQL (for data retrieval)
+* REST APIs
+* GraphQL
+* WebRTC
 
 ### Database
 
 * PostgreSQL
 * Prisma ORM
 
-## Setup Instructions
+### Computer Vision Module
+
+* Python
+* OpenCV
+* MediaPipe
+* NumPy, Pandas
+
+---
+
+## Installation and Setup
 
 ### Prerequisites
 
-* Node.js (v18 or above recommended)
-* npm
+* Node.js (v18 or higher)
+* npm or yarn
 * PostgreSQL
+* Python (v3.9 or higher)
+* Git
 
-### Backend Setup
+---
 
-```termina(run these commands on terminal)
-# First go to backend directory
+## Setup Instructions
+
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd <project-root>
+```
+
+---
+
+## Backend Setup
+
+```bash
+cd <backend-folder>
+
 npm install
 
-# Generate Prisma client to develop the environment for prisma to run
-npx prisma generate
+cp .env.example .env
+# Update environment variables inside .env
 
-# Run database migrations to apply all one by one
+npx prisma generate
 npx prisma migrate dev
 
-# Start backend server
 npm run dev
+# or
+npm run start
 ```
-### Frontend Setup
 
-```terminal(run these commands on terminal)
-# Navigate to frontend directory
+---
+
+## Frontend Setup
+
+```bash
+cd <frontend-folder>
+
 npm install
 
-# Start frontend development server
 npm run dev
+
+# For production
+npm run build
+npm run start
 ```
-### Environment Variables
 
-A `.env` file is required for both frontend and backend. It typically includes:
+---
 
-. Database connection string
-. Authentication secrets
+## Computer Vision Module Setup (Optional)
 
-## Repository Structure & Branching
+```bash
+cd <cv-module-folder>
+
+python -m venv venv
+
+# Activate virtual environment
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python <entry-file>.py
+```
+
+---
+
+## Environment Variables
+
+Create `.env` files for backend and frontend. Typical variables include:
+
+* Database connection string
+* Authentication secrets (JWT or provider-based)
+* API URLs
+* Port configurations
+
+---
+
+## Running the Full System
+
+1. Start PostgreSQL database
+2. Start backend server
+3. Start frontend server
+4. (Optional) Start computer vision module
+
+Open the application in a browser using the configured frontend URL (for example: [http://localhost:3000](http://localhost:3000)).
+
+---
+
+## Usage Instructions
+
+### For Hosts
+
+1. Register or log in
+2. Create an organization
+3. Add participants
+4. Schedule a meeting
+5. Start the meeting and monitor engagement
+6. View reports after the meeting
+
+### For Participants
+
+1. Join meetings using an invitation
+2. Enable camera for engagement tracking
+3. Participate using audio, video, and chat
+
+---
+
+## Reports and Analytics
+
+After each meeting, the system provides:
+
+* Individual engagement scores
+* Attention tracking over time
+* Participation summaries
+* Overall meeting effectiveness
+
+---
+
+## Repository Structure and Branching
 
 ### Main Branches
 
-* `BackEnd` – Production-ready code for backend
-* `FrontEnd` –  Production-ready code for frontend
+* frontend – Frontend application
+* backend – Backend services
 
-### Feature & Supporting Branches
+### Supporting Branches
 
-* `feature/ui`
-* `cv`
-* `Smart-Meet-Server-only`
-* `Backend`
-* `server`
-* `integration_b`
+* cv – Computer vision module
+* feature/* – Feature development branches
+* Other experimental or integration branches
+
+---
+
+## Authentication
+
+* JWT-based authentication
+* Secure session handling
+* Role-based access control
+
+---
+
+## Deployment Overview
+
+* Configure environment variables
+* Build frontend and backend
+* Deploy services to hosting platforms
+* Use a production database
+* Enable HTTPS
+
+---
+
+## Notes
+
+* All services (database, backend, frontend) should run simultaneously
+* Camera access is required for engagement tracking
+* Performance may vary depending on system hardware
+
+---
+
+## License
+
+This project is developed for academic and educational purposes.
+
