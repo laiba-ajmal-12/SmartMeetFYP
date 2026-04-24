@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-Smart Meet is an intelligent online meeting platform designed to analyze participant engagement during online sessions. It uses computer vision techniques such as head pose estimation and gaze tracking to monitor attentiveness in real time.
+Smart Meet is an intelligent online meeting platform that analyzes participant engagement using computer vision techniques such as gaze tracking and head pose estimation. It monitors attentiveness in real time during meetings and generates detailed post-meeting reports through a hybrid analysis approach.
 
-After each meeting, the system generates automated engagement reports, helping hosts evaluate meeting effectiveness and participant involvement.
+The platform provides both individual and overall engagement scores, displayed through an interactive dashboard with visual analytics. This allows hosts to evaluate participation levels, identify engagement patterns, and make informed decisions to improve meeting effectiveness.
 
 ---
 
