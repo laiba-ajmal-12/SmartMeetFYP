@@ -1,42 +1,42 @@
-# Smart Meet – An Online Meeting Platform with Engagement Tracking and Automated Reports
+# Smart Meet – Online Meeting Platform with Engagement Tracking & Automated Reports
 
-# Project Description
+## Project Overview
 
-Smart Meet is an online meeting platform which is designed to help hosts understand how engaged participants are during online meetings. In traditional online meetings, hosts often struggle to know whether participants are actively listening or simply just physically present and mentally absent. Most users just join the meeting but don't listen it.
+Smart Meet is an intelligent online meeting platform that analyzes participant engagement using computer vision techniques such as gaze tracking and head pose estimation. It monitors attentiveness in real time during meetings and generates detailed post-meeting reports through a hybrid analysis approach.
 
-This platform addresses that problem by monitoring participant attentiveness and attention during meetings using computer vision techniques such as head pose estimation, and gaze tracking. At the end of each session, Smart Meet generates automated reports that summarize individual participant engagement as well as overall session productivity. This allows hosts to objectively evaluate how effective and engaging their meetings were.
+The platform provides both individual and overall engagement scores, displayed through an interactive dashboard with visual analytics. This allows hosts to evaluate participation levels, identify engagement patterns, and make informed decisions to improve meeting effectiveness.
 
-## Features Implemented
+---
 
-The following features are fully implemented in the current MVP:
+## Features
 
-## Core Platform Features
+### Core Platform Features
 
 * User authentication (Sign Up / Login)
-* Host role with ability to create organizations
-* Host can add participants to organizations and meetings
-* Meeting scheduling and listing for hosts
+* Role-based access (Host and Participants)
+* Organization creation and management
+* Participant management within organizations
+* Meeting scheduling and listing
 * Real-time meeting controls:
-    * Join / Leave meeting
-    * Microphone on/off
-    * Audio mute/unmute
-    * In-meeting chat
-    * Screen sharing
 
-### Computer Vision & Engagement Tracking
+  * Join and leave meetings
+  * Microphone mute/unmute
+  * In-meeting chat
+  * Screen sharing
+* Cross-platform video communication
+* Post-meeting engagement reports
 
-* Face detection (face present or not)
-* Head pose movement analysis (right or left)
-* Eye gaze tracking
-* Attention and attentiveness detection logic
-* Computer vision preprocessing using OpenCV
-* MediaPipe-based facial landmark extraction
+### Engagement Tracking
 
-### Reports & Analytics
+* Real-time face-based attention detection
+* Head pose estimation
+* Gaze tracking
+* Engagement scoring
+* Automated report generation
 
-* Participant-level attentiveness analysis
- 
-## Technologies Used
+---
+
+## Tech Stack
 
 ### Frontend
 
@@ -47,29 +47,47 @@ The following features are fully implemented in the current MVP:
 
 * Node.js
 * Express.js
-* REST APIs (for create/update/delete operations)
-* GraphQL (for data retrieval)
-
-### Computer Vision / AI
-
-* Python
-* OpenCV
-* MediaPipe
+* REST APIs
+* GraphQL
 
 ### Database
 
 * PostgreSQL
 * Prisma ORM
 
-## Setup Instructions
+### Computer Vision Module
+
+* Python
+* OpenCV
+* MediaPipe
+* NumPy, Pandas
+
+---
+
+## Installation and Setup
 
 ### Prerequisites
 
-* Node.js (v18 or above recommended)
-* npm
+* Node.js (v18 or higher)
+* npm or yarn
 * PostgreSQL
+* Python (v3.9 or higher)
+* Git
 
-### Backend Setup
+---
+
+## Setup Instructions
+
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd <project-root>
+```
+
+---
+
+## Backend Setup
 
 ```termina(run these commands on terminal)
 # First go to backend directory
@@ -84,8 +102,9 @@ npx prisma migrate dev
 # Start backend server
 npm run dev
 ```
+---
 
-### Frontend Setup
+## Frontend Setup
 
 ```terminal(run these commands on terminal)
 # Navigate to frontend directory
@@ -94,36 +113,68 @@ npm install
 # Start frontend development server
 npm run dev
 ```
-### Cv Setup
 
-```terminal(run these commands on terminal)
-# Step 1: Create and Activate Virtual Environment (Recommended)
-python -m venv cv_env
-# Windows
-cv_env\Scripts\activate
-# Linux / macOS
-source cv_env/bin/activate
-# Step 2: Install Required Libraries
-pip install opencv-python mediapipe numpy matplotlib jupyter
-# Step 3: Launch Jupyter Notebook
-jupyter notebook
-```
+---
 
-### Environment Variables
+## Environment Variables
 
-A `.env` file is required for both frontend and backend. It typically includes:
+Create `.env` files. Typical variables include:
 
-. Database connection string
-. Authentication secrets
+* Database connection string
+* Authentication secrets 
+* Port configurations
 
-## Repository Structure & Branching
+---
+
+## Running the Full System
+
+1. Start PostgreSQL database
+2. Start backend server
+3. Start frontend server
+4. Start computer vision module
+
+Open the application in a browser using the configured frontend URL (for example: [http://localhost:3000](http://localhost:3000)).
+
+---
+
+## Usage Instructions
+
+### For Hosts
+
+1. Register or log in
+2. Create an organization
+3. Add participants
+4. Schedule a meeting
+5. Start the meeting and monitor engagement
+6. View reports after the meeting
+
+### For Participants
+
+1. Join meetings using an invitation
+2. Enable camera for engagement tracking
+3. Participate using audio, video, and chat
+
+---
+
+## Reports and Analytics
+
+After each meeting, the system provides:
+
+* Individual engagement scores
+* Attention tracking over time
+* Participation summaries
+* Overall meeting effectiveness
+
+---
+
+## Repository Structure and Branching
 
 ### Main Branches
 
-* `master` – Production-ready code
-* `develop` – Stable development branch
+* frontend – Frontend application
+* backend – Backend services
 
-### Feature & Supporting Branches (Sprint 1)
+### Supporting Branches
 
 * `feature/ui`
 * `cv`
@@ -132,13 +183,35 @@ A `.env` file is required for both frontend and backend. It typically includes:
 * `server`
 * `integration_b`
 
-All Sprint 1 features were developed in feature-specific branches and merged into `develop` and `master` after integration.
+---
 
-## TODOs
+## Authentication
 
-The following items are planned for future sprints:
+* JWT-based authentication
+* Secure session handling
+* Role-based access control
 
-* Cross platform video transfer
-* Improvement and optimization of CV module
-* Real-time warnings when participant attentiveness drops below a threshold
-* Attendance calculation based on attention metrics
+---
+
+## Deployment Overview
+
+* Configure environment variables
+* Build frontend and backend
+* Deploy services to hosting platforms
+* Use a production database
+* Enable HTTPS
+
+---
+
+## Notes
+
+* All services (database, backend, frontend) should run simultaneously
+* Camera access is required for engagement tracking
+* Performance may vary depending on system hardware
+
+---
+
+## License
+
+This project is developed for academic and educational purposes.
+
