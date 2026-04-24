@@ -89,36 +89,29 @@ cd <project-root>
 
 ## Backend Setup
 
-```bash
-cd <backend-folder>
-
+```termina(run these commands on terminal)
+# First go to backend directory
 npm install
 
-cp .env.example .env
-# Update environment variables inside .env
-
+# Generate Prisma client to develop the environment for prisma to run
 npx prisma generate
+
+# Run database migrations to apply all one by one
 npx prisma migrate dev
 
+# Start backend server
 npm run dev
-# or
-npm run start
 ```
-
 ---
 
 ## Frontend Setup
 
-```bash
-cd <frontend-folder>
-
+```terminal(run these commands on terminal)
+# Navigate to frontend directory
 npm install
 
+# Start frontend development server
 npm run dev
-
-# For production
-npm run build
-npm run start
 ```
 
 ---
