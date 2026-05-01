@@ -7,7 +7,7 @@ import { Chat } from "stream-chat-react"
 require( "stream-chat-react/dist/css/v2/index.css")
 import { API_PREFIX } from "@/constants/api";
 import { Loader2 } from "lucide-react";
-import useFaceMesh from "@/mediapipe/FaceMesh";
+
 
 
 export const STREAM_API_KEY = process.env.NEXT_PUBLIC_STREAM_KEY
@@ -113,6 +113,7 @@ useEffect(() => {
       const cClient = new StreamChat(String(STREAM_API_KEY))
       await cClient.connectUser({ id: String(user.id), name: user.name, image: user.ImagePath }, payload.token)
 
+      await new Promise(resolve => setTimeout(resolve, 1500))
       videoClientRef.current = vClient
       chatClientRef.current = cClient
       setVideoClient(vClient)
@@ -153,7 +154,7 @@ useEffect(() => {
     }
 
     sendMetrics()
-    metricsIntervalRef.current = setInterval(sendMetrics, 20)
+    metricsIntervalRef.current = setInterval(sendMetrics, 2000)
   }
 
   const stopMetricsLoop = () => {
