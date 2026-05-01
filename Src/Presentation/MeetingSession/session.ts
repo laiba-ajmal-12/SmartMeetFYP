@@ -6,10 +6,12 @@ export type ParticipantStats = {
   cameraOn: boolean
   currentJoinTime: Date | null
   totalActiveSeconds: number
-  attentionSum: number
+  engagementSum: number
   gazeSum: number
-  faceSum: number
+  postureSum: number
   samples: number
+  deepSamples: number
+
 }
 
 export type MeetingSession = {

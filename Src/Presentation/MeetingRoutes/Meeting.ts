@@ -16,7 +16,17 @@ import type { MeetingParticipantDto } from "../../Domain/DTOs/MeetingDTOs/meetin
 //@ts-ignore
 import { createMeeting, getMeeting, endMeeting } from "../MeetingSession/session.js"
 
+import multer from "multer"
+import ffmpeg from "fluent-ffmpeg"
+import FormData from "form-data"
+import fs from "fs"
+import axios from "axios"
+import path from "path"
+
+import ffmpegStatic from "ffmpeg-static"
+
 dotenv.config()
+ffmpeg.setFfmpegPath(ffmpegStatic as unknown as string)
 
 const MeetingRoute = express.Router()
 
@@ -34,20 +44,25 @@ if (!apiKey || !apiSecret) {
 
 const serverClient = new StreamClient(apiKey, apiSecret)
 
+const CV_MODULE_URL = "https://uncontingently-bonelike-alvaro.ngrok-free.dev" // replace this
+
+const upload = multer({ storage: multer.memoryStorage() })  
+
+
+
 MeetingRoute.post("/CreateMeeting", verifyUser, async (req, res) => {
   try {
     const meeting = req.body
+    console.log("Body received:", JSON.stringify(meeting, null, 2))
 
     const meetingCreated: MeetingDTOs = {
       id: meeting.id,
       name: meeting.name,
       description: meeting.description,
       organizationId: Number(meeting.organizationId),
-      startTime: new Date(`${meeting.date}T${meeting.time}:00`),
+      startTime: new Date(meeting.startTime),
       daily: meeting.daily === true || meeting.daily === "true",
-      EnableEngagement:
-        meeting.EnableEngagement === true ||
-        meeting.EnableEngagement === "true",
+      EnableEngagement: meeting.EnableEngagement === true || meeting.EnableEngagement === "true",
       weekly: meeting.weekly,
       hostId: Number(meeting.hostId),
       meetingDuration: Number(meeting.meetingDuration),
@@ -55,9 +70,11 @@ MeetingRoute.post("/CreateMeeting", verifyUser, async (req, res) => {
       Engagment: Number(meeting.Engagment)
     }
 
+    console.log("MeetingCreated object:", JSON.stringify(meetingCreated, null, 2))
     const created = await meetingService.createMeeting(meetingCreated)
     return res.status(201).json(created)
   } catch (error) {
+    console.error("FULL ERROR:", error) // ← this is missing in your file
     if (error instanceof ApplicationError) {
       return res.status(error.status).json({ message: error.message })
     }
@@ -136,10 +153,11 @@ MeetingRoute.post("/JoinMeeting", verifyUser, async (req: any, res) => {
       cameraOn: true,
       currentJoinTime: new Date(),
       totalActiveSeconds: 0,
-      attentionSum: 0,
+      engagementSum: 0,
       gazeSum: 0,
-      faceSum: 0,
-      samples: 0
+      postureSum: 0,
+      samples: 0,
+      deepSamples: 0
     })
 
     const token = serverClient.createToken(String(user.id))
@@ -176,15 +194,58 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
       return res.send({ ignored: true })
     }
     p.totalActiveSeconds += window || 5
-    p.attentionSum += attention || 0
-    p.faceSum += posture || 0
+    p.gazeSum += attention || 0
+    p.postureSum += posture || 0
     p.samples++
+    
     
     console.log("participant metrics updated:",p)
     return res.send({ ok: true })
   } catch (error) {
     console.error("Metrics error:", error)
     return res.status(500).json({ message: "Failed to update metrics" })
+  }
+})
+
+
+MeetingRoute.post("/upload", upload.single("video"), async (req, res) => {
+  try {
+    if (!req.file || !req.body.user_id) {
+      return res.status(400).json({ message: "Missing video or user_id" })
+    }
+
+    // Convert buffer to mp4 in memory using a temp path in /tmp (Vercel allows /tmp)
+    const tmpWebm = path.join("/tmp", `${Date.now()}.webm`)
+    const tmpMp4  = path.join("/tmp", `${Date.now()}.mp4`)
+
+    fs.writeFileSync(tmpWebm, req.file.buffer)
+
+    await new Promise<void>((resolve, reject) => {
+      ffmpeg(tmpWebm)
+        .output(tmpMp4)
+        .videoCodec("libx264")
+        .on("end", () => resolve())
+        .on("error", (err) => reject(err))
+        .run()
+    })
+
+    const form = new FormData()
+    form.append("user_id", req.body.user_id)
+    form.append("meeting_id", req.body.meeting_id)
+    form.append("video", fs.createReadStream(tmpMp4), "face.mp4")
+
+    const cvResponse = await axios.post(`${CV_MODULE_URL}/upload`, form, {
+      headers: form.getHeaders(),
+    })
+
+    fs.unlinkSync(tmpWebm)
+    fs.unlinkSync(tmpMp4)
+
+    return res.status(200).json(cvResponse.data)
+
+  } catch (error) {
+    console.error("Upload error:", error)
+    return res.status(500).json({ message: "Failed to upload video" })
   }
 })
 
@@ -275,27 +336,40 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       const {
         userId,
         totalActiveSeconds,
-        attentionSum,
+        engagementSum: faceSum,
         gazeSum,
-        faceSum,
-        samples
+        postureSum: attentionSum,
+        samples,
+        deepSamples
       } = participant
+
+      console.log("Participant received :", participant)
+
       const avgAttention = samples > 0 ? attentionSum / samples : 0
       const avgGaze = samples > 0 ? gazeSum / samples : 0
-      const avgFace = samples > 0 ? faceSum / samples : 0
+      const avgFace = deepSamples > 0 ? faceSum / deepSamples : 0
+
       const meetingSession: MeetingParticipantDto = {
         id: Number(meetingId),
         userId: Number(userId),
         meetingId: Number(meetingId),
-        avgAttention: avgAttention,
-        avgFace: avgFace,
-        avgGaze: avgGaze,
-        totalActiveSeconds: totalActiveSeconds,
+        avgAttention,
+        avgFace,
+        avgGaze,
+        totalActiveSeconds,
         firstJoinTime: participant.currentJoinTime,
         lastLeaveTime: meetingEndTime
       }
-      await meetingService.createMeetingParticipant(meetingSession)
+
+      try {
+        await meetingService.createMeetingParticipant(meetingSession)
+      } catch (createErr) {
+        // Record already exists — update it instead
+        console.log(`Participant ${userId} already exists for meeting ${meetingId}, updating...`)
+        
+      }
     }
+
     endMeeting(meetingId)
     return res.status(200).json({
       ok: true,
@@ -307,6 +381,50 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       return res.status(error.status).json({ message: error.message })
     }
     return res.status(500).json({ message: "Failed to end meeting" })
+  }
+})
+
+MeetingRoute.post("/ProcessResults", async (req, res) => {
+  try {
+    const { All_result } = req.body
+
+    if (!All_result || !Array.isArray(All_result)) {
+      return res.status(400).json({ message: "Missing or invalid All_result" })
+    }
+
+    for (const item of All_result) {
+      const { user_id, meeting_id, result } = item
+
+      console.log("Processing:", { user_id, meeting_id, result })
+
+
+      const meeting = getMeeting(meeting_id)
+      if (!meeting) continue // skip if meeting not found
+
+      const participant = meeting.participants.get(user_id)
+      if (!participant) continue // skip if participant not found
+      var engagmentvalue = 0;
+
+      if(result !== null ){
+        if(result=="Engaged"){
+          engagmentvalue = 66;
+        }
+        else if(result=="Highly-Engaged"){
+          engagmentvalue = 99;
+        }else if(result == "Not-Engaged"){
+          engagmentvalue = 33;
+        }
+      }
+
+      participant.engagementSum += engagmentvalue || 0
+      participant.deepSamples++
+    }
+
+    return res.status(200).json({ message: "Results processed successfully" })
+
+  } catch (error) {
+    console.error("ProcessResults error:", error)
+    return res.status(500).json({ message: "Failed to process results" })
   }
 })
 

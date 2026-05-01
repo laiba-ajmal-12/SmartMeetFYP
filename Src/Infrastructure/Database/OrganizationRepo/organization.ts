@@ -54,20 +54,25 @@ export class OrganizationDbRepo implements IOrganizationService{
         return users;
     }
 
-    async getOrganizationByHostOrMember(userId: number , orgId:number): Promise<OrganizationDTOs| null> {
-        const org = await this.postSQlClient.organization.findFirst({
-                where: {
-                    id: orgId,
-                    OR: [
-                    { ownerId: userId },
-                    {
-                        members: {
-                        some: { userId }
-                        }
-                    }
-                    ]
-                }
-        });
-        return org;
+async getOrganizationByHostOrMember(userId: number, orgId: number): Promise<OrganizationDTOs | null> {
+  const org = await this.postSQlClient.organization.findFirst({
+    where: {
+      id: orgId,
+      OR: [
+        { ownerId: userId },
+        { members: { some: { userId } } }
+      ]
+    },
+    include: {
+      owner: true,
+      members: {
+        include: {
+          user: true
+        }
+      },
+      meeting: true
     }
+  });
+  return org;
+}
 }

@@ -169,7 +169,7 @@ userRoute.post('/verifyResetCode',  async (req:any, res:any) => {
 });
 
 
-userRoute.post('/getFeedback', verifyUser, async (req:any, res:any) => {
+userRoute.post('/getFeedback', async (req:any, res:any) => {
   try{
       const {name , email , response} = req.body;
       const resObj:boolean = await emailService.submitResponse(name , email , response);

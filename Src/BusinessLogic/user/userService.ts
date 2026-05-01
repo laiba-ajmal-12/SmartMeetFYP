@@ -31,9 +31,9 @@ export class UserService {
         if (!this.validation.isEmailCorrect(user.email)){
             throw new ApplicationError(400,"Bad Request");
         }
-        if(!await this.validation.isEmailUnique(user.email)){
-            throw new ApplicationError(400,"Bad Request");
-        }
+       if(!await this.validation.isEmailUnique(user.email)){
+    throw new ApplicationError(409, "Account already exists"); // was 400 "Bad Request"
+}
         if(!user.password || user.password.trim().length < 6){
             throw new ApplicationError(400,"Password must be at least 6 characters")
         }

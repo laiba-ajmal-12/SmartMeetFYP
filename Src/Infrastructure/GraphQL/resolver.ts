@@ -50,26 +50,7 @@ export const resolvers = {
         return await userFetcher.getUserbyId(obj.userId);
     }
   },
-  Organization:{
-    meeting: async (obj:any , args:any)=>{
-        console.log( '[Time ] : ' ,  args.time);
-        return await meetings.getMeetingbyTime(args.time, obj.id ,  args.limit);
-    },
-    organizationCode: (obj:any , args:any, context:any)=>{
-        if(obj.ownerId == context.userId){
-          return obj.organizationCode
-        }
-        else{
-          return null
-        }
-    },
-    members: async (obj:any) =>{
-        return await organmMember.getAllMemberByOrganiztion(obj.id);
-    },
-    owner: async (obj:any) =>{
-      return await userFetcher.getUserbyId(obj.ownerId);
-    }
-  },
+  
   Meeting:{
     organization: async (obj:any) =>{
         return await organ.getOrganizationById(obj.organizationId);
