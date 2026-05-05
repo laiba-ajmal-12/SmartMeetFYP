@@ -44,9 +44,8 @@ if (!apiKey || !apiSecret) {
 
 const serverClient = new StreamClient(apiKey, apiSecret)
 
-const CV_MODULE_URL = "https://uncontingently-bonelike-alvaro.ngrok-free.dev" // replace this
-
-const upload = multer({ storage: multer.memoryStorage() })  
+const CV_MODULE_URL = "https://uncontingently-bonelike-alvaro.ngrok-free.dev" 
+ 
 
 
 
@@ -208,38 +207,33 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
 })
 
 
-MeetingRoute.post("/upload", upload.single("video"), async (req, res) => {
+// Change this:
+const upload = multer({ storage: multer.memoryStorage() })
+
+// Route change:
+MeetingRoute.post("/upload", upload.array("frames", 70), async (req, res) => {
   try {
-    if (!req.file || !req.body.user_id) {
-      return res.status(400).json({ message: "Missing video or user_id" })
+    const files = req.files as Express.Multer.File[]
+
+    if (!files?.length || !req.body.user_id) {
+      return res.status(400).json({ message: "Missing frames or user_id" })
     }
-
-    // Convert buffer to mp4 in memory using a temp path in /tmp (Vercel allows /tmp)
-    const tmpWebm = path.join("/tmp", `${Date.now()}.webm`)
-    const tmpMp4  = path.join("/tmp", `${Date.now()}.mp4`)
-
-    fs.writeFileSync(tmpWebm, req.file.buffer)
-
-    await new Promise<void>((resolve, reject) => {
-      ffmpeg(tmpWebm)
-        .output(tmpMp4)
-        .videoCodec("libx264")
-        .on("end", () => resolve())
-        .on("error", (err) => reject(err))
-        .run()
-    })
 
     const form = new FormData()
     form.append("user_id", req.body.user_id)
     form.append("meeting_id", req.body.meeting_id)
-    form.append("video", fs.createReadStream(tmpMp4), "face.mp4")
+
+    files.forEach((file, i) => {
+      form.append("frames", file.buffer, {
+        filename: `frame_${String(i).padStart(4, "0")}.jpg`,
+        contentType: "image/jpeg",
+      })
+    })
 
     const cvResponse = await axios.post(`${CV_MODULE_URL}/upload`, form, {
       headers: form.getHeaders(),
+      maxBodyLength: Infinity,
     })
-
-    fs.unlinkSync(tmpWebm)
-    fs.unlinkSync(tmpMp4)
 
     return res.status(200).json(cvResponse.data)
 
@@ -349,6 +343,9 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       const avgGaze = samples > 0 ? gazeSum / samples : 0
       const avgFace = deepSamples > 0 ? faceSum / deepSamples : 0
 
+      console.log("Face sum is : ", faceSum)
+      console.log("Sample   ",deepSamples)
+
       const meetingSession: MeetingParticipantDto = {
         id: Number(meetingId),
         userId: Number(userId),
@@ -401,7 +398,8 @@ MeetingRoute.post("/ProcessResults", async (req, res) => {
       const meeting = getMeeting(meeting_id)
       if (!meeting) continue // skip if meeting not found
 
-      const participant = meeting.participants.get(user_id)
+      const participant = meeting.participants.get(Number(user_id))
+      console.log("Found participant:", participant)
       if (!participant) continue // skip if participant not found
       var engagmentvalue = 0;
 
@@ -418,6 +416,8 @@ MeetingRoute.post("/ProcessResults", async (req, res) => {
 
       participant.engagementSum += engagmentvalue || 0
       participant.deepSamples++
+
+      console.log("Participant updated with engagement:", participant)
     }
 
     return res.status(200).json({ message: "Results processed successfully" })

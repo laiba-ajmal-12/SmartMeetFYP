@@ -10,24 +10,31 @@ export class MeetingDbRepo implements IMeetingService{
         this.postSQlClient = PostSQLClient.getClient();
         // this.postSQlClient.$connect()
     }
-    async createMeetingParticpant(meet: MeetingParticipantDto): Promise<MeetingParticipantDto> 
-    {
-            const sessionData = {
-            meetingId: meet.meetingId,
-            userId: meet.userId,
-            totalActiveSeconds: meet.totalActiveSeconds,
-            avgAttention: meet.avgAttention,
-            avgGaze: meet.avgGaze,
-            avgFace: meet.avgFace,
-            firstJoinTime: meet.firstJoinTime,
-            lastLeaveTime: meet.lastLeaveTime
-            }
-
-            const meeting = await this.postSQlClient.meetingParticipant.create({
-            data: sessionData
-            })
-            return meeting
+async createMeetingParticpant(meet: MeetingParticipantDto): Promise<MeetingParticipantDto> {
+    const sessionData = {
+        meetingId: meet.meetingId,
+        userId: meet.userId,
+        totalActiveSeconds: meet.totalActiveSeconds,
+        avgAttention: meet.avgAttention,
+        avgGaze: meet.avgGaze,
+        avgFace: meet.avgFace,
+        firstJoinTime: meet.firstJoinTime,
+        lastLeaveTime: meet.lastLeaveTime
     }
+
+  const meeting = await this.postSQlClient.meetingParticipant.upsert({
+    where: {
+        meetingId_userId: {
+            userId: meet.userId,
+            meetingId: meet.meetingId
+        }
+    },
+    update: sessionData,
+    create: sessionData
+})
+
+    return meeting
+}
 
     async getMeetingbyTime(time:string, organizationId:number , limit:number): Promise<MeetingDTOs[]> {
         console.log('infra [time]: ' , time);
