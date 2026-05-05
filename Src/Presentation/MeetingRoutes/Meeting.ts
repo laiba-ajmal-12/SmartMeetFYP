@@ -185,7 +185,7 @@ MeetingRoute.post("/metrics", async (req: any, res) => {
     if (!meeting) {
       return res.status(404).json({ message: "Meeting not found" })
     }
-    const p = meeting.participants.get(userId)
+    const p = meeting.participants.get(Number(userId))
     if (!p) {
       return res.status(404).json({ message: "Participant not found" })
     }
@@ -253,7 +253,7 @@ MeetingRoute.post("/camera-off", async (req, res) => {
     if (!meeting) {
       return res.status(404).json({ message: "Meeting not found" })
     }
-    const p = meeting.participants.get(userId)
+    const p = meeting.participants.get(Number(userId))
     if (!p) {
       return res.status(404).json({ message: "Participant not found" })
     }
@@ -275,7 +275,7 @@ MeetingRoute.post("/camera-on", async (req, res) => {
     if (!meeting) {
       return res.status(404).json({ message: "Meeting not found" })
     }
-    const p = meeting.participants.get(userId)
+    const p = meeting.participants.get(Number(userId))
     if (!p) {
       return res.status(404).json({ message: "Participant not found" })
     }
@@ -299,7 +299,7 @@ MeetingRoute.post("/leave", async (req, res) => {
       return res.status(404).json({ message: "Meeting not found" })
     }
   
-    const p = meeting.participants.get(userId)
+    const p = meeting.participants.get(Number(userId))
     if (!p) {
       return res.status(404).json({ message: "Participant not found" })
     }
@@ -326,6 +326,8 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       return res.status(404).json({ ok: false, message: "Meeting not found" })
     }
     const meetingEndTime = new Date()
+
+     
     for (const participant of meeting.participants.values()) {
       const {
         userId,
@@ -343,8 +345,6 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
       const avgGaze = samples > 0 ? gazeSum / samples : 0
       const avgFace = deepSamples > 0 ? faceSum / deepSamples : 0
 
-      console.log("Face sum is : ", faceSum)
-      console.log("Sample   ",deepSamples)
 
       const meetingSession: MeetingParticipantDto = {
         id: Number(meetingId),
