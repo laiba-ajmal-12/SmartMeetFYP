@@ -145,19 +145,26 @@ MeetingRoute.post("/JoinMeeting", verifyUser, async (req: any, res) => {
       return res.status(404).json({ message: "Meeting not found" })
     }
 
-    meeting.participants.set(user.id, {
+    // Preserve existing participant data on rejoin
+    const existing = meeting.participants.get(Number(user.id))
+
+    meeting.participants.set(Number(user.id), {
       userId: user.id,
       name: user.name,
       isActive: true,
       cameraOn: true,
       currentJoinTime: new Date(),
-      totalActiveSeconds: 0,
-      engagementSum: 0,
-      gazeSum: 0,
-      postureSum: 0,
-      samples: 0,
-      deepSamples: 0
+      firstJoinTime: existing?.firstJoinTime ?? new Date(),  // never overwrite original
+      totalActiveSeconds: existing?.totalActiveSeconds ?? 0,
+      engagementSum:      existing?.engagementSum      ?? 0,
+      gazeSum:            existing?.gazeSum            ?? 0,
+      postureSum:         existing?.postureSum          ?? 0,
+      samples:            existing?.samples            ?? 0,
+      deepSamples:        existing?.deepSamples         ?? 0,
     })
+
+    console.log(`User ${user.id} joined meeting ${meetingIdNum}. Total participants: ${meeting.participants.size}`)
+    console.log("Participants in meeting:", [...meeting.participants.keys()])
 
     const token = serverClient.createToken(String(user.id))
     return res.status(200).json({
@@ -320,58 +327,58 @@ MeetingRoute.post("/end", verifyUser, async (req, res) => {
     if (!meetingId) {
       return res.status(400).json({ ok: false, message: "meetingId required" })
     }
+
     const meeting = getMeeting(meetingId)
-    console.log("Host ended the meeting !")
     if (!meeting) {
       return res.status(404).json({ ok: false, message: "Meeting not found" })
     }
+
+    console.log(`Ending meeting ${meetingId}. Total participants: ${meeting.participants.size}`)
+    console.log("Participant IDs:", [...meeting.participants.keys()])
+
     const meetingEndTime = new Date()
 
-     
     for (const participant of meeting.participants.values()) {
       const {
         userId,
         totalActiveSeconds,
-        engagementSum: faceSum,
+        engagementSum,
         gazeSum,
-        postureSum: attentionSum,
+        postureSum,
         samples,
-        deepSamples
+        deepSamples,
+        firstJoinTime,
+        currentJoinTime,
       } = participant
 
-      console.log("Participant received :", participant)
+      console.log(`Saving participant ${userId} — samples: ${samples}, activeSeconds: ${totalActiveSeconds}, deepSamples: ${deepSamples}`)
 
-      const avgAttention = samples > 0 ? attentionSum / samples : 0
-      const avgGaze = samples > 0 ? gazeSum / samples : 0
-      const avgFace = deepSamples > 0 ? faceSum / deepSamples : 0
-
+      const avgAttention = samples > 0     ? postureSum    / samples     : 0
+      const avgGaze      = samples > 0     ? gazeSum       / samples     : 0
+      const avgFace      = deepSamples > 0 ? engagementSum / deepSamples : 0
 
       const meetingSession: MeetingParticipantDto = {
-        id: Number(meetingId),
-        userId: Number(userId),
-        meetingId: Number(meetingId),
+        id:                 Number(meetingId),
+        userId:             Number(userId),
+        meetingId:          Number(meetingId),
         avgAttention,
-        avgFace,
         avgGaze,
+        avgFace,
         totalActiveSeconds,
-        firstJoinTime: participant.currentJoinTime,
-        lastLeaveTime: meetingEndTime
+        firstJoinTime:      firstJoinTime ?? currentJoinTime,
+        lastLeaveTime:      meetingEndTime,
       }
 
       try {
         await meetingService.createMeetingParticipant(meetingSession)
-      } catch (createErr) {
-        // Record already exists — update it instead
-        console.log(`Participant ${userId} already exists for meeting ${meetingId}, updating...`)
-        
+        console.log(`✓ Participant ${userId} saved successfully`)
+      } catch (err) {
+        console.error(`✗ Failed to save participant ${userId}:`, err)
       }
     }
 
     endMeeting(meetingId)
-    return res.status(200).json({
-      ok: true,
-      message: "Meeting ended and stats finalized"
-    })
+    return res.status(200).json({ ok: true, message: "Meeting ended and stats finalized" })
   } catch (error) {
     console.error("End meeting error:", error)
     if (error instanceof ApplicationError) {
